@@ -1,0 +1,6 @@
+      SUBROUTINE ERM1(STA,STB)
+      CHARACTER*(*) STA,STB
+      PRINT *,STA,' NOT FOUND: ',STB
+      CALL ERM0
+      RETURN
+      END

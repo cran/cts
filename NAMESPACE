@@ -1,0 +1,2 @@
+useDynLib(cts)
+export(car, aic, ctsdiag, factab, kalsmo.car, kalsmo.comp, plot.spec.car, plot.spec.ls, predict.car, plotpredict.car, print.car, spec.car, spec.ls)

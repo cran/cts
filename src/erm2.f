@@ -1,0 +1,7 @@
+      SUBROUTINE ERM2(STA,N)
+      CHARACTER*(*) STA
+      INTEGER N
+      PRINT *,'INVALID ',STA,' VALUE: ',N
+      CALL ERM0
+      RETURN
+      END

@@ -1,0 +1,6 @@
+      SUBROUTINE ERM4(STA,STB)
+      CHARACTER*(*) STA,STB
+      PRINT *,'INVALID ',STA,' OPTION: ',STB
+      CALL ERM0
+      RETURN
+      END
