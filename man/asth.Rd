@@ -22,8 +22,7 @@ Belcher, J. and Hampton, J. S. and Tunnicliffe Wilson,
 }
 
 \examples{
-\dontrun{
 data(asth)
 str(asth) ; plot(asth)
-}}
+}
 \keyword{datasets}

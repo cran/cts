@@ -1,4 +1,5 @@
       SUBROUTINE RESG0
+      IMPLICIT NONE
       INTEGER I,J,T
       DOUBLE PRECISION U,V,W,X,Y,Z,PRED,PEV
 c      INCLUDE 'model.txt'
@@ -15,6 +16,9 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra
+
 C*****series.txt
       CHARACTER*40 NAME
       INTEGER LEN

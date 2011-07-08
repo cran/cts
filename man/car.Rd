@@ -1,60 +1,82 @@
 \name{car}
 \alias{car}
+\alias{print.car}
+\alias{summary.car}
+\alias{plot.car}
+\alias{predict.car}
+\alias{spectrum}
+\alias{spectrum.car}
+\alias{tsdiag}
+\alias{tsdiag.car}
+\alias{AIC.car}
+\alias{kalsmo}
+\alias{kalsmo.car}
 \title{Fit Continuous Time AR Models to Irregularly Sampled Time Series}
 \description{
   Fit a continuous AR model to an irregularly sampled univariate time series with the Kalman filter
 }
 \usage{
-car(x, y=NULL, scale = 1.5, order = 3, ari= TRUE, phi = rep(0, order),
-vri = FALSE, vr = 0, pfi = "MAPS", ccv = "CTES", lpv = TRUE,
-scc = TRUE, n.ahead = 10, nit = 40, opm = 1, rgm = 1, req = 0.5,
-con = 1e-05, rpe = 1, ivl = 0.01, fac = 10, stl = 1e-05,
-sml = 100, gtl = 1e+05, kst = TRUE, fct = TRUE, fty=2)
+car(x, y=NULL, scale = 1.5, order = 3, ctrl=car_control())
+\method{print}{car}(x, digits = 3, ...)
+\method{summary}{car}(object, ...)
+\method{plot}{car}(x, type=c("spec", "pred", "diag"),...) 
+\method{predict}{car}(object, se.fit = TRUE, digits = 3, plot.it=TRUE,...)
+\method{spectrum}{car}(object, n.freq, plot.it = TRUE, na.action = na.fail, ...)
+\method{AIC}{car}(object, ..., k=NULL)
+\method{tsdiag}{car}(object, gof.lag = 10, ...)
+\method{kalsmo}{car}(object)
 }
 \arguments{
   \item{x}{two column data frame or matrix with the first column
     being the sampled time and the second column being the observations at
-    the first column; otherwise \code{x} is a numeric vector of sampled time.}
+    the first column; otherwise \code{x} is a numeric vector of sampled time. It can be a \code{car} object for S3 methods}
   \item{y}{not used if \code{x} has two columns; otherwise \code{y} is a numeric vector of observations at sampled time \code{x}.}
   \item{scale}{ The kappa value referred to in the paper.}
   \item{order}{order of autoregression.}
-  \item{ari}{ \code{ari=TRUE}: parameter starting values follow \code{phi}. \code{ari=FALSE}: they are taken as zero}
-  \item{phi}{ parameter starting values used only if \code{ari=TRUE}.}
-  \item{vri}{ \code{vri=FALSE}, observation noise not included in the
-    model. \code{vri=TRUE}, observation noise included}
-  \item{vr}{ 0.5, initial value of observation noise ratio: only if
-    \code{vri=TRUE}}
-  \item{pfi}{ always use the option pfi="MAPS".}
-  \item{ccv}{\code{ccv="CTES"} for constant term estimation. \code{ccv="MNCT"} if mean correction, \code{ccv=NULL} if omitted.}
-  \item{lpv}{\code{lpv=TRUE} always use this option.}
-  \item{scc}{ \code{scc=TRUE} always use this option. }
-  \item{n.ahead}{number of steps ahead at which to predict.}
-  \item{nit}{number of iteations. }
-  \item{opm}{\code{opm=1} always use this.}
-  \item{rgm}{\code{rgm=1} always use this.}
-  \item{req}{root equality switch value.}
-  \item{con}{convergence criterion.}
-  \item{rpe}{relative size of parameter perturbations.}
-  \item{ivl}{initial value of step size constraint parameter.}
-  \item{fac}{step size constraint modification parameter. This value may
-  be setup to \code{fac=5} for better convergency.}
-  \item{stl}{typical smallest step size parameter.}
-  \item{sml}{typical small step size parametrr.}
-  \item{gtl}{typical greatest step size parameter. }
-  \item{kst}{\code{kst=TRUE} to save estimated states. }
-  \item{fct}{\code{fct=TRUE} to use all time series to fit the model. }
-  \item{fty}{\code{fty=1} forecast past the end. \code{fty=2} forecast
-    last L-steps. \code{fty=3} forecast last L-steps updated (filtering)types.}
+  \item{ctrl}{ control parameters used in predict and numerical optimization. }
+  \item{object}{ object of class \code{car} }
+  \item{type}{ in \code{plot} a character indicating the type of plot. type="spec", call \code{spec};
+                 type="pred", call \code{predict};
+                 type="diag", call \code{diag}}
+  \item{se.fit}{ Logical: should standard errors of prediction be returned?}
+  \item{digits}{ return value digits }
+  \item{plot.it}{ Logical: plot the forecast values? }
+  \item{gof.lag}{the maximum number of lags for a Portmanteau
+    goodness-of-fit test}
+  \item{n.freq}{number of frequency}
+  \item{k}{penalty, not used}
+  \item{na.action}{ \code{NA} action function.}
+  \item{\dots}{further arguments to be passed to particular methods}
 }
 \details{
-  See references.
+\code{spectrum} returns (and by default plots) the spectral density of the fitted model.
+
+\code{tsdiag} is a generic diagnostic function for continuous AR model. It will generally plot the residuals,
+  often standadized, the autocorrelation function of the residuals, and
+  the p-values of a Portmanteau test for all lags up to \code{gof.lag}.
+  The method for \code{\link{car}} object plots residuals scaled by the estimate of their (individual) variance, and use the Ljung--Box version of the portmanteau test.
+
+\code{AIC} For continuous CAR model selection, t-statistic and AIC are calculated
+based on reparameterized coefficients \code{phi} and covariance matrix
+\code{ecov}. From the t-statistic, the final model is chosen such that
+if the true model \code{order} is less than the large value used for
+model estimation then for \code{i > order} the deviations of the
+estimated parameters \code{phi} from their true value of 0 will be
+small. From the AIC, the final model is chosen based on the smallest AIC
+value. A table with t-statistic and AIC for the corresponding model order.
+
+\code{factab} calculate characteristic roots and system frequency from the estimated
+reparameterized coefficients of CAR fits.
+
+\code{smooth} computes components corresponding to the diagonal transition matrix with the Kalman smoother. This may not be stable for some data due to numerical inversion of matrix.
+
 }
 \value{
   A list of class \code{"car"} with the following elements:
   \item{n.used}{The number of observations of \code{ser} used in fitting}
   \item{order }{The order of the fitted model. This is chosen by the user.}
   \item{np }{The number of parameters estimated. This may include the mean and the observation noise ratio.}
-  \item{scale}{The kappa value referred to in the paper.}
+  \item{scale}{The kappa value referred to in the paper of Belcher et al.}
   \item{vr}{The estimated observation noise ratio.}
   \item{sigma2}{The estimated innovation variance.}
   \item{phi}{The estimated reparameterized autoregressive parameters.}
@@ -63,10 +85,10 @@ sml = 100, gtl = 1e+05, kst = TRUE, fct = TRUE, fty=2)
   \item{delb}{The estimated standard error of \code{b}}
   \item{essp}{The estimated correlation matrix of \code{b}}
   \item{ecov}{The estimated covariance matrix of \code{phi}. See also
-    \code{\link{aic}}}
-  \item{rootr}{The real part of roots of \code{phi}. See also \code{\link{aic}}}
+    \code{\link{AIC}}}
+  \item{rootr}{The real part of roots of \code{phi}. See also \code{\link{AIC}}}
   \item{rooti}{The imaginary part of roots of \code{phi}. See also
-    \code{\link{aic}}}
+    \code{\link{AIC}}}
   \item{tim}{The numeric vector of sampled time.}
   \item{ser}{The numeric vector of observations at sampled time
     \code{tim}.}
@@ -77,8 +99,13 @@ sml = 100, gtl = 1e+05, kst = TRUE, fct = TRUE, fty=2)
   \item{svar}{The estimated variance of smoothed time series
     \code{sser}}
   \item{stdred}{The standardized residuals from the fitted model.}
-  \item{predict}{Predictions for the series which has been used to fit the model.}
-  \item{predict.var}{Prediction variance of \code{predict}}
+  \item{pretime}{Time of predictions.}
+  \item{pred}{Predictions for the \code{pretime}.}
+  \item{prv}{Prediction variance of \code{pred}}
+  \item{fty}{Forecast type}
+  \item{tnit}{Numeric vector: iteration}
+  \item{ss}{Numeric vector: sum of squares for each \code{tnit}}
+  \item{bit}{Matrix with rows for \code{tnit} and columns for parameter estimates}
 }
 \references{
   Belcher, J. and Hampton, J. S. and Tunnicliffe Wilson,
@@ -91,18 +118,25 @@ sml = 100, gtl = 1e+05, kst = TRUE, fct = TRUE, fty=2)
 
   Wang, Zhu (2004). \emph{The Application of the Kalman Filter to Nonstationary Time Series through Time Deformation}. PhD thesis, Southern Methodist University
 
+  Wang, Zhu and Woodward, W. A. and Gray, H. L. (2009). The Application of the Kalman Filter to Nonstationary Time Series through Time Deformation. \emph{Journal of Time Series Analysis}, \bold{30(5)}, 559-574.
+
+  Wang, Zhu (2011). cts: An R Package for Continuous Time Autoregressive Models via Kalman Filter. Under review.
 }
 
 \author{
   G. Tunnicliffe Wilson and Zhu Wang
 }
-\seealso{\code{\link{aic}} for model selection}
+\seealso{\code{\link{car_control}} for predict and numerical optimization parameters, and \code{\link{AIC}} for model selection}
 \examples{
-\dontrun{
 data(V22174)
-car(V22174,scale=0.2,order=7)
-
+fit <- car(V22174,scale=0.2,order=7, ctrl=car_control(trace=TRUE))
+summary(fit)
+spectrum(fit)
+tsdiag(fit)
+AIC(fit)
+factab(fit)
 data(asth)
-car(asth,scale=0.25,order=4)
-}}
+fit <- car(asth,scale=0.25,order=4, ctrl=car_control(n.ahead=10))
+kalsmo(fit)
+}
 \keyword{ts}

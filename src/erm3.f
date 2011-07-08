@@ -1,7 +1,8 @@
       SUBROUTINE ERM3(STA,A)
+      IMPLICIT NONE
       CHARACTER*(*) STA
       DOUBLE PRECISION A
-      PRINT *,'INVALID ',STA,' VALUE: ',A
+C      PRINT *,'INVALID ',STA,' VALUE: ',A
       CALL ERM0
       RETURN
       END

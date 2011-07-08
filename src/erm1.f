@@ -1,6 +1,7 @@
       SUBROUTINE ERM1(STA,STB)
+      IMPLICIT NONE
       CHARACTER*(*) STA,STB
-      PRINT *,STA,' NOT FOUND: ',STB
+C      PRINT *,STA,' NOT FOUND: ',STB
       CALL ERM0
       RETURN
       END

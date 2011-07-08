@@ -1,4 +1,5 @@
       SUBROUTINE UPDATE
+      IMPLICIT NONE
       CHARACTER*1 ST9
       CHARACTER*4 ST0,ST1
       INTEGER I,J,M,N
@@ -10,7 +11,9 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
-
+      integer ARI, tra
+      common/model/ari,tra
+             
 C*****setcon.txt
       LOGICAL CONV,FAIL
       INTEGER NP,ITCT,PPIND
@@ -20,13 +23,15 @@ c     *GMOLD,GMNEW,SIGSQ,OLDB
       COMMON/SETCON/CSO,CSZ,LAM,SSOLD,
      *GMOLD,GMNEW,SIGSQ,OLDB,CONV,FAIL,NP,ITCT,PPIND
 
-      PRINT *,'MODEL UPDATE IN PROGRESS'
-        I=ARP+1
+      if(tra.EQ.1)then
+C      PRINT *,'MODEL UPDATE IN PROGRESS'
+      end if
+      I=ARP+1
         IF(I.GT.20)THEN
-          PRINT *,'PROGRAM FAILS: MAXIMUM ORDER EXCEEDED IN UPDATE'
+C          PRINT *,'PROGRAM FAILS: MAXIMUM ORDER EXCEEDED IN UPDATE'
           STOP
         END IF
-        OPEN(UNIT=4,FILE='newmodel.dat',STATUS='unknown')
+c        OPEN(UNIT=4,FILE='newmodel.dat',STATUS='unknown')
         ST0='PFI='
         IF(PFI.EQ.1)THEN
           ST1='QLFA'
@@ -41,18 +46,18 @@ c     *GMOLD,GMNEW,SIGSQ,OLDB
         ELSE
           ST1='MAPS'
         END IF
-        WRITE(4,100)ST0,ST1
-  100   FORMAT(2A4)
+c        WRITE(4,100)ST0,ST1
+c  100   FORMAT(2A4)
         ST0='SCA='
-        WRITE(4,101)ST0,SCALE
-  101   FORMAT(A4,D14.6)
+c        WRITE(4,101)ST0,SCALE
+c  101   FORMAT(A4,D14.6)
         ST0='ARP='
-        WRITE(4,102)ST0,I
-  102   FORMAT(A4,I3)
+c        WRITE(4,102)ST0,I
+c  102   FORMAT(A4,I3)
         ST0='ARI='
         ST9='Y'
-        WRITE(4,103)ST0,ST9
-  103   FORMAT(A4,A1)
+c        WRITE(4,103)ST0,ST9
+c  103   FORMAT(A4,A1)
         DO 200 J=1,ARP
         PHI(J)=OLDB(J)
   200   CONTINUE
@@ -72,8 +77,8 @@ C         TO BE DEFINED LATER
           PHI(I)=CSZ
         END IF
         DO 202 J=1,I
-        WRITE(4,104)PHI(J)
-  104   FORMAT(D14.6)
+c        WRITE(4,104)PHI(J)
+c  104   FORMAT(D14.6)
   202   CONTINUE
         ST0='VRI='
         IF(VRI.EQ.0)THEN
@@ -81,9 +86,9 @@ C         TO BE DEFINED LATER
         ELSE
           ST9='Y'
         END IF
-        WRITE(4,103)ST0,ST9
+c        WRITE(4,103)ST0,ST9
         IF(VRI.EQ.1)THEN
-          WRITE(4,104)VR
+c          WRITE(4,104)VR
         END IF
         ST0='CCV='
         IF(CCV.EQ.0)THEN
@@ -93,7 +98,7 @@ C         TO BE DEFINED LATER
         ELSE
           ST1='CTES'
         END IF
-        WRITE(4,100)ST0,ST1
-        CLOSE(UNIT=4)
+c       WRITE(4,100)ST0,ST1
+c        CLOSE(UNIT=4)
       RETURN
       END

@@ -1,7 +1,7 @@
 "spec.ls" <-
 function (x, y=NULL, spans = NULL, kernel = NULL, taper = 0.1, pad = 0, 
     fast = TRUE, type = "lomb", demean = FALSE, detrend = TRUE, 
-    plot = TRUE, na.action = na.fail, ...) 
+    plot.it = TRUE, na.action = na.fail, ...) 
 {
 #    series <- deparse(substitute(x))
     if (NCOL(x)==2){
@@ -109,7 +109,7 @@ function (x, y=NULL, spans = NULL, kernel = NULL, taper = 0.1, pad = 0,
             "Smoothed Lomb-Scargle Periodogram", "Raw Lomb-Scargle Periodogram"), 
         taper = taper, pad = pad, detrend = detrend, demean = demean)
     class(spg.out) <- "spec"
-    if (plot) {
+    if (plot.it) {
         plot(spg.out, ...)
         return(invisible(spg.out))
     }

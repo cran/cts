@@ -74,7 +74,9 @@ C
 C        ENVRON returns the parameters LBETA and LT. ( LRND is not used
 C        here. )
 C
-          CALL ENVRON(LBETA,LT,LRND)
+c          call envron(lbeta,lt,lrnd)
+          lbeta = 2
+          lt = 53
 C
 C        Start to find EPS.
 C

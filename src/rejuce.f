@@ -1,4 +1,5 @@
       SUBROUTINE REJUCE
+      IMPLICIT NONE
       INTEGER I,J,K 
       DOUBLE PRECISION U
 c      INCLUDE 'series.txt'

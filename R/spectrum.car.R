@@ -1,14 +1,17 @@
 .First.lib <- function(lib, pkg)
         library.dynam("cts", pkg, lib)
+spectrum <- function(object, ...)
+    UseMethod("spectrum")
 
-"spec.car" <-
-function (x, n.freq, plot = TRUE, na.action = na.fail, ...) 
+"spectrum.car" <-
+function (object, n.freq, plot.it = TRUE, na.action = na.fail, ...) 
 {
+  x <- object
   ## must be a result of an AR fit
 #  cn <- match(c("frequency", "spectrum"), names(x))
   cn <- match(c("b","order","scale"),names(x))
   if (any(is.na(cn))) 
-    stop("x must be an car() fit")
+    stop("object must be a car() fit")
   b <- x$b
   order <- x$order
   scale <- x$scale
@@ -23,7 +26,7 @@ function (x, n.freq, plot = TRUE, na.action = na.fail, ...)
            package="cts")
   spg.out <- list(freq = Z$freq, spec = Z$spec, method = paste("CAR (",order, ") spectrum ", sep = ""))
   class(spg.out) <- "spec.car"
-  if (plot) {
+  if (plot.it) {
     plot(spg.out, ci = 0, ...)
     return(invisible(spg.out))
   }

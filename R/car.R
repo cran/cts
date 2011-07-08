@@ -1,9 +1,18 @@
 .First.lib <- function(lib, pkg)
         library.dynam("cts", pkg, lib)
+
+car_control <- function(fty=1, n.ahead=10, trace=FALSE, ari=TRUE, vri=FALSE, vr=0, pfi="MAPS",ccv="CTES", lpv=TRUE, scc=TRUE,  nit=40, opm=1, rgm=1, req=0.5, con=1.0e-5, rpe=1.0, ivl=1.0e-2, fac=1.0e1, stl=1.0e-5, sml=1.0e2, gtl=1.0e5, kst=TRUE, fct=TRUE){
+  RET <- list(fty=fty, n.ahead=n.ahead, trace=trace, ari=ari, vri=vri, vr=vr, pfi=pfi,ccv=ccv, lpv=lpv, scc=scc, nit=nit, opm=opm, rgm=rgm, req=req, con=con, rpe=rpe, ivl=ivl, fac=fac, stl=stl, sml=sml, gtl=gtl, kst=kst, fct=fct)
+  class(RET) <- c("car_control")
+  RET
+}
+
 car <-
-function(x, y=NULL, scale=1.5, order=3, ari=TRUE, phi=rep(0,order), vri=FALSE, vr=0, pfi="MAPS",ccv="CTES", lpv=TRUE, scc=TRUE, n.ahead=10,  nit=40, opm=1, rgm=1, req=0.5, con=1.0e-5, rpe=1.0, ivl=1.0e-2, fac=1.0e1, stl=1.0e-5, sml=1.0e2, gtl=1.0e5, kst=TRUE, fct=TRUE, fty=2)
+function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
   {
     call <- match.call()
+ fty=ctrl$fty; n.ahead=ctrl$n.ahead; trace=ctrl$trace
+    ari=ctrl$ari; phi=rep(0, order); vri=ctrl$vri; vr=ctrl$vr; pfi=ctrl$pfi; ccv=ctrl$ccv; lpv=ctrl$lpv; scc=ctrl$scc; nit=ctrl$nit; opm=ctrl$opm; rgm=ctrl$rgm; req=ctrl$req; con=ctrl$con; rpe=ctrl$rpe; ivl=ctrl$ivl; fac=ctrl$fac; stl=ctrl$stl; sml=ctrl$sml; gtl=ctrl$gtl; kst=ctrl$kst; fct=ctrl$fct;
     if (NCOL(x)==2){
       tim <- x[,1]
       ser <- x[,2]
@@ -15,6 +24,7 @@ function(x, y=NULL, scale=1.5, order=3, ari=TRUE, phi=rep(0,order), vri=FALSE, v
     }
     if (length(tim)!=length(ser)) stop("Number of time and observations are not equal")
     len <- length(tim)
+    if (len > 500) stop("Number of time beyond 500 is not implemented")
     ### corresponding to setup.f
     csz <- 0
     if (pfi=="QLFA") pfi <- 1
@@ -59,10 +69,11 @@ function(x, y=NULL, scale=1.5, order=3, ari=TRUE, phi=rep(0,order), vri=FALSE, v
       {
         lyap <- 0
         prdg <- 1.0e4
+        if(trace)        
         cat("\nSCC=N CAUSES RESET OF LPV=Y TO LPV=N AND PRDG=1.0D4","\n")
       }
     if (n.ahead < 0 || n.ahead > 500) stop("Invalid forecasting steps:", n.ahead)
-    cat("\nREADING OF model parameter SUCCESSFUL")
+    if (trace) cat("\nREADING OF MODEL PARAMETER PARAMETER SUCCESSFUL")
     
     if (nit < 0 || nit > 100) nit <- 25
     if (opm < 0) stop("Invalid OPM value:", opm)
@@ -91,8 +102,11 @@ function(x, y=NULL, scale=1.5, order=3, ari=TRUE, phi=rep(0,order), vri=FALSE, v
     if (fct < 0) stop("Invalid FCT value:", fct)
 
     if(fty < 1 || fty > 3) stop("Invalid fty value:", fty)
-    
-    cat("\nREADING OF control parameter SUCCESSFUL","\n")
+    tra <- 0
+    if(trace){
+    tra <- 1
+    cat("\nREADING OF CONTROL PARAMETER SUCCESSFUL","\n")
+    }
     np1 <- 0
     z <-.Fortran("setup",
                  as.integer(pfi),
@@ -126,14 +140,25 @@ function(x, y=NULL, scale=1.5, order=3, ari=TRUE, phi=rep(0,order), vri=FALSE, v
                  as.double(gtlam),
                  as.integer(kst),
                  np1=as.integer(np1),
+                 as.integer(tra),
                  package="cts")
+    if(trace)
     .Fortran("display",package="cts")
-    if (nit > 0)
-      {
-        .Fortran("loop",package="cts")
-        .Fortran("complete",package="cts")
-      }
-
+        zpar <- .Fortran("loop",
+                ss=double(nit+1),
+                bit=as.double(matrix(0, nit+1, 22)),
+           package="cts")
+        neff <- zpar$ss > 0
+        zpar$tnit <- seq(0, sum(neff))
+        zpar$ss <- zpar$ss[neff]
+        zpar$bit <- matrix(zpar$bit, nrow=nit+1)
+        zpar$bit <- zpar$bit[neff, 1:(order+1)]
+        zfin <- .Fortran("complete",
+                ss=double(1),
+                bit=double(22),
+                package="cts")
+        zpar$ss <- c(zpar$ss, zfin$ss)
+        zpar$bit <- rbind(zpar$bit, zfin$bit[1:(order+1)])
     Z <- .Fortran("setcom",
                   pfi1=integer(1),
                   arp1=integer(1),
@@ -207,6 +232,7 @@ function(x, y=NULL, scale=1.5, order=3, ari=TRUE, phi=rep(0,order), vri=FALSE, v
     phi <- .Fortran("setupdate",
                     phi1=double(order),
                     package="cts")$phi 
+    ### I am not sure this phi is updated
     if (n.ahead > 0)
       {
         .Fortran("forecast",package="cts")
@@ -227,67 +253,112 @@ function(x, y=NULL, scale=1.5, order=3, ari=TRUE, phi=rep(0,order), vri=FALSE, v
         pre <- NULL
         prv <- NULL
       }
-
+    ntim <- length(ser); ntim1 <- length(tim)-length(pre)
+    ntim2 <- length(tim)
     structure(list(call=call,series = series,order=Z$arp1,
                    np=Z$np1,scale=Z$scale1,
                    x.mean=Z$b1[order+1],vr=Z$vr1,
-                   sigma2=Z$sigsq1,phi=phi,
+                   sigma2=Z$sigsq1,phi=Z$b1[1:order],
+                   #sigma2=Z$sigsq1,phi=phi,
                    b=Z$b1,delb=Z$delb1,essp=essp,
                    ecov=ecov,
                    rootr=Z$rootr1,rooti=Z$rooti1,
-                   tim=tim,ser=ser,n.used=Z$len1,
+                   tim=tim[1:ntim],ser=ser,n.used=Z$len1,
                    filser=filser,filvar=filvar,
                    sser=sser,svar=svar,
-                   stdres=sres,
-                   predict=pre,predict.var=prv),
+                   stdres=sres, pretime = tim[(ntim1+1):ntim2],
+                   predict=pre,predict.var=prv, fty=fty, tnit=zpar$tnit, ss=zpar$ss, bit=zpar$bit),
               class="car")
   }
 
-print.car <- function(x, digits = max(3, getOption("digits") - 3), ...)
+print.car <- function(x, digits = 3, ...)
 {
   cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
-
-  cat("Coefficients:\n")
-  coef <- drop(round(x$phi, digits = digits))
-  names(coef) <- seq(length=x$order)
-  print.default(coef, print.gap = 2)
-  
-  cat("\nOrder selected", x$order, " sigma^2 estimated as",
-      format(x$sigsq, digits = digits),"\n")
+  cat("Coefficients and mean:\n")
+  coef <- drop(round(c(x$phi, x$x.mean), digits = digits))
+  names(coef) <- c(seq(length=x$order), "Mean")
+  print(coef)
   invisible(x)
 }
 
-predict.car <- function(object, se.fit=TRUE, digits = max(3, getOption("digits") - 3), ...)
+summary.car <- function(object, ...)
 {
-#  if (!is.null(object$predict))
-#    {
-      cat("\nCall:\n", deparse(object$call), "\n\n", sep = "")
-      ar <- object$phi
-      p <- object$order
-      cat("\nTime required to forecast","\n\n")
-      tim <- drop(round(object$tim[(length(object$tim)-length(object$predict)+1):length(object$tim)],digits = digits))
-      names(tim) <- seq(length=length(object$predict))
-      print.default(tim, print.gap = 2)
-      cat("\nForecasted value","\n\n")
-      predict <- drop(round(object$predict,digits = digits))
-      names(predict) <- seq(length=length(object$predict))
-      print.default(predict, print.gap = 2)
-      cat("\nEstimated variance","\n\n")
-      prv <- drop(round(object$predict.var,digits = digits))
-      names(prv) <- seq(length=length(object$predict.var))
-      print.default(predict.var, print.gap = 2)
-      
-#    }
-#  else stop("No forecasting calculation","\n",
-#            "\Please recalculate "car" and set n.ahead>0","\n")
+  x <- object
+  digits <- 3
+  cat("\nCall:\n", deparse(x$call), "\n", sep = "")
+  cat(paste("\nOrder of model = ", x$order, ", sigma^2 = ",
+      format(x$sigma2, digits = digits), sep=""),"\n")
+  cat("\nCoefficients and mean (standard errors):\n")
+  coef <- drop(round(c(x$phi, x$x.mean), digits = digits))
+  names(coef) <- c(seq(length=x$order), "Mean")
+  tmp <- rbind(coef, x$delb)
+  rownames(tmp) <- c("", "S.E.")
+  print(round(tmp, digits))
+  corout <- FALSE
+  if(corout){
+  cat("\nCorrelations:\n")
+  x$essp <- round(x$essp, digits)
+  x$essp[upper.tri(x$essp)] <- ""
+  tmp <- as.data.frame(x$essp)
+  colnames(tmp) <- 1:dim(x$essp)[1]
+  print(tmp)
+  }
+  invisible(x)
 }
 
+predict.car <- function(object, se.fit=TRUE, digits = 3, plot.it=TRUE, ...)
+{
+      ar <- object$phi
+      p <- object$order
+      pretime <- object$pretime
+      names(pretime) <- seq(length=length(object$predict))
+      pred <- drop(round(object$predict,digits = digits))
+      names(pred) <- seq(length=length(object$predict))
+      prv <- drop(round(object$predict.var,digits = digits))
+      names(prv) <- seq(length=length(object$predict.var))
+      cat("\nCall:\n", deparse(object$call), "\n\n", sep = "")
+      tmp <- rbind(pretime, pred)
+      rownames(tmp) <- c("Time", "Predict") 
+      print(tmp)
+      if(plot.it)
+      plot.predict.car(object, ...) 
+      RET <- list(pretime=pretime, pred=pred)
+}
 
-ctsdiag <- tsdiag.car <- function(object, gof.lag = 10, ...)
+plot.predict.car <- function(object,xlab = "time",
+    ylab = "", type = "l", main = NULL, sub = NULL,...)
+  {
+    if(class(object) != "car")
+    stop("object must be car\n")
+    if(object$fty==1){ ### forecast type is beyond of the observation
+    plot(object$tim, object$ser,
+         xlab=xlab, ylab=ylab, type=type, main=main,sub=sub, ...)
+    points(object$pretime, object$predict, lty=2, col="red", ...)
+    }
+    else{
+    npre <- length(object$pretime)
+    ntim <- length(object$tim)
+    plot(object$tim, object$ser,
+         xlab=xlab,ylab=ylab,type=type,main=main,sub=sub, ...)
+#    plot(object$tim[1:length(object$ser)],object$ser,ylim=c(min(object$ser)-2*max(sqrt(object$predict.var)),max(object$ser)+2*max(sqrt(object$predict.var))),xlab=xlab,ylab=ylab,type=type,main=main,sub=sub, ...)
+    points(object$pretime, object$predict,
+           lty=2,col="red", ...)
+}
+#    lines(object$tim[(length(object$tim) - length(object$predict) +
+#                      1):length(object$tim)],object$predict+2*sqrt(object$predict.var),lty=2,col="blue")
+#    lines(object$tim[(length(object$tim) - length(object$predict) +
+#                      1):length(object$tim)],object$predict-2*sqrt(object$predict.var),lty=2,col="blue")
+  }
+
+tsdiag <- function(object, ...)
+    UseMethod("tsdiag")
+
+tsdiag.car <- function(object, gof.lag = 10, ...)
 {
     ## plot standardized residuals, acf of residuals,
   ## cumulative periodogram and Ljung-Box p-values
-  
+    if(class(object) != "car")
+    stop("object must be 'car' class\n") 
     oldpar<- par(mfrow = c(2, 2))
     on.exit(par(oldpar))
     stdres <- object$stdres
@@ -296,13 +367,12 @@ ctsdiag <- tsdiag.car <- function(object, gof.lag = 10, ...)
     acf(object$stdres, plot = TRUE, main = "ACF of Standardized Residuals",
         na.action = na.pass)
     cpgram(stdres,main="Cumulative periodogram")
-
     nlag <- gof.lag
     pval <- numeric(nlag)
     for(i in 1:nlag) pval[i] <- Box.test(stdres, i, type="Ljung-Box")$p.value
     plot(1:nlag, pval, xlab = "lag", ylab = "p value", ylim = c(0,1),
          main = "p values for Ljung-Box statistic")
     abline(h = 0.05, lty = 2, col = "blue")
+    invisible(object)
 }
 
-#tsdiag.car <- function(object, gof.lag, ...) UseMethod("tsdiag")

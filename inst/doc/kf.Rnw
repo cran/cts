@@ -1,0 +1,228 @@
+\documentclass[nojss]{jss}
+%\documentclass[article]{jss}
+\usepackage{amsmath}
+\usepackage{amssymb}
+%\usepackage{/usr/lib/R/share/texmf/Sweave}
+%%\VignetteIndexEntry{cts Illustrations}
+
+\SweaveOpts{engine=R,eps=false,strip.white=true, width=6, height=6}
+%\SweaveOpts{engine=R,eps=false,prefix.string=fig/plot,strip.white=true,width=6,height=6}
+\author{Zhu Wang\\Connecticut Children's Medical Center\\University of Connecticut School of Medicine}
+\title{\pkg{cts}: An \proglang{R} Package for Continuous Time Autoregressive Models via Kalman Filter}
+
+\Plainauthor{Zhu Wang}
+\Plaintitle{cts: An R Package for Continuous Time Autoregressive Models via Kalman Filter}
+\Shorttitle{Continuous Time AR Models via Kalman Filter}
+\Abstract{
+We describe an \proglang{R} package \pkg{cts} for continuous time autoregressive model fitting, which can be particularly useful with unequally sampled time series. The estimation is based on the application of the Kalman filter. The paper provides the methods and algorithms implemented in the package, including parameter estimation, spectral analysis, forecasting, model checking and Kalman smoothing. The package contains \proglang{R} functions which interface underlying \proglang{Fortran} routines. The package is applied to geophysical and medical data for illustration.
+}
+\Keywords{continuous time autoregressive model, state space model, Kalman filter, Kalman smoothing, \proglang{R}}
+\Plainkeywords{continuous time autoregressive model, state space model, Kalman filter, Kalman smoothing, R}
+\Address{
+Zhu Wang\\
+Department of Research\\
+Connecticut Children's Medical Center\\
+Department of Pediatrics\\
+University of Connecticut School of Medicine\\
+Connecticut 06106, United States of America\\
+  E-mail: \email{zwang@ccmckids.org}
+}
+
+\begin{document}
+
+\maketitle
+\section{Introduction}
+A discrete time autoregressive model is a common tool for the analysis of time series data. An important alternative is the continuous time series (CTS) autoregressive model, which has unique advantages over a discrete time series model. For instance, a CTS model can provide interpolates between observations, generate signal derivatives and fit unequally sampled data. There is a rich literature on continuous autoregressive (CAR) model. \citet{Jone:1981} developed an estimation method through the application of the Kalman filter.
+\citet{Belc:Hamp:Tunn:1994} further extended to higher order model with rapid and reliable convergence of parameter estimates. Also see \citet{Tunn:2004}
+ for additional description. \citet{Wang:Wood:Gray:2008} utilized the methods in \citet{Belc:Hamp:Tunn:1994} for fitting time varying nonstationary models. 
+ The CAR models have seen practical usages in many fields including astronomics, medicine and economics \citep{Whit:2004, Belc:Hamp:Tunn:1994, Berg:1990}.
+Since the technical details for the Kalman filter on CAR models are scattered in the literature, we give a thorough presentation in this paper, which provides a foundation for the implementations in the \proglang{R} \citep{Rcite} package \pkg{cts} \citep{cts} for fitting CAR models with discrete data. 
+The \pkg{cts} package contains typical time series applications including spectral estimation, forecasting, diagnostics, smoothing and signal extraction. 
+The application is focused on unequally spaced data although the techniques can be applied to equally spaced data as well. 
+The paper is organized as follows. Section 2 summarizes the methods from which the \pkg{cts} package was developed. Section 3 outlines the implementations in the package. Section 4 illustrates the capabilities of \pkg{cts} with two data sets. Finally, Section 5 concludes the paper.
+\section{Methods}
+\input{chap3v1}
+\section{Implementation}
+The \code{cts} package utilizes the \proglang{Fortran} program developed by the authors of \citet{Belc:Hamp:Tunn:1994}, with substantial additional \proglang{Fortran} and \proglang{R} routines. In this process, two \proglang{Fortran} subroutines in \citet{Belc:Hamp:Tunn:1994} have to be substituted since they belong to commercial NAG Fortran Library, developed by the Numerical Algorithms Group. One subroutine was to compute the approximate solution of a set of complex linear equations with multiple right-hand sides, using an Lower-Upper \textit{LU} factorization with partial pivoting. Another subroutine was to find all roots of a real polynomial equation, using a variant of Laguerre's Method. In the \code{cts} package, these subroutines have been replaced by their public available counterparts in the LAPACK \& BLAS Fortran Library. All the \proglang{Fortran} programs were written in double precision.
+
+Several supporting \proglang{R} functions are available in the \code{cts} package that extract or calculate useful statistics based on the fitted CAR model, such as model summary, predicted values and model spectrum. In particular,
+the function \code{car} returns objects of class \code{car}, for which the following methods
+are available: \code{print, summary, plot, predict, AIC, tsdiag, spectrum, kalsmo}. A detailed description
+of these functions is available in the online help files. Here a brief introduction will be given and the usage will be illustrated in the next section. The model fitting results can be graphical displayed with \code{plot} function. With argument \code{type} equal to \code{"spec", "pred"} and \code{"diag"}, respectively, a figure can be plotted for spectrum, predicted values and model diagnostic checking, respectively. Three types of prediction exist: forecast past the end, forecast last L-step, forecast last L-step update. This can be achieved by invoking argument \code{fty=1, 2, 3}, respectively. For instance, \code{car(data, ctrl=car_control(fty=1, n.ahead=10))} can predict 10 steps past the end. Function \code{AIC} can generate both $t$-statistic and AIC values following section~\ref{S:caraic}. Function \code{tsdiag} follows section~\ref{S:cardiag} to provide model diagnostic checking. Indeed, this function provides the backbone for function \code{plot} with argument \code{type="diag"}. Function \code{kalsmo} implements the Kalman smoothing described in section~\ref{S:carsmo}. In an earlier version of package, specifying \code{trace=TRUE} in \code{car_control} could trigger annotated printout of information during the fitting process and major results for the fitted model. However, since this call invoked print with \proglang{Fortran}, the printout is essentially suppressed in the current version. 
+
+The source version of the \pkg{cts} package is freely available from the Comprehensive \proglang{R} Archive Network (\url{http://CRAN.R-project.org}). The reader can install the package directly from the \proglang{R} prompt via
+<<echo=false,results=hide>>=
+options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
+@
+<<echo=true,results=hide, eval=FALSE>>=
+install.packages("cts")
+@
+All analyses presented below are contained in a package vignette. The rendered output of the analyses is available by the \proglang{R}-command
+<<echo=true,results=hide, eval=FALSE>>=
+library("cts")
+vignette("kf",package = "cts")
+@
+To reproduce the analyses, one can invoke the \proglang{R} code 
+<<echo=true,results=hide,eval=FALSE>>=
+edit(vignette("kf",package = "cts"))
+@
+\section{Data examples}
+Two data examples in \citet{Belc:Hamp:Tunn:1994} are used to illustrate the capabilities of \pkg{cts}. A detailed description of the data can be found in the original paper. Since some analysis here reproduces the results in \citet{Belc:Hamp:Tunn:1994}, we also ignore a lengthy discussion for brevity. These analyses were done using \proglang{R} version 2.10.1 (2009-12-14) and the
+operating system \code{i686-pc-cygwin}. 
+
+\subsection{Geophysical application}
+
+\citet{Belc:Hamp:Tunn:1994} analyzed 164 measurements of relative abundance of an oxygen isotope in an ocean core. These are unequally spaced time points with an average of separation of 2000 years. Unequally spaced tick marks indicate the corresponding irregularly sampled times in Figure~\ref{fig:oxy1}.
+<<echo=true,results=hide>>=
+#164 measurements of relative abundance of an oxygen isotope in an ocean core. These are unequally spaced time points with an average of separation of 2000 years. Unequally spaced tick marks indicate the corresponding irregularly sampled time.
+library("cts")
+data("V22174")
+@
+\setkeys{Gin}{height=0.35\textheight, width=1.05\textwidth}
+
+\begin{figure}[h!]
+\centering
+<<fig=TRUE, echo=TRUE, results=hide>>=
+plot(V22174,type="l",xlab="Time in kiloyears", ylab="")
+rug(V22174[,1], col="red")
+@
+\caption{Oxygen isotope series.}
+\label{fig:oxy1}
+\end{figure}
+<<echo=FALSE, results=hide>>=
+#Time to finish the modeling
+time <- system.time(V22174.car14 <- car(V22174,scale=0.2,order=14))[1]
+@
+We first fit a model of order 14 to the data, following \citet{Belc:Hamp:Tunn:1994}. The scale parameter is chosen to be 0.2 as well. 
+The estimation algorithm converges rather quickly as demonstrated in the following printout, which shows the sum of squares and the value of $\phi_{14}$ at each iteration. The results are similar to Table 1 of \citet{Belc:Hamp:Tunn:1994}, which took 30 minutes on a PC386/387 machine to carry out the computing. These authors expected that simple improvements to the program's code could substantially speed up the procedure. Despite that the current \pkg{cts} package has no intent to accomplish such a task, running the above \code{car} function took only \Sexpr{formatC(round(time, 1), digits = 2)} second, on an ordinary desktop PC (Intel Core 2 CPU, 1.86 GHz). Such a dramatic efficiency improvement is unlikely driven by software change, but by hardware advancement in the last 20 years. 
+<<echo=true>>=
+#We first fit a model of order 14 to the data, following \citet{Belc:Hamp:Tunn:1994}. The scale parameter is chosen to be 0.2 as well. The estimation algorithm converges rather quickly as demonstrated in the following printout, which shows the sum of squares and the value of $\phi_{14}$ at each iteration. 
+V22174.car14 <- car(V22174,scale=0.2,order=14)
+tab1 <- cbind(V22174.car14$tnit, V22174.car14$ss, V22174.car14$bit[,14])
+colnames(tab1) <- c("Iteration","Sum of Squares","phi_14")
+@
+\newpage
+<<echo=true>>=
+print(as.data.frame(round(tab1,5)),row.names=FALSE, print.gap=8)
+@
+Following section~\ref{S:caraic}, a model selection was conducted with \code{AIC} which generates exactly the same results as Table 2 of \citet{Belc:Hamp:Tunn:1994}. Accordingly,   the first-order value for the AIC shows the most rapid drop from the base-line of 0. Consequently a large $t$-value of 3.20 suggests order 7 while the minimum AIC implies order 9.
+For illustration, a model order 7 was selected as in \citet{Belc:Hamp:Tunn:1994}.
+<<echo=true>>=
+#A model selection is conducted with \code{AIC} which generates exactly the same results as Table 2 of \citet{Belc:Hamp:Tunn:1994}. Consequently, a model of order 7 is suggested.
+AIC(V22174.car14)
+@
+<<echo=true>>=
+V22174.car7 <- car(V22174,scale=0.2,order=7)
+summary(V22174.car7)
+@
+The estimated spectra for both models of order 14 and 7 are displayed on logarithmic (base 10) scale in Figure~\ref{fig:specox}. Both two models indicate three peaks, while for the model of order 14 the resolution is much improved.
+\setkeys{Gin}{height=0.55\textheight, width=0.8\textwidth}
+\begin{figure}[b!]
+\centering
+<<fig=true>>=
+#The estimated spectra for both models of order 14 and 7 are displayed on logarithmic (base 10) scale.
+par(mfrow=c(2,1))
+spectrum(V22174.car14)
+spectrum(V22174.car7)
+@
+\caption{Spectra from fitted models for the oxygen isotope series.}
+\label{fig:specox}
+\end{figure}
+
+\newpage 
+To check model assumptions as described in section~\ref{S:cardiag}, 
+Figure~\ref{fig:diagox} displays a plot of the standardized residuals,
+the ACF of the residuals, cumulative periodogram of the standardized residuals, and the p-values associated with the Ljung-Box statistic.
+Visual inspection of the time plot of the standardized residuals in Figure 3
+shows no obvious patterns, although one outlier extends 3 standard deviations. The ACF of
+the standardized residuals shows no apparent departure from the model
+assumptions, i.e., approximately independently
+and normally distributed with zero means and variances $1/n$ at lag > 0. The cumulative periodogram of standardized residuals follows the line $y=2x$ reasonably well. The Ljung-Box statistic is not significant at the lags shown.
+\setkeys{Gin}{height=0.6\textheight, width=1.05\textwidth}
+\begin{figure}[h!]
+\centering
+<<fig=true>>=
+#To check model assumptions
+tsdiag(V22174.car7)
+@
+\caption{Model diagnostics for the oxygen isotope series.}
+\label{fig:diagox}
+\end{figure}
+
+\subsection{Medical application}
+
+\citet{Belc:Hamp:Tunn:1994} analyzed 209 measurements of the lung function of an asthma patient. The time series is measured mostly at 2 hour time intervals but with irregular gaps, as demonstrated by the unequal space of tick marks in Figure~\ref{fig:asth1}.
+<<echo=true,results=hide>>=
+#209 measurements of the lung function of an asthma patient. The time series is measured mostly at 2 hour time intervals but with irregular gaps, as demonstrated by the unequal space of tick marks.
+data("asth")
+@
+<<fig=true, eval=FALSE>>=
+plot(asth,type="l",xlab="Time in hours", ylab="")
+rug(asth[,1], col="red")
+@
+\setkeys{Gin}{height=0.35\textheight, width=1.05\textwidth}
+\begin{figure}[t!]
+\centering
+<<fig=true, echo=FALSE>>=
+plot(asth,type="l",xlab="Time in hours", ylab="")
+rug(asth[,1], col="red")
+@
+\caption{Measurements of the lung function.}
+\label{fig:asth1}
+\end{figure}
+To apply \pkg{cts}, a scale parameter 0.25 was chosen and a model of order 4 was fitted to the data \citep{Belc:Hamp:Tunn:1994}. 
+<<echo=true>>=
+#a scale parameter 0.25 is chosen and a model of order 4 is fitted to the data.
+asth.car4 <- car(asth,scale=0.25,order=4, ctrl=car_control(n.ahead=10))
+summary(asth.car4)
+@
+
+The log-spectrum (base 10) of the fitted model is shown in Figure~\ref{fig:asth2}. The spectral peak indicates a strong diurnal cycle in the data, along with a low frequency. With function \code{factab}, the model has one diurnal frequency 0.041, a low frequency component and the other close to white noise component. We thus decomposed the original time series into three corresponding components via the Kalman smoother as shown in Figure~\ref{fig:asth3}. Finally, we predicted the last 10 steps past the end of time series in Figure~\ref{fig:asth4}.
+\setkeys{Gin}{height=0.35\textheight, width=0.8\textwidth}
+\begin{figure}[t!]
+\centering
+<<fig=true>>=
+#The log-spectrum (base 10) of the fitted model is shown in Figure~\ref{fig:asth2}. The spectral peak indicates a strong diurnal cycle in the data, along with a low frequency.
+spectrum(asth.car4)
+@
+\caption{Spectrum from fitted model for the lung function measurements.}
+\label{fig:asth2}
+\end{figure}
+
+\newpage
+<<echo=true>>=
+#With function \code{factab}, the model has one diurnal frequency 0.041, a low frequency component and the other close to white noise component.
+factab(asth.car4)
+@
+\setkeys{Gin}{height=0.9\textheight, width=1.05\textwidth}
+\begin{figure}
+\centering
+<<fig=true,include=TRUE>>=
+#We thus can decompose the original time series into three components via the Kalman smoother
+asth.kalsmo <- kalsmo(asth.car4)
+par(mfrow=c(3,1))
+kalsmoComp(asth.kalsmo,comp=1, xlab="Time in hours")
+kalsmoComp(asth.kalsmo,comp=c(2,3), xlab="Time in hours")
+kalsmoComp(asth.kalsmo,comp=4,xlab="Time in hours")
+@
+\caption{Components of the lung function measurements. From top to bottom: trend (low frequency) component, diurnal component, and white noise component.}
+\label{fig:asth3}
+\end{figure}
+
+\setkeys{Gin}{height=0.35\textheight, width=1\textwidth}
+\begin{figure}[h!]
+\centering
+<<fig=true>>=
+#We predict the last 10 steps past the end of time series
+predict(asth.car4, xlab="Time in hours")
+@
+\caption{Forecasts (circles) for lung function measurements.}
+\label{fig:asth4}
+\end{figure}
+
+\newpage
+\section{Conclusion}
+In this article we have outlined the methods and algorithms for fitting continuous time autoregressive models through the Kalman filter. The theoretical ingredients of Kalman filter have their counterparts in the \proglang{R} package \pkg{cts}, which can be particularly useful with unequally sampled time series data.
+\bibliography{kf}
+
+\end{document}

@@ -1,2 +1,15 @@
 useDynLib(cts)
-export(car, aic, ctsdiag, factab, kalsmo.car, kalsmo.comp, plot.spec.car, plot.spec.ls, predict.car, plotpredict.car, print.car, spec.car, spec.ls)
+export(car, tsdiag, factab, kalsmo, kalsmoComp, spectrum, plot.spec.car, plot.spec.ls, spec.ls, car_control, spec.ci)
+exportClasses("car")
+exportMethods("show")
+
+S3method(plot, car)
+S3method(print, car)
+S3method(summary, car)
+S3method(predict, car)
+S3method(tsdiag, car)
+S3method(spectrum, car)
+S3method(AIC, car)
+S3method(kalsmo, car)
+S3method(print, factab)
+

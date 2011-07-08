@@ -32,9 +32,9 @@ function (x, add = FALSE, ci = 0.95, log = "dB", xlab = "frequency",
                 conf.lim <- 10 * log10(conf.lim)
                 conf.y <- max(x$spec) - conf.lim[2]
                 conf.x <- max(x$freq) - x$bandwidth
-                lines(rep(conf.x, 2), conf.y + conf.lim, col = ci.col)
+                lines(rep(conf.x, 2), conf.y + conf.lim)
                 lines(conf.x + c(-0.5, 0.5) * x$bandwidth, rep(conf.y, 
-                  2), col = ci.col)
+                  2))
                 ci.text <- paste(", ", round(100 * ci, 2), "% C.I. is (", 
                   paste(format(conf.lim, digits = 3), collapse = ","), 
                   ")dB", sep = "")
@@ -43,9 +43,9 @@ function (x, add = FALSE, ci = 0.95, log = "dB", xlab = "frequency",
                 ci.text <- ""
                 conf.y <- max(x$spec)/conf.lim[2]
                 conf.x <- max(x$freq) - x$bandwidth
-                lines(rep(conf.x, 2), conf.y * conf.lim, col = ci.col)
+                lines(rep(conf.x, 2), conf.y * conf.lim)
                 lines(conf.x + c(-0.5, 0.5) * x$bandwidth, rep(conf.y, 
-                  2), col = ci.col)
+                  2))
             }
         }
           if (is.null(main)) 

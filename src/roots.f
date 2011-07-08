@@ -1,4 +1,5 @@
       SUBROUTINE ROOTS
+      IMPLICIT NONE
       INTEGER I,J
       DOUBLE PRECISION T
 C     DOUBLE PRECISION ROOTC(40),WORK(42)    CHANGED ZW
@@ -14,6 +15,8 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra      
 C*****setcon.txt
       LOGICAL CONV,FAIL
       INTEGER NP,ITCT,PPIND

@@ -1,6 +1,7 @@
 c      SUBROUTINE KFILSM
 c     use the diagonal form to find components
       subroutine kfilsm1
+      IMPLICIT NONE
 c      INCLUDE 'model.txt'
 c      INCLUDE 'repcom.txt'
 c      INCLUDE 'kfasav.txt'
@@ -14,6 +15,9 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra
+
 C*****repcom.txt
       LOGICAL PRPI
       INTEGER REQSW,KFSW
@@ -30,7 +34,7 @@ c     1,PSES,PSCV,TRAN
      1,PSES,PSCV,TRAN,PRE,PRV,FSER,FVAR,SSER,SVAR
 C*****setcon.txt
       LOGICAL CONV,FAIL
-      INTEGER NP,ITCT,PPIND
+      INTEGER I, NP,ITCT,PPIND
       DOUBLE PRECISION CSO,CSZ,LAM,SSOLD,GMOLD,GMNEW,SIGSQ,OLDB(22)
 c      COMMON/SETCON/CONV,FAIL,NP,ITCT,PPIND,CSO,CSZ,LAM,SSOLD,
 c     *GMOLD,GMNEW,SIGSQ,OLDB
@@ -51,8 +55,9 @@ C*****repar3.txt
      *XVECI(20)
       COMMON/REPAR3/ALPHA,ROOTR,ROOTI,XVECR,XVECI
 
-  
-      PRINT *,'SAVING OF FILTERED AND SMOOTHED STATES IN PROGRESS' 
+      if(tra.EQ.1)then
+C      PRINT *,'SAVING OF FILTERED AND SMOOTHED STATES IN PROGRESS' 
+      end if
 c      KFSW=1
       kfsw=0
 c     change kfsw=1 to kfsw=0, where kfsw=1 is standard version

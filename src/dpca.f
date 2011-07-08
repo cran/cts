@@ -1,4 +1,5 @@
       SUBROUTINE ADDC(A,B,C,D,E,F)
+      IMPLICIT NONE
       DOUBLE PRECISION A,B,C,D,E,F
       E=A+C
       F=B+D
@@ -14,7 +15,7 @@
       DOUBLE PRECISION A,B,C,D,E,F,R
       R=C*C+D*D
       IF(R.EQ.0.0D0)THEN
-        PRINT *,'FAILURE IN COMPLEX DIVISION'
+C        PRINT *,'FAILURE IN COMPLEX DIVISION'
         STOP
       END IF
       E=(C*A+D*B)/R

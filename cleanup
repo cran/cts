@@ -1,0 +1,34 @@
+#!/bin/bash
+
+for f in ./R/*~; do
+    rm -f $f
+done
+
+for f in ./man/*~; do
+    rm -f $f
+done
+
+for f in ./man/*.ps; do
+    rm -f $f
+done
+
+for f in ./inst/doc/*~; do
+    rm -f $f
+done
+
+    rm Rplots.pdf -f
+    rm kf-*.pdf -f
+
+for f in ./src/*~; do
+    rm -f $f
+done
+
+for f in ./src/*.o; do
+    rm -f $f
+done
+
+for f in *~; do
+    rm -f $f
+done
+
+exit 0

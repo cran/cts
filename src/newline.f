@@ -1,4 +1,4 @@
       SUBROUTINE NEWLINE
-      PRINT *,' '
+C      PRINT *,' '
       RETURN
       END

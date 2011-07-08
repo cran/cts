@@ -1,5 +1,5 @@
       SUBROUTINE CSPEC(B1,ARP1,SCALE1,NFREQ,F1,S1)
-
+      IMPLICIT NONE
       INTEGER I,J,M,NF,NF1,NFREQ,ARP1
       DOUBLE PRECISION B1(ARP1+1),F1(NFREQ),S1(NFREQ)
       DOUBLE PRECISION FAC,P2,S2,F,S,U,V,W,X,Y,Z,SCALE1
@@ -12,6 +12,9 @@ c      INCLUDE 'veccom.txt'
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra
+
 C*****setcon.txt
       LOGICAL CONV,FAIL
       INTEGER NP,ITCT,PPIND
@@ -28,7 +31,7 @@ C*****veccom.txt
       DOUBLE PRECISION B(22),NEWB(22),PERB(22),DELB(22),
      * ERR(500),RES(500),PRES(22,500),sres(500)
       COMMON/VECCOM/B,NEWB,PERB,DELB,ERR,RES,PRES,sres
-
+      DOUBLE PRECISION FRMULT
 
 c      PRINT *, 'SAVING OF MODEL SPECTRUM IN PROGRESS'
       P2=6.2831853071795864D0

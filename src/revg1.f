@@ -1,6 +1,7 @@
       SUBROUTINE REVG1
-      INTEGER I,J,T,TR,IA
-      DOUBLE PRECISION CSO,U,V,W,X,TWM1(20,20),TWM2(20,20)
+      IMPLICIT NONE
+      INTEGER I,J,T,TR,IA,IFAIL
+      DOUBLE PRECISION CSZ, CSO,U,V,W,X,TWM1(20,20),TWM2(20,20)
      *,AQ(20,20),AQI(20,20),APH(20,20),AP(20,20),AJ(20,20),SIG(20,20)
 c      INCLUDE 'kfasav.txt'
 c      INCLUDE 'series.txt'
@@ -26,6 +27,8 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra      
 C*****repar3.txt
       DOUBLE PRECISION ALPHA(21),ROOTR(20),ROOTI(20),XVECR(20),
      *XVECI(20)
@@ -54,7 +57,7 @@ c         added ZW
 
       IF (IFAIL .NE. 0) THEN
 
-        PRINT 1030, IFAIL
+C        PRINT 1030, IFAIL
 
         STOP 1
 
@@ -72,7 +75,7 @@ C
 
       IF (IFAIL .NE. 0) THEN
 
-        PRINT 1040, ABS(IFAIL)
+C        PRINT 1040, ABS(IFAIL)
 
         STOP 2
 
@@ -88,7 +91,7 @@ c      print *,'AQI',AQI
 c     added ZW
 c          CALL F01ADF(ARP,AQI,IA,IFAIL)
 C          PRINT *,'AFTER CALL OF F01ADF'
-          IF (IFAIL.EQ.1) PRINT *,'SMOOTHING ERROR: NOT POS.DEF.'
+C          IF (IFAIL.EQ.1) PRINT *,'SMOOTHING ERROR: NOT POS.DEF.'
 c          DO 20 I=1,ARP
 c          DO 20 J=I,ARP
 c          AQI(I,J)=AQI(J+1,I)

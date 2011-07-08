@@ -1,4 +1,5 @@
       SUBROUTINE SEARCH
+      IMPLICIT NONE
       INTEGER I,J
       DOUBLE PRECISION U,V
 c      INCLUDE 'setcon.txt'

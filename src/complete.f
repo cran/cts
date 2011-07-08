@@ -1,4 +1,5 @@
-      SUBROUTINE COMPLETE
+      SUBROUTINE COMPLETE(SS, BIT)
+      IMPLICIT NONE
       INTEGER I,J,K
       DOUBLE PRECISION U
 c      INCLUDE 'model.txt'
@@ -15,6 +16,9 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra
+
 C*****conpar.txt    
       INTEGER NIT,OPM,RGM,KUP,KSP,KST
       DOUBLE PRECISION REQ,CONCRIT,RPERT,IVLAM,FAC,STLAM,SMLAM,GTLAM
@@ -54,25 +58,32 @@ C*****repar3.txt
       DOUBLE PRECISION ALPHA(21),ROOTR(20),ROOTI(20),XVECR(20),
      *XVECI(20)
       COMMON/REPAR3/ALPHA,ROOTR,ROOTI,XVECR,XVECI
+      DOUBLE PRECISION SS, BIT(22) 
 
-      CALL NEWLINE
-      PRINT *,'PROCESSING COMPLETED'
+C      CALL NEWLINE
+C      if(tra.EQ.1)then
+C      PRINT *,'PROCESSING COMPLETED'
+C      end if
       IF(ITCT.GE.NIT)THEN
         I=NIT
       ELSE
         I=ITCT
       END IF
-      PRINT *,I,' ITERATIONS COMPLETED'
-      IF(CONV)THEN
-        PRINT *,'CONVERGENCE ACHIEVED'
-      ELSE
-        PRINT *,'CONVERGENCE NOT ACHIEVED'
-      END IF
-      IF(FAIL)THEN
-        PRINT *,'SEARCH FAILED TO PROGRESS'
-      ELSE
-        PRINT *,'SEARCH PROGRESSED'
-      END IF
+C      if(tra.EQ.1)then
+C      PRINT *,I,' ITERATIONS COMPLETED'
+C      end if
+C      IF(CONV)THEN
+C        PRINT *,'CONVERGENCE ACHIEVED'
+C      ELSE
+C        PRINT *,'CONVERGENCE NOT ACHIEVED'
+C      END IF
+C      IF(FAIL)THEN
+C        PRINT *,'SEARCH FAILED TO PROGRESS'
+C      ELSE
+C       if(tra.EQ.1)then
+C        PRINT *,'SEARCH PROGRESSED'
+C       end if
+C      END IF
       DO 100 I=1,NP
       DELB(I)=0.0D0
       DO 100 J=1,NP
@@ -90,11 +101,16 @@ C*****repar3.txt
   101 CONTINUE
 c added by Z.W.
 c      OPEN(UNIT=4,FILE='cov.dat',STATUS='NEW')
-      OPEN(UNIT=4,FILE='cov.dat',STATUS='unknown')
-      write(4,95) ((ESSP(I,J),J=1,NP-1),I=1,NP-1)
-   95 FORMAT(5E16.8)
+c      OPEN(UNIT=4,FILE='cov.dat',STATUS='unknown')
+c      write(4,95) ((ESSP(I,J),J=1,NP-1),I=1,NP-1)
+c   95 FORMAT(5E16.8)
 c Note: NP-th parameter is the constant estimator in the last line
-      close(unit=4)
+c      close(unit=4)
+C     for model selection purpose, find covariance matrix ECOV
+      DO 303 I=1,ARP
+      DO 303 J=1,ARP
+      ECOV(I,J)=ESSP(I,J)
+  303 CONTINUE                                  
 c end by Z.W.   
       DO 102 I=1,NP
       DELB(I)=DSQRT(ESSP(I,I))
@@ -104,54 +120,64 @@ c end by Z.W.
       DO 103 J=1,NP
       ESSP(I,J)=ESSP(I,J)/(U*DELB(J))
   103 CONTINUE
+      if(tra.EQ.1)then
       CALL NEWLINE
-      PRINT *,'FINAL SUM OF SQUARES: ',SSOLD
-      PRINT *,'MEAN SUM OF SQUARES : ',SIGSQ*GMOLD
-      PRINT *,'INNOVATION PROCESS VARIANCE ESTIMATE: ',SIGSQ
-      PRINT *,'GEOMETRIC MEAN VARIANCE MULTIPLIER:   ',GMOLD
-      PRINT *,'FINAL PARAMETER VALUES:'
+C      PRINT *,'FINAL SUM OF SQUARES: ',SSOLD
+C      PRINT *,'MEAN SUM OF SQUARES : ',SIGSQ*GMOLD
+C      PRINT *,'INNOVATION PROCESS VARIANCE ESTIMATE: ',SIGSQ
+C      PRINT *,'GEOMETRIC MEAN VARIANCE MULTIPLIER:   ',GMOLD
+C      PRINT *,'FINAL PARAMETER VALUES:'
+      end if
       DO 104 I=1,NP
       B(I)=OLDB(I)
-      PRINT *,'   ',I,'  ',B(I),'   +/- ',DELB(I)
+C      if(tra.EQ.1)then
+C      PRINT *,'   ',I,'  ',B(I),'   +/- ',DELB(I)
+C      end if
   104 CONTINUE
+      if(tra.EQ.1)then
       CALL NEWLINE
-      PRINT *,'CORRELATION MATRIX:'
-      DO 106 I=1,NP
-      WRITE(6,105)(ESSP(I,J),J=1,I)
-  105 FORMAT(1H ,7(D10.3,2X))
-  106 CONTINUE
+C      PRINT *,'CORRELATION MATRIX:'
+c      DO 106 I=1,NP
+c      WRITE(6,105)(ESSP(I,J),J=1,I)
+c  105 FORMAT(1H ,7(D10.3,2X))
+c  106 CONTINUE
+      end if
+      SS = SSOLD
+      DO 107 I=1,NP
+      BIT(I)=OLDB(I)
+  107 CONTINUE
 c      OPEN(UNIT=4,FILE='parest.dat',STATUS='NEW')
-      open(unit=4,file='parest.dat',status='unknown')
-      WRITE(4,195)
-  195 FORMAT('MOD.PAR.IND., ORDER, NO.PAR., VAR.RAT.IND., CON.IND.')
-      WRITE(4,196) PFI,ARP,NP,VRI,CCV
-  196 FORMAT(5I10)
-      WRITE(4,197)
-  197 FORMAT('SCALE , INNOVATION VARIANCE')
-      WRITE(4,198) SCALE,SIGSQ
-  198 FORMAT(5E16.8)
-      WRITE(4,199)
-  199 FORMAT('PARAMETERS')
-      WRITE(4,198) (B(I),I=1,NP)
-      WRITE(4,200)
-  200 FORMAT('STANDARD ERRORS')
-      WRITE(4,198) (DELB(I),I=1,NP)
-      WRITE(4,201)
-  201 FORMAT('CORRELATIONS')
-      WRITE(4,198) ((ESSP(I,J),J=1,I),I=1,NP)
-      WRITE(4,202)
+c      open(unit=4,file='parest.dat',status='unknown')
+c      WRITE(4,195)
+c  195 FORMAT('MOD.PAR.IND., ORDER, NO.PAR., VAR.RAT.IND., CON.IND.')
+c      WRITE(4,196) PFI,ARP,NP,VRI,CCV
+c  196 FORMAT(5I10)
+c      WRITE(4,197)
+c  197 FORMAT('SCALE , INNOVATION VARIANCE')
+c      WRITE(4,198) SCALE,SIGSQ
+c  198 FORMAT(5E16.8)
+c      WRITE(4,199)
+c  199 FORMAT('PARAMETERS')
+c      WRITE(4,198) (B(I),I=1,NP)
+c      WRITE(4,200)
+c  200 FORMAT('STANDARD ERRORS')
+c      WRITE(4,198) (DELB(I),I=1,NP)
+c      WRITE(4,201)
+c  201 FORMAT('CORRELATIONS')
+c      WRITE(4,198) ((ESSP(I,J),J=1,I),I=1,NP)
+c      WRITE(4,202)
       CALL ROOTS
-  202 FORMAT('ROOTS:REAL PARTS THEN IMAGINARY')
-      WRITE(4,198) (ROOTR(I),I=1,ARP)
-      WRITE(4,198) (ROOTI(I),I=1,ARP)
-      CLOSE(UNIT=4)
+c  202 FORMAT('ROOTS:REAL PARTS THEN IMAGINARY')
+c      WRITE(4,198) (ROOTR(I),I=1,ARP)
+c      WRITE(4,198) (ROOTI(I),I=1,ARP)
+c      CLOSE(UNIT=4)
 c added by Z.W.
 c     the last element of phi.dat is the estimate of the mean
 c      OPEN(UNIT=4,FILE='phi.dat',STATUS='NEW')
-      OPEN(UNIT=4,FILE='phi.dat',STATUS='unknown')
-      WRITE(4,300) (B(I),I=1,NP)
-  300 FORMAT(5E16.8)
-      CLOSE(UNIT=4)
+c      OPEN(UNIT=4,FILE='phi.dat',STATUS='unknown')
+c      WRITE(4,300) (B(I),I=1,NP)
+c  300 FORMAT(5E16.8)
+c      CLOSE(UNIT=4)
 c end by Z.W.
       RETURN
       END

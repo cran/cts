@@ -1,4 +1,5 @@
       SUBROUTINE REPAR
+      IMPLICIT NONE
       INTEGER I,J,K,K1,K2,M
       DOUBLE PRECISION REV,S,T,U,V,W,X,Y,Z
 c      INCLUDE 'model.txt'
@@ -14,6 +15,9 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra
+
 C*****conpar.txt    
       INTEGER NIT,OPM,RGM,KUP,KSP,KST
       DOUBLE PRECISION REQ,CONCRIT,RPERT,IVLAM,FAC,STLAM,SMLAM,GTLAM
@@ -51,9 +55,9 @@ C*****repar3.txt
 
       M=ARP+1
       IF(PFI.EQ.1)THEN
-        PRINT *,'NOT YET IMPLEMENTED'
+C        PRINT *,'NOT YET IMPLEMENTED'
       ELSE IF(PFI.EQ.2)THEN
-        PRINT *,'NOT YET IMPLEMENTED'
+C        PRINT *,'NOT YET IMPLEMENTED'
       ELSE IF(PFI.GE.3)THEN
         CALL ROOTS
         J=ARP+1

@@ -12,7 +12,7 @@ properties of standard power spectra.
 }
 \usage{
 spec.ls(x, y=NULL, spans = NULL, kernel = NULL, taper = 0.1, pad = 0,
-fast = TRUE, type = "lomb",demean = FALSE, detrend = TRUE, plot = TRUE,
+fast = TRUE, type = "lomb",demean = FALSE, detrend = TRUE, plot.it = TRUE,
 na.action = na.fail, ...)
 }
 \arguments{
@@ -36,7 +36,7 @@ na.action = na.fail, ...)
     series.}
   \item{detrend}{logical. If \code{TRUE}, remove a linear trend from
     the series. This will also remove the mean.}
-  \item{plot}{plot the periodogram?}
+  \item{plot.it}{plot the periodogram?}
   \item{na.action}{\code{NA} action function.}
   \item{\dots}{graphical arguments passed to \code{plot.spec.ls}.}
 }
@@ -71,7 +71,7 @@ na.action = na.fail, ...)
   \item{detrend}{The value of the \code{detrend} argument.}
   \item{demean}{The value of the \code{demean} argument.}
 
-  The result is returned invisibly if \code{plot} is true.
+  The result is returned invisibly if \code{plot.it} is true.
 }
 \references{
 Bloomfield, P. (1976) \emph{Fourier Analysis of Time Series: An
@@ -99,11 +99,10 @@ Scargle, J.D. (1982) Studies in astronomical time series analysis II. Statistica
   \code{\link{plot.spec.ls}}, \code{\link{fft}}}
 
 \examples{
-\dontrun{
 data(V22174)
 spec.ls(V22174)
 
 data(asth)
 spec.ls(asth)
-}}
+}
 \keyword{ ts }

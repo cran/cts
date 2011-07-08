@@ -1,16 +1,18 @@
-\name{kalsmo.comp}
-\alias{kalsmo.comp}
+\name{kalsmoComp}
+\alias{kalsmoComp}
 \title{Estimate Componenents with the Kalman Smoother }
 \description{
 Estimate unobserved components with the Kalman smoother to a fitted CAR model.
 }
 \usage{
-kalsmo.comp(x, comp = NULL, plot = TRUE, na.action = na.fail, ...)
+kalsmoComp(x, comp = NULL, plot.it = TRUE, xlab= "time", ylab="",na.action = na.fail, ...)
 }
 \arguments{
-  \item{x}{ the result of a fit by \code{\link{car}}. }
+  \item{x}{ the result of estimated components by \code{\link{kalsmo}}. }
   \item{comp}{ a numeric vector from which components are estimaed }
-  \item{plot}{ plot the component? }
+  \item{plot.it}{ plot the component? }
+  \item{xlab}{ name of xlab}
+  \item{ylab}{ name of ylab}
   \item{na.action}{ how to handle NAs? }
   \item{\dots}{further graphical parameters. }
 }
@@ -30,10 +32,13 @@ Belcher, J. and Hampton, J. S. and Tunnicliffe Wilson,
 }
 
 \author{
-  G. Tunnicliffe Wilson and Zhu Wang
-}
+  Zhu Wang
 }
 
-\seealso{ \code{\link{kalsmo.car}}}
+\seealso{ \code{\link{kalsmo}}}
 
+\examples{
+data(asth)
+kalsmoComp(kalsmo(car(asth,scale=0.25,order=4)),c(2,3))
+}
 \keyword{ ts }

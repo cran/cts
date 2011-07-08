@@ -1,4 +1,5 @@
       SUBROUTINE RESGEN
+      IMPLICIT NONE
       INTEGER T
       DOUBLE PRECISION U,V
 c      INCLUDE 'series.txt'
@@ -35,10 +36,19 @@ C*****resgn2.txt
      *RI(2,20,20)
 c       DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(20,20),RI(2,20,20)
       COMMON/RESGN2/WK,VT,BI,R,RI
+      INTEGER PFI,ARP,VRI,CCV,LYAP,SCC,fct
+      DOUBLE PRECISION SCALE,VR,CONST,PHI(20),PRDG
+      COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
+      integer for, fty
+      common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra
 
 c      print *,'PPIND: ',PPIND
+      IF(tra.EQ.1)THEN
       IF(PPIND.EQ.0)THEN
-        PRINT *,'ROOT EQUALITY SWITCH: ',REQSW
+C        PRINT *,'ROOT EQUALITY SWITCH: ',REQSW
+      END IF
       END IF
 c      print *,'REQSW: ',REQSW
       IF(REQSW.EQ.0)THEN

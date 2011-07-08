@@ -1,6 +1,6 @@
       subroutine setcom(PFI1,ARP1,NP1,VRI1,CCV1,LEN1,SCALE1,VR1,SIGSQ1,
      *ESSP1,ECOV1,B1,DELB1,ROOTR1,ROOTI1)
-
+      IMPLICIT NONE 
       INTEGER I,J
 c      INCLUDE 'model.txt'
 c      INCLUDE 'conpar.txt'
@@ -18,6 +18,8 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra      
 C*****conpar.txt    
       INTEGER NIT,OPM,RGM,KUP,KSP,KST
       DOUBLE PRECISION REQ,CONCRIT,RPERT,IVLAM,FAC,STLAM,SMLAM,GTLAM
@@ -73,7 +75,7 @@ C*****setcon1.txt
       INTEGER NP1
       DOUBLE PRECISION SIGSQ1
 C*****model1.txt
-      INTEGER PFI1,ARP1,VRI1,CCV1
+      INTEGER LEN1, PFI1,ARP1,VRI1,CCV1
       DOUBLE PRECISION SCALE1,VR1
 
 

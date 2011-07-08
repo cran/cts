@@ -1,3 +1,19 @@
+### Adopted from plot.spec R code
+ spec.ci <- function (spec.obj, coverage = 0.95)
+    {
+        ## A utility function for plot.spec which calculates the confidence
+        ## interval (centred around zero). We use a conditional argument to
+        ## ensure that the ci always contains zero.
+
+        if (coverage < 0 || coverage >= 1)
+            stop("coverage probability out of range [0,1)")
+        tail <- (1 - coverage)
+        df <- spec.obj$df
+        upper.quantile <- 1 - tail * pchisq(df, df, lower.tail = FALSE)
+        lower.quantile <- tail * pchisq(df, df)
+        1/(qchisq(c(upper.quantile, lower.quantile), df)/df)
+    }
+
 "plot.spec.ls" <-
 function (x, add = FALSE, ci = 0.95, log = c("yes", "dB", "no"), 
     xlab = "frequency", ylab = NULL, type = "l",
@@ -47,9 +63,9 @@ function (x, add = FALSE, ci = 0.95, log = c("yes", "dB", "no"),
                 conf.lim <- 10 * log10(conf.lim)
                 conf.y <- max(x$spec) - conf.lim[2]
                 conf.x <- max(x$freq) - x$bandwidth
-                lines(rep(conf.x, 2), conf.y + conf.lim, col = ci.col)
+                lines(rep(conf.x, 2), conf.y + conf.lim, ...)
                 lines(conf.x + c(-0.5, 0.5) * x$bandwidth, rep(conf.y, 
-                  2), col = ci.col)
+                  2))
                 ci.text <- paste(", ", round(100 * ci, 2), "% C.I. is (", 
                   paste(format(conf.lim, digits = 3), collapse = ","), 
                   ")dB", sep = "")
@@ -58,9 +74,9 @@ function (x, add = FALSE, ci = 0.95, log = c("yes", "dB", "no"),
                 ci.text <- ""
                 conf.y <- max(x$spec)/conf.lim[2]
                 conf.x <- max(x$freq) - x$bandwidth
-                lines(rep(conf.x, 2), conf.y * conf.lim, col = ci.col)
+                lines(rep(conf.x, 2), conf.y * conf.lim)
                 lines(conf.x + c(-0.5, 0.5) * x$bandwidth, rep(conf.y, 
-                  2), col = ci.col)
+                  2))
             }
         }
         if (is.null(main)) 

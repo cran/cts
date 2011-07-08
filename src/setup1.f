@@ -2,8 +2,8 @@
      *PHI1,LYAP1,PRDG1,SCC1,FCT1,FTY1,
      *LEN1,FOR1,TIM1,SER1,
      *NIT1,OPM1,RGM1,REQ1,CONCRIT1,RPERT1,IVLAM1,
-     *FAC1,STLAM1,SMLAM1,GTLAM1,KST1,NP1)
-
+     *FAC1,STLAM1,SMLAM1,GTLAM1,KST1,NP1, tra1)
+      IMPLICIT NONE
 c      CHARACTER*1 ST9
 c      CHARACTER*4 ST0,ST1
       INTEGER I,J,K,L,M
@@ -29,6 +29,8 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra      
 C*****series.txt
       CHARACTER*40 NAME
       INTEGER LEN
@@ -113,9 +115,9 @@ c      COMMON/KFASAV/PRE,PRV,FSER,FVAR,SSER,SVAR,FSES,FSCV,SSES,SSCV
 c     1,PSES,PSCV,TRAN
       COMMON/KFASAV/FSES,FSCV,SSES,SSCV
      1,PSES,PSCV,TRAN,PRE,PRV,FSER,FVAR,SSER,SVAR
+      integer tra1
 
-
-      INTEGER LEN1
+      INTEGER LEN1, NP1
       DOUBLE PRECISION TIM1(500),SER1(500)
 C*****conpar1.txt    
       INTEGER NIT1,OPM1,RGM1,KST1
@@ -126,6 +128,8 @@ C*****conpar1.txt
          SER(I)=SER1(I)
  100     continue
 
+ 
+      tra=tra1   
       PFI=PFI1
       ARP=ARP1
       ARI=ARI1

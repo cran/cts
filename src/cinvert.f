@@ -1,4 +1,5 @@
       SUBROUTINE CINVERT
+      IMPLICIT NONE
       INTEGER I,J
 c      INCLUDE 'model.txt'
 c      INCLUDE 'setcon.txt'
@@ -9,6 +10,9 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra
+
 C*****setcon.txt
       LOGICAL CONV,FAIL
       INTEGER NP,ITCT,PPIND
@@ -41,7 +45,7 @@ c      CALL F04ADF(R,J,BI,J,ARP,ARP,RI,J,WK,I) changed ZW
       call zgesv(ARP,ARP,R,J,IPIVOT,BI,J,I)
       IF(I.NE.0)THEN
 c        PRINT *,'PROGRAM FAILS IN F04ADF WITH ERROR: ',I
-         PRINT *,'PROGRAM FAILS IN ZGESV WITH ERROR: ',I
+C         PRINT *,'PROGRAM FAILS IN ZGESV WITH ERROR: ',I
          STOP
       END IF
       RETURN

@@ -1,4 +1,7 @@
-kalsmo.car <- function(object)
+kalsmo <- function(object)
+    UseMethod("kalsmo")
+
+"kalsmo.car" <- function(object)
 {
   par <- object$phi
   n <- object$n.used
@@ -23,16 +26,21 @@ kalsmo.car <- function(object)
     K <- c(rep(0, p - 1), 1)
     H <- choose(p - 1, k = 0:(p - 1))/k^(0:(p - 1))
 #    w <- sort(polyroot(rev(c(1, par[1:p]))))
-  w <- sort(polyroot(rev(c(1, par))))
+    w <- sort(round(polyroot(rev(c(1, par[1:p]))),4)) 
+#   sortind <- sort.list(abs(object$rootr), decreasing = TRUE)
+#    carroot <- complex(real = object$rootr, imag = object$rooti)
+#    w <- carroot <- rev(sort(carroot, partial = sortind))
     r <- -k * (1 - w)/(1 + w)
     sortind <- sort.list(abs(Re(r)), decreasing = TRUE)
-    r <- rev(sort(r, partial = sortind))
+    r <- rev(r[sortind]) #changed  
+    ###r <- rev(sort(r, partial = sortind))
     R <- matrix(0, p, p)
     E <- matrix(0, p, p)
     P <- matrix(0, p, p)
     for (i in 1:p) R[i, ] <- r^(i - 1)
+    R <- round(R, 4)
     D <- diag(r)
-    J <- solve(R)[, p]
+   J <- solve(R)[, p]
     G <- H %*% R
     state <- matrix(0, n + 1, p)
     innovation <- v <- rep(0, n)
@@ -85,7 +93,7 @@ kalsmo.car <- function(object)
     v <- round(v, 4)
     state <- round(state, 4)
     vwhite <- sse/(n - object$np)
-    list(sse = Re(sse), vwhite = Re(vwhite), state = state, innovation = innovation, 
+    RET <- list(tim=object$tim,ser=object$ser,sse = Re(sse), vwhite = Re(vwhite), state = state, innovation = innovation, 
         filcomp = filcomp, v = v, roots = r, sses = SSES, sser = SSER, 
         svar = SVAR)
 }

@@ -3,14 +3,15 @@
 
 \title{Plotting Spectral Densities }
 \description{
- Plotting method for objects of class \code{"spec.car"}.}
+ Internal function used in spectrum.car only. Not called by user.
+ Plotting method for objects of class \code{"spectrum.car"}.}
 \usage{
 plot.spec.car(x, add = FALSE, ci = 0.95, log = "dB", xlab = "frequency",
 ylab = NULL, type = "l", main = NULL, sub = NULL,...)
 }
 
 \arguments{
-    \item{x}{an object of class \code{"spec.car"}.}
+    \item{x}{an object of class \code{"spectrum.car"}.}
   \item{add}{logical.  If \code{TRUE}, add to already existing plot.}
   \item{ci}{Coverage probability for confidence interval.  Plotting of
     the confidence bar is omitted unless \code{ci} is strictly
@@ -27,7 +28,7 @@ ylab = NULL, type = "l", main = NULL, sub = NULL,...)
   \item{sub}{a sub title for the plot.}
   \item{\dots}{further graphical parameters.}
 }
-\value{plot of spectral density from continuous time series model}
+\value{plot of spectral density from continuous time autoregressive model}
 \references{
   Belcher, J. and Hampton, J. S. and Tunnicliffe Wilson,
   G. (1994). Parameterization of continuous time autoregressive models
@@ -44,7 +45,7 @@ ylab = NULL, type = "l", main = NULL, sub = NULL,...)
 \author{
   G. Tunnicliffe Wilson and Zhu Wang
 }
-\seealso{ \code{\link{spec.car}}}
+\seealso{ \code{\link{spectrum.car}}}
 
 \keyword{ hplot }
 \keyword{ ts }

@@ -1,4 +1,5 @@
       SUBROUTINE SIMI
+      IMPLICIT NONE
       INTEGER I,I1,J,K,L
       DOUBLE PRECISION V,W,Y,Z
 c      INCLUDE 'setcon.txt'

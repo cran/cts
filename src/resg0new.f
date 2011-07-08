@@ -8,6 +8,7 @@ c     CSR and CSI corresponding to CS (resg1d.f)
 c     CR and CI corresponding to CC (resg1d.f)
 
       subroutine resg0new
+      IMPLICIT NONE 
       INTEGER I,J,T
       DOUBLE PRECISION U,V,W,X,Y,Z,PRED,PEV
       DOUBLE PRECISION FSESR(500,20),FSCVR(500,20,20)
@@ -30,6 +31,9 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra
+
 C*****series.txt
       CHARACTER*40 NAME
       INTEGER LEN

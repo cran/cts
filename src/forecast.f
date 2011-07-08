@@ -1,6 +1,7 @@
 c     SUBROUTINE KFILSM
       SUBROUTINE FORECAST
-      INTEGER T
+      IMPLICIT NONE
+      INTEGER I, T
 c      INCLUDE 'model.txt'
 c      INCLUDE 'repcom.txt'
 c      INCLUDE 'kfasav.txt'
@@ -14,6 +15,9 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra
+
 C*****repcom.txt
       LOGICAL PRPI
       INTEGER REQSW,KFSW
@@ -53,8 +57,9 @@ C*****repar3.txt
      *XVECI(20)
       COMMON/REPAR3/ALPHA,ROOTR,ROOTI,XVECR,XVECI
 
-
-      print *,'FORECASTING IN PROGRESS'
+      if(tra.EQ.1)then
+C      PRINT *,'FORECASTING IN PROGRESS'
+      endif
       KFSW=1
       DO 10 I=1,NP
   10  B(I)=OLDB(I)
@@ -63,18 +68,24 @@ C*****repar3.txt
 c     resg1pre and resg1pre1 together are predicting
 c fct=0 means to use part (len-for) of data to fit a model, then forecast. So the data length will be changed.
       if(fct.EQ.0)then
-         print *,'  THE LENGTH OF THE DATA USED TO MODEL IS'
-     *,LEN 
-         print *,'  FCT=0, FORECAST LAST L-STEP'  
+        if(tra.EQ.1)then
+C         print *,'  THE LENGTH OF THE DATA USED TO MODEL IS'
+C     *,LEN 
+C         print *,'  FCT=0, FORECAST LAST L-STEP'  
+        endif
 c note: for fct=0, LEN has been reduced to LEN-FOR in setup subroutine      
          call resg1pre1
 c fct=1 means to use all data to fit a model, then forecast.
 c subroutine resg1pre uses len-for of data to estimate optimal state and covariance matrices.
       else
-         print *,'  THE LENGTH OF THE DATA USED TO MODEL IS'
-     *,LEN         
+        if(tra.EQ.1)then
+C         print *,'  THE LENGTH OF THE DATA USED TO MODEL IS'
+C     *,LEN         
+        endif
          if(fty.EQ.1)then
-            print *,'  FCT=1 AND FTY=1, FORECAST PAST THE END'
+           if(tra.EQ.1)then
+C            print *,'  FCT=1 AND FTY=1, FORECAST PAST THE END'
+           endif
 c     construct equally spaced time points to forecast
 c     this may be changed, for example, from input file
             do 15 T=LEN+1,LEN+FOR
@@ -85,38 +96,42 @@ c changed 6/6/06
             call resg1pre1
          else
             if(fty.EQ.2)then
-               print *,'  FCT=1 AND FTY=2, FORECAST LAST L-STEP'
+              if(tra.EQ.1)then
+C               print *,'  FCT=1 AND FTY=2, FORECAST LAST L-STEP'
+              endif
 c               estimate state and convariance matrix up to time LEN-FOR
                call resg1pre
                LEN=LEN-FOR
                call resg1pre1
              else
-                print *,'  FCT=1 AND FTY=3, FORECAST LAST L-STEP UPDATE
-     *D(FILTERING)' 
+              if(tra.EQ.1)then
+C                print *,'  FCT=1 AND FTY=3, FORECAST LAST L-STEP UPDATE
+C     *D(FILTERING)' 
               endif
+             endif
          endif
       endif
 
 ccccccccccc
-      open(unit=4,file='forecast.dat',status='UNKNOWN')
-      WRITE(4,195)
-  195 FORMAT(7H LENGTH)
-      WRITE(4,196) for
-  196 FORMAT(I10)
-      WRITE(4,201) 
-  201 format(27H  TIME SERIES PRESER PREVAR) 
+c      open(unit=4,file='forecast.dat',status='UNKNOWN')
+c      WRITE(4,195)
+c  195 FORMAT(7H LENGTH)
+c      WRITE(4,196) for
+c  196 FORMAT(I10)
+c      WRITE(4,201) 
+c  201 format(27H  TIME SERIES PRESER PREVAR) 
       if(fct.EQ.0)then
-         DO 20 T=LEN+1,LEN+FOR
- 20         write(4,202) TIM(T),SER(T),PRE(T),PRV(T)
- 202        FORMAT(4E13.5)
+c         DO 20 T=LEN+1,LEN+FOR
+c 20         write(4,202) TIM(T),SER(T),PRE(T),PRV(T)
+c 202        FORMAT(4E13.5)
          else
             if(fty.EQ.3)then
                LEN=LEN-FOR
             endif
-            do 30 T=LEN+1,LEN+for
- 30            write(4,203) TIM(T),SER(T),PRE(T),PRV(T)
- 203           FORMAT(4E13.5)
+c            do 30 T=LEN+1,LEN+for
+c 30            write(4,203) TIM(T),SER(T),PRE(T),PRV(T)
+c 203           FORMAT(4E13.5)
             endif
-            CLOSE(UNIT=4)
+c            CLOSE(UNIT=4)
             RETURN
             END

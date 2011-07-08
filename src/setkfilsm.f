@@ -1,6 +1,7 @@
       subroutine setkfilsm(FSER1,FVAR1,SSER1,SVAR1,
 c     *ERR1,SRES1)
      *SRES1) 
+      IMPLICIT NONE
       INTEGER I
 
 c      INCLUDE 'conpar.txt'
@@ -69,6 +70,8 @@ c      COMMON/MODEL/PFI,ARP,VRI,CCV,SCALE,VR,CONST,PHI,LYAP,PRDG,SCC,fct
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra      
       DOUBLE PRECISION FSER1(500),FVAR1(500),
      *SSER1(500),SVAR1(500)
       DOUBLE PRECISION SRES1(500)

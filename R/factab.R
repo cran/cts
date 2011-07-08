@@ -1,25 +1,27 @@
-"factab" <-
+"factab" <- 
 function (object) 
 {
+    if(class(object) != "car")
+    stop("object must be car\n")
     call <- match.call()
-    sortind <- sort.list(abs(object$rootr), decreasing = TRUE)
-    carroot <- complex(real = object$rootr, imag = object$rooti)
-    carroot <- rev(sort(carroot, partial = sortind))
-    car.freq <- abs(Im(carroot))/(2 * pi)
-    structure(list(call=call,root=carroot,freq=car.freq),
+    par <- object$phi
+    p <- object$order
+    k <- object$scale
+    w <- sort(round(polyroot(rev(c(1, par[1:p]))),4))
+    r <- -k * (1 - w)/(1 + w)
+    sortind <- sort.list(abs(Re(r)), decreasing = TRUE)
+    r <- rev(r[sortind]) #changed  
+    car.freq <- abs(Im(r))/(2 * pi)
+    structure(list(call=call,root=r,freq=car.freq),
               class="factab")
-#    cat("\nCharacteristic roots and frequencies", "\n\n")
-#    freq.table <- data.frame(Roots = round(carroot, 3), Frequency = round(car.freq, 
-#        3))
-#    return(freq.table)
 }
 
 print.factab <- 
 
-function (x, digits = max(3, getOption("digits") - 3), ...) 
+function (x, digits = 3, ...) 
 {
-    cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
-    cat("\nCharacteristic root", "\n\n")
+    cat("\nCall:\n", deparse(x$call), "\n", sep = "")
+    cat("\nCharacteristic root of original parameterization in alpha", "\n\n")
     root <- drop(round(x$root, digits=digits))
     freq <- drop(round(x$freq, digits=digits))
     names(root) <- seq(length = length(x$freq))

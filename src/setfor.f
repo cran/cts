@@ -1,5 +1,5 @@
       subroutine setfor (PRE1,PRV1,TIM1)
-
+      IMPLICIT NONE
       INTEGER I
 c      INCLUDE 'model.txt'
 c      INCLUDE 'series.txt'
@@ -10,6 +10,8 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra      
 C*****series.txt
       CHARACTER*40 NAME
       INTEGER LEN

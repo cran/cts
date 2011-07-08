@@ -32,12 +32,10 @@ discrete data. \emph{Applied Time Series Analysis II}, 651--682
 \author{
   G. Tunnicliffe Wilson and Zhu Wang
 }
-}
-\seealso{ \code{\link{car}} and \code{\link{kalsmo.car}}}
+\seealso{ \code{\link{car}} and \code{\link{kalsmo}}}
 \examples{
-\dontrun{
 data(asth)
 (fit <- car(asth,scale=0.25,order=4))
 factab(fit)
-}}
+}
 \keyword{ ts }

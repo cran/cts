@@ -1,5 +1,6 @@
 *UPTODATE ENVRONTEXT
       SUBROUTINE ENVRON(BETA,T,RND)
+      IMPLICIT NONE
 C
 C        MARK 2.2 RELEASE.  NAG COPYRIGHT 1987.
 C
@@ -75,6 +76,7 @@ C+       WHILE( C.EQ.ONE )LOOP
               C = STORE(C,-A)
               GO TO 20
           END IF
+         call dblepr("20", 2, C, 1)
 C+       END WHILE
 C
 C        Now compute  b = 2.0**m  with the smallest positive integer m
@@ -91,6 +93,7 @@ C+       WHILE( C.EQ.A )LOOP
               C = STORE(A,B)
               GO TO 40
           END IF
+         call dblepr("40", 2, C, 1)
 C+       END WHILE
 C
 C        Now compute the base. a and b are neighbouring floating point
@@ -127,9 +130,15 @@ C
 C+       WHILE( C.EQ.ONE )LOOP
    60     IF (C.EQ.ONE) THEN
               LT = LT + 1
+         call dblepr("LBETA", 5, LBETA, 1)
+         call dblepr("60 A", 4, A, 1)
               A = A*LBETA
               C = STORE(A,ONE)
+         call dblepr("ONE", 3, ONE, 1)
+         call dblepr("60 A", 4, A, 1)
+         call dblepr("60C1", 4, C, 1)
               C = STORE(C,-A)
+         call dblepr("60C2", 4, C, 1)
               GO TO 60
           END IF
 C+       END WHILE

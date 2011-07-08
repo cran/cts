@@ -1,4 +1,5 @@
-      SUBROUTINE LOOP
+      SUBROUTINE LOOP(ss, bit)
+      IMPLICIT NONE
       LOGICAL ADV
       INTEGER I
       DOUBLE PRECISION U,PU,SSNEW
@@ -14,6 +15,9 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra
+
 C*****repcom.txt
       LOGICAL PRPI
       INTEGER REQSW,KFSW
@@ -46,7 +50,9 @@ C*****series.txt
       DOUBLE PRECISION TIM(500),SER(500),TDIF(500)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
       COMMON/SERIES/TIM,SER,TDIF,NAME,LEN
-
+C sum of squares and parameters in each iteration      
+      DOUBLE PRECISION ss(NIT+1), BIT(NIT+1,22)
+      
 C  FOR USE IN PERTURBATION CALCULATIONS
       IF(PFI.LT.3)THEN
         PU=CSO
@@ -62,7 +68,7 @@ C  COPY OLDB TO B
       IF(ITCT.EQ.1)THEN
         CALL REPAR
         IF(PRPI)THEN
-          PRINT *,'ITERATION 0: ROOT WITH POSITIVE REAL PART'
+C          PRINT *,'ITERATION 0: ROOT WITH POSITIVE REAL PART'
           STOP
         END IF
         CALL RESGEN
@@ -71,15 +77,18 @@ C  COPY OLDB TO B
         SSOLD=SSOLD+RES(I)*RES(I)
   201   CONTINUE
         GMOLD=GMNEW
-        PRINT *,'ITERATION 0:'
-        PRINT *,'   LAMBDA = ',LAM
-        PRINT *,'   INITIAL SUM OF SQUARES = ',SSOLD
-        PRINT *,'   INITIAL PARAMETER VALUES'
+        ss(1)=SSOLD
+        IF(tra.EQ.1)THEN
+C        PRINT *,'ITERATION 0:'
+C        PRINT *,'   LAMBDA = ',LAM
+C        PRINT *,'   INITIAL SUM OF SQUARES = ',SSOLD
+C        PRINT *,'   INITIAL PARAMETER VALUES'
         DO 202 I=1,ARP
-        PRINT *,'   ',I,'  ',B(I)
+C        PRINT *,'   ',I,'  ',B(I)
   202   CONTINUE
         IF(VRI.EQ.1)THEN
-          PRINT *,'   INITIAL OBSERVATION VARIANCE RATIO = ',B(ARP+1)
+C          PRINT *,'   INITIAL OBSERVATION VARIANCE RATIO = ',B(ARP+1)
+        END IF
         END IF
         IF(CCV.EQ.2)THEN
           IF(VRI.EQ.1)THEN
@@ -87,7 +96,9 @@ C  COPY OLDB TO B
           ELSE
             U=B(ARP+1)
           ENDIF
-          PRINT *,'   INITIAL VALUE OF CONSTANT TERM = ',U
+          IF(tra.EQ.1)THEN
+C           PRINT *,'   INITIAL VALUE OF CONSTANT TERM = ',U
+          ENDIF
         ENDIF
       END IF
 C  CALCULATE PERTURBATION VECTOR
@@ -104,7 +115,7 @@ C  CALCULATE PERTURBATION VECTOR
       B(PPIND)=B(PPIND)+U
       CALL REPAR
       IF(PRPI)THEN
-        PRINT *,'ITERATION ',ITCT,': ROOT WITH POSITIVE REAL PART'
+C        PRINT *,'ITERATION ',ITCT,': ROOT WITH POSITIVE REAL PART'
         STOP
       END IF
       CALL RESGEN
@@ -142,13 +153,19 @@ C  CALCULATE PERTURBATION VECTOR
         IF(CONV)THEN
           RETURN
         ELSE
-          PRINT *,'ITERATION :',ITCT
-          PRINT *,'   LAMBDA: ',LAM
-          PRINT *,'   SUM OF SQUARES: ',SSOLD
-          PRINT *,'   PARAMETER VALUES:'
+          IF(tra.EQ.1)THEN
+C          PRINT *,'ITERATION :',ITCT
+C          PRINT *,'   LAMBDA: ',LAM
+C          PRINT *,'   SUM OF SQUARES: ',SSOLD
+C          PRINT *,'   PARAMETER VALUES:'
           DO 308 I=1,NP
-          PRINT *,'  ',I,'  ',OLDB(I)
+C          PRINT *,'  ',I,'  ',OLDB(I)
   308     CONTINUE
+          END IF
+      ss(ITCT+1)=SSOLD
+      DO 309 I=1,NP
+      BIT(ITCT+1, I)=OLDB(I)
+  309 CONTINUE    
           GOTO 100
         END IF
       ELSE

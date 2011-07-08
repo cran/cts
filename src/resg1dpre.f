@@ -1,5 +1,6 @@
 c     SUBROUTINE RESG1
       SUBROUTINE RESG1pre
+      IMPLICIT NONE
       INTEGER E,I,J,K,L,M,T
       DOUBLE PRECISION DEL
       DOUBLE PRECISION U,PRED,PEV
@@ -18,6 +19,9 @@ C*****model.txt
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
       integer for, fty
       common/model/for, fty
+      integer ARI, tra
+      common/model/ari,tra
+
 C*****series.txt
       CHARACTER*40 NAME
       INTEGER LEN
@@ -93,7 +97,7 @@ c     1,PSES,PSCV,TRAN
       T=0
       CALL LYBSC(ARP,AL,J,CL,J,BL,J,DL,W1,W2,T,I)
       IF(I.NE.0)THEN
-        PRINT *,'PROGRAM FAILS IN SLICE ROUTINE LYBSC: ',I
+C        PRINT *,'PROGRAM FAILS IN SLICE ROUTINE LYBSC: ',I
         STOP
       END IF
       DO 113 I=1,ARP
@@ -123,7 +127,7 @@ C     *****             ****
       CALL MEPAD(ARP,K,DEL,BL,J,DL,J,L,M,IW1,AL,CL,W1,W2,I)
 C      IF (KFSW.EQ.1)PRINT *,'JUST AFTER MEPAD CALLED'
       IF(I.EQ.4)THEN
-        PRINT *,'PROGRAM FAILS IN SLICE ROUTINE MEPAD: ',I
+C        PRINT *,'PROGRAM FAILS IN SLICE ROUTINE MEPAD: ',I
         STOP
       ELSE IF(I.NE.0)THEN
         E=I
@@ -222,7 +226,7 @@ c     U is Jones (43) without R
   150 CONTINUE
 C      PRINT *,'MAIN LOOP IN RESG1 COMPLETED'
       IF(E.NE.0)THEN
-        PRINT *,'WARNING IN SLICE ROUTINE MEPAD: ',E
+C        PRINT *,'WARNING IN SLICE ROUTINE MEPAD: ',E
       END IF
       RETURN
       END
