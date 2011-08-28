@@ -101,7 +101,7 @@ V22174.car14 <- car(V22174,scale=0.2,order=14)
 tab1 <- cbind(V22174.car14$tnit, V22174.car14$ss, V22174.car14$bit[,14])
 colnames(tab1) <- c("Iteration","Sum of Squares","phi_14")
 @
-\newpage
+%\newpage
 <<echo=true>>=
 print(as.data.frame(round(tab1,5)),row.names=FALSE, print.gap=8)
 @
@@ -116,7 +116,7 @@ V22174.car7 <- car(V22174,scale=0.2,order=7)
 summary(V22174.car7)
 @
 The estimated spectra for both models of order 14 and 7 are displayed on logarithmic (base 10) scale in Figure~\ref{fig:specox}. Both two models indicate three peaks, while for the model of order 14 the resolution is much improved.
-\setkeys{Gin}{height=0.55\textheight, width=0.8\textwidth}
+\setkeys{Gin}{height=0.50\textheight, width=0.8\textwidth}
 \begin{figure}[b!]
 \centering
 <<fig=true>>=

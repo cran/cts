@@ -1,7 +1,0 @@
-      SUBROUTINE ERM1(STA,STB)
-      IMPLICIT NONE
-      CHARACTER*(*) STA,STB
-C      PRINT *,STA,' NOT FOUND: ',STB
-      CALL ERM0
-      RETURN
-      END

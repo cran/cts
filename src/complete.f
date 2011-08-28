@@ -61,29 +61,31 @@ C*****repar3.txt
       DOUBLE PRECISION SS, BIT(22) 
 
 C      CALL NEWLINE
-C      if(tra.EQ.1)then
-C      PRINT *,'PROCESSING COMPLETED'
-C      end if
+      if(tra.EQ.1)then
+        call NEWLINE
+        call intpr('PROCESSING COMPLETED', 20, 1, 0) 
+      end if
       IF(ITCT.GE.NIT)THEN
         I=NIT
       ELSE
         I=ITCT
       END IF
-C      if(tra.EQ.1)then
-C      PRINT *,I,' ITERATIONS COMPLETED'
+      if(tra.EQ.1)then
+       call intpr('ITERATIONS COMPLETED:', 21, I, 1)
 C      end if
-C      IF(CONV)THEN
-C        PRINT *,'CONVERGENCE ACHIEVED'
-C      ELSE
-C        PRINT *,'CONVERGENCE NOT ACHIEVED'
-C      END IF
-C      IF(FAIL)THEN
-C        PRINT *,'SEARCH FAILED TO PROGRESS'
-C      ELSE
+      IF(CONV)THEN
+        call intpr('CONVERGENCE ACHIEVED', 20, 1, 0)
+      ELSE
+        call intpr('CONVERGENCE NOT ACHIEVED', 24, 1, 0)
+      END IF
+      IF(FAIL)THEN
+        call intpr('SEARCH FAILED TO PROGRESS', 25, 1, 0)
+      ELSE
 C       if(tra.EQ.1)then
-C        PRINT *,'SEARCH PROGRESSED'
+        call intpr('SEARCH PROGRESSED', 17, 1, 0) 
 C       end if
-C      END IF
+      END IF
+      END IF
       DO 100 I=1,NP
       DELB(I)=0.0D0
       DO 100 J=1,NP
@@ -122,11 +124,13 @@ c end by Z.W.
   103 CONTINUE
       if(tra.EQ.1)then
       CALL NEWLINE
-C      PRINT *,'FINAL SUM OF SQUARES: ',SSOLD
-C      PRINT *,'MEAN SUM OF SQUARES : ',SIGSQ*GMOLD
-C      PRINT *,'INNOVATION PROCESS VARIANCE ESTIMATE: ',SIGSQ
-C      PRINT *,'GEOMETRIC MEAN VARIANCE MULTIPLIER:   ',GMOLD
-C      PRINT *,'FINAL PARAMETER VALUES:'
+       call dblepr('FINAL SUM OF SQUARES: ', 22, SSOLD, 1)
+       call dblepr('MEAN SUM OF SQUARES : ', 22, SIGSQ*GMOLD, 1)
+       call dblepr('INNOVATION PROCESS VARIANCE ESTIMATE: ',38, SIGSQ,
+     *1) 
+       call dblepr('GEOMETRIC MEAN VARIANCE MULTIPLIER:   ',38, GMOLD,
+     *1) 
+       call dblepr('FINAL PARAMETER VALUES:',23,  OLDB, NP)
       end if
       DO 104 I=1,NP
       B(I)=OLDB(I)

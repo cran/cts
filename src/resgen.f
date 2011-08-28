@@ -35,7 +35,8 @@ C*****resgn2.txt
       DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(2,20,20),
      *RI(2,20,20)
 c       DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(20,20),RI(2,20,20)
-      COMMON/RESGN2/WK,VT,BI,R,RI
+      INTEGER ERRNO1
+      COMMON/RESGN2/WK,VT,BI,R,RI,ERRNO1
       INTEGER PFI,ARP,VRI,CCV,LYAP,SCC,fct
       DOUBLE PRECISION SCALE,VR,CONST,PHI(20),PRDG
       COMMON/MODEL/SCALE,VR,CONST,PHI,PRDG,PFI,ARP,VRI,CCV,LYAP,SCC,fct
@@ -47,7 +48,7 @@ c       DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(20,20),RI(2,20,20)
 c      print *,'PPIND: ',PPIND
       IF(tra.EQ.1)THEN
       IF(PPIND.EQ.0)THEN
-C        PRINT *,'ROOT EQUALITY SWITCH: ',REQSW
+        call dblepr('ROOT EQUALITY SWITCH: ', 22, REQSW, 1)
       END IF
       END IF
 c      print *,'REQSW: ',REQSW
@@ -55,7 +56,9 @@ c      print *,'REQSW: ',REQSW
         CALL RESG0
       ELSE
         CALL RESG1
-c        PRINT *, 'CALL OF RESG1 COMPLETED'
+C        IF(tra.EQ.1)THEN
+C         call intpr('CALL OF RESG1 COMPLETED', 23, 1, 0)
+C        END IF
       END IF
       U=CSZ
       DO 100 T=1,LEN

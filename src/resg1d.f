@@ -54,7 +54,8 @@ C*****resgn2.txt
       DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(2,20,20),
      *RI(2,20,20)
 c       DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(20,20),RI(2,20,20)
-      COMMON/RESGN2/WK,VT,BI,R,RI
+      INTEGER ERRNO1
+      COMMON/RESGN2/WK,VT,BI,R,RI,ERRNO1
 C*****resgd3.txt
       INTEGER IW1(20)
       DOUBLE PRECISION W1(20),W2(20),AL(20,20),BL(20,20),
@@ -96,8 +97,12 @@ c     1,PSES,PSCV,TRAN
       T=0
       CALL LYBSC(ARP,AL,J,CL,J,BL,J,DL,W1,W2,T,I)
       IF(I.NE.0)THEN
+        call intpr('WITH ERROR', 10, I, 1)
+        call rexit('PROGRAM FAILS IN SLICE ROUTINE LYBSC')
 C        PRINT *,'PROGRAM FAILS IN SLICE ROUTINE LYBSC: ',I
-        STOP
+      ERRNO1=3
+      RETURN
+C              STOP
       END IF
       DO 113 I=1,ARP
       DO 113 J=1,ARP
@@ -107,7 +112,9 @@ C        PRINT *,'PROGRAM FAILS IN SLICE ROUTINE LYBSC: ',I
       BL(I,J)=AS(I,J)
   113 CONTINUE
       E=0
-C      PRINT *, 'MAIN LOOP IN RESG1 BEGINS'
+C      IF(tra.EQ.1)THEN
+C        call intpr('MAIN LOOP IN RESG1 BEGINS', 25, 1, 0)
+C      ENDIF
       DO 150 T=1,LEN
       DEL=TDIF(T)
       J=20
@@ -125,8 +132,12 @@ C     *****             ****
 
 C      IF (KFSW.EQ.1)PRINT *,'JUST AFTER MEPAD CALLED'
       IF(I.EQ.4)THEN
+        call intpr('WITH ERROR', 10, I, 1)
+        call rexit('PROGRAM FAILS IN SLICE ROUTINE MEPAD')
 C        PRINT *,'PROGRAM FAILS IN SLICE ROUTINE MEPAD: ',I
-        STOP
+       ERRNO1=4
+       RETURN
+C        STOP
       ELSE IF(I.NE.0)THEN
         E=I
       END IF
@@ -214,8 +225,13 @@ C     **** WS IS NOW PRESENT (UPDATED) STATE ESTIMATE
         FVAR(T)=U
       ENDIF
   150 CONTINUE
+C      IF(tra.EQ.1)THEN
+C         call intpr('MAIN LOOP IN RESG1 COMPLETED', 28, 1, 0)
+C      END IF
 C      PRINT *,'MAIN LOOP IN RESG1 COMPLETED'
       IF(E.NE.0)THEN
+         call intpr('WARNING', 7, E, 1)
+         call rwarn('WARNING IN SLICE ROUTINE MEPAD')
 C        PRINT *,'WARNING IN SLICE ROUTINE MEPAD: ',E
       END IF
       RETURN

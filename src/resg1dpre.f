@@ -55,7 +55,8 @@ C*****resgn2.txt
       DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(2,20,20),
      *RI(2,20,20)
 c       DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(20,20),RI(2,20,20)
-      COMMON/RESGN2/WK,VT,BI,R,RI
+      INTEGER ERRNO1
+      COMMON/RESGN2/WK,VT,BI,R,RI,ERRNO1
 C*****resgd3.txt
       INTEGER IW1(20)
       DOUBLE PRECISION W1(20),W2(20),AL(20,20),BL(20,20),
@@ -97,8 +98,12 @@ c     1,PSES,PSCV,TRAN
       T=0
       CALL LYBSC(ARP,AL,J,CL,J,BL,J,DL,W1,W2,T,I)
       IF(I.NE.0)THEN
+        call intpr('WITH ERROR', 10, I, 1)
+        call rexit('PROGRAM FAILS IN SLICE ROUTINE LYBSC')
+        ERRNO1=30
+        RETURN
 C        PRINT *,'PROGRAM FAILS IN SLICE ROUTINE LYBSC: ',I
-        STOP
+C        STOP
       END IF
       DO 113 I=1,ARP
       DO 113 J=1,ARP
@@ -127,8 +132,12 @@ C     *****             ****
       CALL MEPAD(ARP,K,DEL,BL,J,DL,J,L,M,IW1,AL,CL,W1,W2,I)
 C      IF (KFSW.EQ.1)PRINT *,'JUST AFTER MEPAD CALLED'
       IF(I.EQ.4)THEN
+        call intpr('WITH ERROR', 10, I, 1)
+        call rexit('PROGRAM FAILS IN SLICE ROUTINE MEPAD')
+        ERRNO1=40
+        RETURN
 C        PRINT *,'PROGRAM FAILS IN SLICE ROUTINE MEPAD: ',I
-        STOP
+C        STOP
       ELSE IF(I.NE.0)THEN
         E=I
       END IF

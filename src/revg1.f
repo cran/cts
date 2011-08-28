@@ -33,6 +33,10 @@ C*****repar3.txt
       DOUBLE PRECISION ALPHA(21),ROOTR(20),ROOTI(20),XVECR(20),
      *XVECI(20)
       COMMON/REPAR3/ALPHA,ROOTR,ROOTI,XVECR,XVECI
+      DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(2,20,20),
+     *RI(2,20,20)
+      INTEGER ERRNO1
+      COMMON/RESGN2/WK,VT,BI,R,RI,ERRNO1
 
       CSO=1.D0
       CSZ=0.D0
@@ -56,10 +60,11 @@ c         added ZW
       CALL DPOTRF ('UPPER TRIANGLE OF A STORED', ARP, AQI, IA, IFAIL)
 
       IF (IFAIL .NE. 0) THEN
-
+        call  intpr('Error factoring A, INFO = ', 27, IFAIL, 1)
 C        PRINT 1030, IFAIL
-
-        STOP 1
+        ERRNO1=51
+        RETURN
+C        STOP 1
 
       END IF
 
@@ -74,10 +79,12 @@ C
       CALL DPOTRI ('UPPER TRIANGLE OF A STORED', ARP, AQI, IA, IFAIL)
 
       IF (IFAIL .NE. 0) THEN
-
+        call intpr('Error computing inverse of A, INFO = ', 27,IFAIL, 1)
 C        PRINT 1040, ABS(IFAIL)
+        ERRNO1=52
+        RETURN
 
-        STOP 2
+C        STOP 2
 
       END IF
  1030 FORMAT (1X, 'Error factoring A, INFO = ', I5)

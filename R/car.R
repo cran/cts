@@ -36,7 +36,7 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
     if (pfi==0) stop("Invalid PFI option:",pfi)
 #    scale <- sca
     if (scale <= csz) stop("Invalid SCALE value:",scale)
-    if (order <= 0 || order > 20) stop("Invalid ARP value:", order)
+    if (order <= 0 || order > 20) stop("Model order value must between 1 and 20")
 
     if (ari==FALSE) ari <- 0
     if (ari==TRUE){
@@ -147,7 +147,17 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
         zpar <- .Fortran("loop",
                 ss=double(nit+1),
                 bit=as.double(matrix(0, nit+1, 22)),
-           package="cts")
+                errno=integer(1),  package="cts")
+        if(zpar$errno == 1) stop("ROOT WITH POSITIVE REAL PART, WHICH WAS CALLED IN loop.f")
+        else if(zpar$errno == 2) stop("ERROR IN LAPACK SUBROUTINE zgesv, WHICH WAS CALLED IN cinvert.f")
+        else if(zpar$errno == 3) stop("PROGRAM FAILS IN SLICE ROUTINE LYBSC, WHICH WAS CALLED IN resg1d.f")
+        else if(zpar$errno == 30) stop("PROGRAM FAILS IN SLICE ROUTINE LYBSC, WHICH WAS CALLED IN resg1dpre.f")
+        else if(zpar$errno == 31) stop("PROGRAM FAILS IN SLICE ROUTINE LYBSC, WHICH WAS CALLED IN resg1dpre1.f")
+        else if(zpar$errno == 4) stop("PROGRAM FAILS IN SLICE ROUTINE MEPAD, WHICH WAS CALLED IN resg1d.f")
+        else if(zpar$errno == 40) stop("PROGRAM FAILS IN SLICE ROUTINE MEPAD, WHICH WAS CALLED IN resg1dpre.f")
+        else if(zpar$errno == 51) stop("PROGRAM FAILS IN SUBROUTINE DPOTRF, WHICH WAS CALLED IN revg1.f")
+        else if(zpar$errno == 52) stop("PROGRAM FAILS IN SUBROUTINE DPOTRI, WHICH WAS CALLED IN revg1.f")
+        else if(zpar$errno == 6) stop("PROGRAM FAILS IN SUBROUTINE DIVC , WHICH WAS CALLED IN dpca.f")
         neff <- zpar$ss > 0
         zpar$tnit <- seq(0, sum(neff))
         zpar$ss <- zpar$ss[neff]

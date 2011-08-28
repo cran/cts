@@ -63,7 +63,10 @@ c      print *,'alpha1(2)=',alpha1(2)
 c      print *,'alpha1(3)=',alpha1(3)
       call drpoly(J-1,ALPHA,rootr,rooti)
 c      call drpoly(2,alpha1,rootr,rooti)  3/26/05
-c      if (fail.EQV..TRUE.) then          3/26/05
+      if (fail.EQV..TRUE.) then
+         call rexit('program fails in rpoly')
+      endif
+c         print *,'program fails in rpoly'  3/26/05
 c         print *,'program fails in rpoly'  3/26/05
 c         stop                              3/26/05
 c      else                                 3/26/05

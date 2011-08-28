@@ -57,7 +57,7 @@ function (x, y=NULL, spans = NULL, kernel = NULL, taper = 0.1, pad = 0,
                   tao <- atan(sum(sin(2 * pi * freq.temp[k] * 
                                       ti))/sum(cos(2 * pi * freq.temp[k] * ti)))/(2 * freq.temp[k])
                   pgram[k, i, j] <- 0.5 * ((sum(x[1:length(ti)]* cos(2 * pi * freq.temp[k] * (ti - tao))))^2/sum((cos(2 * 
-                                                                                                         pi * freq.temp[k] * (ti - tao)))^2) + (sum(x[1:length(ti)] *  sin(2 * pi * freq.temp[k] * (ti - tao))))^2)/sum((sin(2 * pi * freq.temp[k] * (ti - tao)))^2)
+                                                                                                         pi * freq.temp[k] * (ti - tao)))^2) + (sum(x[1:length(ti)] *  sin(2 * pi * freq.temp[k] * (ti - tao))))^2/sum((sin(2 * pi * freq.temp[k] * (ti - tao)))^2))
                   pgram[1, i, j] <- 0.5 * (pgram[2, i, j] + pgram[N, 
                                                                   i, j])
                 }

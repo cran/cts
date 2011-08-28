@@ -27,10 +27,10 @@ c     *GMOLD,GMNEW,SIGSQ,OLDB
 C      PRINT *,'MODEL UPDATE IN PROGRESS'
       end if
       I=ARP+1
-        IF(I.GT.20)THEN
+C        IF(I.GT.20)THEN
 C          PRINT *,'PROGRAM FAILS: MAXIMUM ORDER EXCEEDED IN UPDATE'
-          STOP
-        END IF
+C          STOP
+C        END IF
 c        OPEN(UNIT=4,FILE='newmodel.dat',STATUS='unknown')
         ST0='PFI='
         IF(PFI.EQ.1)THEN

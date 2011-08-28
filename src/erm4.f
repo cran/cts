@@ -1,7 +1,0 @@
-      SUBROUTINE ERM4(STA,STB)
-      IMPLICIT NONE
-      CHARACTER*(*) STA,STB
-C      PRINT *,'INVALID ',STA,' OPTION: ',STB
-      CALL ERM0
-      RETURN
-      END

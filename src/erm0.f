@@ -1,5 +1,0 @@
-      SUBROUTINE ERM0
-C      PRINT *,'PROGRAM FAILS IN SETUP'
-      STOP
-      RETURN
-      END

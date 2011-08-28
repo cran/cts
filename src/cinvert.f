@@ -25,7 +25,8 @@ C*****resgn2.txt
       DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(2,20,20),
      *RI(2,20,20)
 c       DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(20,20),RI(2,20,20)
-      COMMON/RESGN2/WK,VT,BI,R,RI
+      INTEGER ERRNO1
+      COMMON/RESGN2/WK,VT,BI,R,RI,ERRNO1
 
 
 c     added ZW
@@ -43,10 +44,16 @@ c     added ZW
       J=20
 c      CALL F04ADF(R,J,BI,J,ARP,ARP,RI,J,WK,I) changed ZW
       call zgesv(ARP,ARP,R,J,IPIVOT,BI,J,I)
+      ERRNO1 = 0
       IF(I.NE.0)THEN
+C      IF(I.NE.0)THEN
 c        PRINT *,'PROGRAM FAILS IN F04ADF WITH ERROR: ',I
 C         PRINT *,'PROGRAM FAILS IN ZGESV WITH ERROR: ',I
-         STOP
+        call intpr('WITH ERROR', 10, I, 1)
+        call rexit('PROGRAM FAILS IN ZGESV')
+C         STOP
+      ERRNO1 = 2
+      RETURN
       END IF
       RETURN
       END

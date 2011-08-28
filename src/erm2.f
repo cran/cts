@@ -1,8 +1,0 @@
-      SUBROUTINE ERM2(STA,N)
-      IMPLICIT NONE
-      CHARACTER*(*) STA
-      INTEGER N
-C      PRINT *,'INVALID ',STA,' VALUE: ',N
-      CALL ERM0
-      RETURN
-      END

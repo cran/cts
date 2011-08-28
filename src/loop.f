@@ -1,7 +1,7 @@
-      SUBROUTINE LOOP(ss, bit)
+      SUBROUTINE LOOP(ss, bit, ERRNO)
       IMPLICIT NONE
       LOGICAL ADV
-      INTEGER I
+      INTEGER I, errno
       DOUBLE PRECISION U,PU,SSNEW
 c      INCLUDE 'model.txt'
 c      INCLUDE 'series.txt'
@@ -52,8 +52,13 @@ c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
       COMMON/SERIES/TIM,SER,TDIF,NAME,LEN
 C sum of squares and parameters in each iteration      
       DOUBLE PRECISION ss(NIT+1), BIT(NIT+1,22)
-      
+      DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(2,20,20),
+     *RI(2,20,20)
+      INTEGER ERRNO1
+      COMMON/RESGN2/WK,VT,BI,R,RI,ERRNO1
+
 C  FOR USE IN PERTURBATION CALCULATIONS
+      ERRNO=0
       IF(PFI.LT.3)THEN
         PU=CSO
       ELSE
@@ -69,7 +74,10 @@ C  COPY OLDB TO B
         CALL REPAR
         IF(PRPI)THEN
 C          PRINT *,'ITERATION 0: ROOT WITH POSITIVE REAL PART'
-          STOP
+           call rexit('ITERATION 0: ROOT WITH POSITIVE REAL PART')
+C          STOP
+        ERRNO=1
+        RETURN
         END IF
         CALL RESGEN
         SSOLD=CSZ
@@ -79,14 +87,22 @@ C          PRINT *,'ITERATION 0: ROOT WITH POSITIVE REAL PART'
         GMOLD=GMNEW
         ss(1)=SSOLD
         IF(tra.EQ.1)THEN
+           call intpr('ITERATION 0:', 12, 1, 0)
+           call dblepr('LAMBDA = ', 9, LAM, 1)
+           call dblepr('   INITIAL SUM OF SQUARES = ', 28, SSOLD, 1)
+           call dblepr('   INITIAL PARAMETER VALUES',  27, B, ARP)
 C        PRINT *,'ITERATION 0:'
 C        PRINT *,'   LAMBDA = ',LAM
 C        PRINT *,'   INITIAL SUM OF SQUARES = ',SSOLD
 C        PRINT *,'   INITIAL PARAMETER VALUES'
-        DO 202 I=1,ARP
+c           call dblepr('  ',  2, B, ARP)
+C        DO 202 I=1,ARP
+C           call dblepr('  ',  2, B(I), 1)
 C        PRINT *,'   ',I,'  ',B(I)
   202   CONTINUE
         IF(VRI.EQ.1)THEN
+          call dblepr('   INITIAL OBSERVATION VARIANCE RATIO = ', 40, 
+     * B(ARP+1), 1)
 C          PRINT *,'   INITIAL OBSERVATION VARIANCE RATIO = ',B(ARP+1)
         END IF
         END IF
@@ -97,6 +113,7 @@ C          PRINT *,'   INITIAL OBSERVATION VARIANCE RATIO = ',B(ARP+1)
             U=B(ARP+1)
           ENDIF
           IF(tra.EQ.1)THEN
+           call dblepr('   INITIAL VALUE OF CONSTANT TERM = ', 36, U, 1)
 C           PRINT *,'   INITIAL VALUE OF CONSTANT TERM = ',U
           ENDIF
         ENDIF
@@ -115,10 +132,16 @@ C  CALCULATE PERTURBATION VECTOR
       B(PPIND)=B(PPIND)+U
       CALL REPAR
       IF(PRPI)THEN
+         call NEWLINE
+         call intpr('ITERATION ',9, ITCT, 1)
+         call rexit('ROOT WITH POSITIVE REAL PART')
 C        PRINT *,'ITERATION ',ITCT,': ROOT WITH POSITIVE REAL PART'
-        STOP
+        ERRNO=1
+        RETURN
+C        STOP
       END IF
       CALL RESGEN
+      ERRNO = ERRNO1
       DO 302 I=1,LEN
       PRES(PPIND,I)=(PRES(PPIND,I)-RES(I))/U
   302 CONTINUE
@@ -154,13 +177,20 @@ C        PRINT *,'ITERATION ',ITCT,': ROOT WITH POSITIVE REAL PART'
           RETURN
         ELSE
           IF(tra.EQ.1)THEN
+            call NEWLINE
+            call intpr('ITERATION :', 11, ITCT, 1)
+            call dblepr('   LAMBDA: ',11, LAM, 1)
+           call dblepr('   SUM OF SQUARES = ', 20, SSOLD, 1)
+           call dblepr('   PARAMETER VALUES',  19, OLDB, NP)
 C          PRINT *,'ITERATION :',ITCT
 C          PRINT *,'   LAMBDA: ',LAM
 C          PRINT *,'   SUM OF SQUARES: ',SSOLD
 C          PRINT *,'   PARAMETER VALUES:'
-          DO 308 I=1,NP
+c           call dblepr('  ',  2, OLDB, NP)
+C          DO 308 I=1,NP
+C           call dblepr('  ',  2, OLDB(I), 1)
 C          PRINT *,'  ',I,'  ',OLDB(I)
-  308     CONTINUE
+C  308     CONTINUE
           END IF
       ss(ITCT+1)=SSOLD
       DO 309 I=1,NP
