@@ -7,6 +7,7 @@ C  WARNING  -This routine is intended to be called only from
 C            SLICE   routine  LYBSC .
 C
 C     .. Scalar Arguments ..
+      IMPLICIT NONE
       INTEGER IERR,N,NA,NC
 C     .. Array Arguments ..
       DOUBLE PRECISION A(NA,N),C(NC,N)
@@ -18,7 +19,8 @@ C     .. Local Arrays ..
       DOUBLE PRECISION P(4),T(4,4)
       INTEGER IPVT(4)
 C     .. External Subroutines ..
-      EXTERNAL SGEFA,SGESL
+C      EXTERNAL SGEFA,SGESL
+C      EXTERNAL DGETRF, DGETRS
 C     .. Executable Statements ..
 C
 C     This routine solves the continuous Lyapunov equation where
@@ -66,9 +68,11 @@ C
       P(1) = C(K,L)
       P(2) = C(KK,L)
       NSYS = 2
-      CALL SGEFA(T,LDIM,NSYS,IPVT,INFO)
+      CALL DGETRF(NSYS, NSYS, T, LDIM,IPVT,INFO)
+C      CALL SGEFA(T,LDIM,NSYS,IPVT,INFO)
       IF (INFO.NE.0) GO TO 360
-      CALL SGESL(T,LDIM,NSYS,IPVT,P,JOB)
+C      CALL SGESL(T,LDIM,NSYS,IPVT,P,JOB)
+      CALL DGETRS('N',NSYS, 1, T,LDIM, IPVT,P, LDIM, INFO)
 
       C(K,L) = P(1)
       C(KK,L) = P(2)
@@ -81,9 +85,11 @@ C
       P(1) = C(K,L)
       P(2) = C(K,LL)
       NSYS = 2
-      CALL SGEFA(T,LDIM,NSYS,IPVT,INFO)
+      CALL DGETRF(NSYS, NSYS, T, LDIM,IPVT,INFO)
+C      CALL SGEFA(T,LDIM,NSYS,IPVT,INFO)
       IF (INFO.NE.0) GO TO 360
-      CALL SGESL(T,LDIM,NSYS,IPVT,P,JOB)
+      CALL DGETRS('N',NSYS, 1, T,LDIM, IPVT,P, LDIM, INFO)
+C      CALL SGESL(T,LDIM,NSYS,IPVT,P,JOB)
       C(K,L) = P(1)
       C(K,LL) = P(2)
       GO TO 260
@@ -101,9 +107,11 @@ C
       P(2) = C(LL,L)
       P(3) = C(LL,LL)*0.5D0
       NSYS = 3
-      CALL SGEFA(T,LDIM,NSYS,IPVT,INFO)
+      CALL DGETRF(NSYS, NSYS, T, LDIM,IPVT,INFO)
+C      CALL SGEFA(T,LDIM,NSYS,IPVT,INFO)
       IF (INFO.NE.0) GO TO 360
-      CALL SGESL(T,LDIM,NSYS,IPVT,P,JOB)
+C      CALL SGESL(T,LDIM,NSYS,IPVT,P,JOB)
+      CALL DGETRS('N',NSYS, 1, T,LDIM, IPVT,P, LDIM, INFO)
       C(L,L) = P(1)
       C(LL,L) = P(2)
       C(L,LL) = P(2)
@@ -118,11 +126,15 @@ C
       T(2,3) = 0.0D0
       T(2,4) = T(1,3)
       T(3,1) = A(L,LL)
+C      call intpr('L', 1, L, 1)
+C      call intpr('LL', 2, LL, 1)
+C      call dblepr('T(3,1)', 6, T(3,1), 1)
       T(3,2) = 0.0D0
       T(3,3) = A(K,K) + A(LL,LL)
       T(3,4) = T(1,2)
       T(4,1) = 0.0D0
       T(4,2) = T(3,1)
+C      call dblepr('T(4,2)', 6, T(4,2), 1)
       T(4,3) = T(2,1)
       T(4,4) = A(KK,KK) + A(LL,LL)
       P(1) = C(K,L)
@@ -130,9 +142,12 @@ C
       P(3) = C(K,LL)
       P(4) = C(KK,LL)
       NSYS = 4
-      CALL SGEFA(T,LDIM,NSYS,IPVT,INFO)
+      
+      CALL DGETRF(NSYS, NSYS, T, LDIM,IPVT,INFO)
+C      CALL SGEFA(T,LDIM,NSYS,IPVT,INFO)
       IF (INFO.NE.0) GO TO 360
-      CALL SGESL(T,LDIM,NSYS,IPVT,P,JOB)
+C      CALL SGESL(T,LDIM,NSYS,IPVT,P,JOB)
+      CALL DGETRS('N',NSYS, 1, T,LDIM, IPVT,P, LDIM, INFO)
       C(K,L) = P(1)
       C(KK,L) = P(2)
       C(K,LL) = P(3)

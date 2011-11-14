@@ -99,13 +99,14 @@ c           call dblepr('  ',  2, B, ARP)
 C        DO 202 I=1,ARP
 C           call dblepr('  ',  2, B(I), 1)
 C        PRINT *,'   ',I,'  ',B(I)
-  202   CONTINUE
+C  202   CONTINUE
         IF(VRI.EQ.1)THEN
           call dblepr('   INITIAL OBSERVATION VARIANCE RATIO = ', 40, 
      * B(ARP+1), 1)
 C          PRINT *,'   INITIAL OBSERVATION VARIANCE RATIO = ',B(ARP+1)
+C        END IF
         END IF
-        END IF
+        ENDIF
         IF(CCV.EQ.2)THEN
           IF(VRI.EQ.1)THEN
             U=B(ARP+2)

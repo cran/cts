@@ -112,9 +112,9 @@ C              STOP
       BL(I,J)=AS(I,J)
   113 CONTINUE
       E=0
-C      IF(tra.EQ.1)THEN
-C        call intpr('MAIN LOOP IN RESG1 BEGINS', 25, 1, 0)
-C      ENDIF
+      IF(tra.EQ.1)THEN
+        call intpr('MAIN LOOP IN RESG1 BEGINS', 25, 1, 0)
+      ENDIF
       DO 150 T=1,LEN
       DEL=TDIF(T)
       J=20
@@ -230,8 +230,8 @@ C         call intpr('MAIN LOOP IN RESG1 COMPLETED', 28, 1, 0)
 C      END IF
 C      PRINT *,'MAIN LOOP IN RESG1 COMPLETED'
       IF(E.NE.0)THEN
-         call intpr('WARNING', 7, E, 1)
          call rwarn('WARNING IN SLICE ROUTINE MEPAD')
+         call intpr('WARNING', 7, E, 1)
 C        PRINT *,'WARNING IN SLICE ROUTINE MEPAD: ',E
       END IF
       RETURN

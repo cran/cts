@@ -1,46 +1,61 @@
-*UPTODATE ISAMAXTEXT
       INTEGER FUNCTION ISAMAX(N,SX,INCX)
-C
-C     FINDS THE INDEX OF ELEMENT HAVING MAX. ABSOLUTE VALUE.
-C     JACK DONGARRA, LINPACK, 3/11/78.
-C
-C     .. Scalar Arguments ..
+*     .. Scalar Arguments ..
       INTEGER INCX,N
-C     .. Array Arguments ..
-      DOUBLE PRECISION SX(*)
-C     .. Local Scalars ..
-      DOUBLE PRECISION SMAX
+*     ..
+*     .. Array Arguments ..
+      REAL SX(*)
+*     ..
+*
+*  Purpose
+*  =======
+*
+*     ISAMAX finds the index of element having max. absolute value.
+*
+*  Further Details
+*  ===============
+*
+*     jack dongarra, linpack, 3/11/78.
+*     modified 3/93 to return if incx .le. 0.
+*     modified 12/3/93, array(1) declarations changed to array(*)
+*
+*  =====================================================================
+*
+*     .. Local Scalars ..
+      REAL SMAX
       INTEGER I,IX
-C     .. Intrinsic Functions ..
+*     ..
+*     .. Intrinsic Functions ..
       INTRINSIC ABS
-C     .. Executable Statements ..
-C
+*     ..
       ISAMAX = 0
-      IF (N.LT.1) RETURN
+      IF (N.LT.1 .OR. INCX.LE.0) RETURN
       ISAMAX = 1
       IF (N.EQ.1) RETURN
-      IF (INCX.EQ.1) GO TO 60
-C
-C        CODE FOR INCREMENT NOT EQUAL TO 1
-C
-      IX = 1
-      SMAX = ABS(SX(1))
-      IX = IX + INCX
-      DO 40 I = 2,N
-          IF (ABS(SX(IX)).LE.SMAX) GO TO 20
-          ISAMAX = I
-          SMAX = ABS(SX(IX))
-   20     IX = IX + INCX
-   40 CONTINUE
-      RETURN
-C
-C        CODE FOR INCREMENT EQUAL TO 1
-C
-   60 SMAX = ABS(SX(1))
-      DO 80 I = 2,N
-          IF (ABS(SX(I)).LE.SMAX) GO TO 80
-          ISAMAX = I
-          SMAX = ABS(SX(I))
-   80 CONTINUE
+      IF (INCX.EQ.1) THEN
+*
+*        code for increment equal to 1
+*
+         SMAX = ABS(SX(1))
+         DO I = 2,N
+            IF (ABS(SX(I)).GT.SMAX) THEN
+               ISAMAX = I
+               SMAX = ABS(SX(I))
+            END IF
+         END DO
+      ELSE
+*
+*        code for increment not equal to 1
+*
+         IX = 1
+         SMAX = ABS(SX(1))
+         IX = IX + INCX
+         DO I = 2,N
+            IF (ABS(SX(IX)).GT.SMAX) THEN
+               ISAMAX = I
+               SMAX = ABS(SX(IX))
+            END IF
+            IX = IX + INCX
+         END DO
+      END IF
       RETURN
       END

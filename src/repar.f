@@ -90,7 +90,6 @@ C        PRINT *,'NOT YET IMPLEMENTED'
           END IF
   310     CONTINUE
         ENDIF
-c        print *,'KFSW',kfsw
         IF(KFSW.EQ.0) THEN
           REV=CSO
           IF(ARP.GT.1)THEN
@@ -98,8 +97,6 @@ c        print *,'KFSW',kfsw
             K=I-1
             S=ROOTR(I)
             T=ROOTI(I)
-c            print *,'S',S
-c            print *,'T',T
             DO 400 J=1,K
             Y=ROOTR(J)
             Z=ROOTI(J)
@@ -107,7 +104,6 @@ c            print *,'T',T
             CALL ADDC(S,T,Y,Z,W,X)
             U=(U*U+V*V)/(W*W+X*X)
             IF(REV.GT.U)REV=U
-c            print *,'REV',REV
   400       CONTINUE
           END IF
           REV=REV*1.0D2

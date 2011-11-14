@@ -48,17 +48,13 @@ c       DOUBLE PRECISION WK(20),VT(500),BI(2,20,20),R(20,20),RI(2,20,20)
 c      print *,'PPIND: ',PPIND
       IF(tra.EQ.1)THEN
       IF(PPIND.EQ.0)THEN
-        call dblepr('ROOT EQUALITY SWITCH: ', 22, REQSW, 1)
+        call intpr('ROOT EQUALITY SWITCH: ', 22, REQSW, 1)
       END IF
       END IF
-c      print *,'REQSW: ',REQSW
       IF(REQSW.EQ.0)THEN
         CALL RESG0
       ELSE
         CALL RESG1
-C        IF(tra.EQ.1)THEN
-C         call intpr('CALL OF RESG1 COMPLETED', 23, 1, 0)
-C        END IF
       END IF
       U=CSZ
       DO 100 T=1,LEN

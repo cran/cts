@@ -67,7 +67,7 @@ To reproduce the analyses, one can invoke the \proglang{R} code
 edit(vignette("kf",package = "cts"))
 @
 \section{Data examples}
-Two data examples in \citet{Belc:Hamp:Tunn:1994} are used to illustrate the capabilities of \pkg{cts}. A detailed description of the data can be found in the original paper. Since some analysis here reproduces the results in \citet{Belc:Hamp:Tunn:1994}, we also ignore a lengthy discussion for brevity. These analyses were done using \proglang{R} version 2.10.1 (2009-12-14) and the
+Two data examples in \citet{Belc:Hamp:Tunn:1994} are used to illustrate the capabilities of \pkg{cts}. A detailed description of the data can be found in the original paper. Since some analysis here reproduces the results in \citet{Belc:Hamp:Tunn:1994}, we also ignore a lengthy discussion for brevity. These analyses were done using \proglang{R} version 2.13.1 (2011-07-08) and the
 operating system \code{i686-pc-cygwin}. 
 
 \subsection{Geophysical application}
