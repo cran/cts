@@ -1,8 +1,8 @@
-27e325f7da69fd1cbcb561ef1e2557d8 *DESCRIPTION
+3f2499321eb27f3c5459066bb40e0735 *DESCRIPTION
 86878085e8dab3f5328ca02f52755143 *NAMESPACE
-ea67086f208c473e65db98ad5b569ea4 *NEWS
+c25ea257645f445f48c0ec2897f74c4b *NEWS
 e6b6e9965c244fdd52933ef75143cd0e *R/aic.R
-6a8140aacb14ed2fdcde5ac82ffd633c *R/car.R
+7fac95f28413981cb79565dc4216e785 *R/car.R
 4bd3f9ddf357743b21c8d5634051d8c0 *R/factab.R
 c5fce53248709f675fd64551cfd942d7 *R/kalsmo.car.R
 2918de4e25af9be300f8434efe68acbd *R/kalsmo.comp.R
@@ -21,7 +21,7 @@ c853ef3e156e4c75c248fd88ebd0f82f *data/V22174.rda
 b9564ddd59a06782310989e8f33db55e *inst/doc/jsslogo.jpg
 f69c46d87af294b003466e0e21a78b5e *inst/doc/kf.Rnw
 199d46b3d596f1e8fe7239782946d40c *inst/doc/kf.bib
-2cf3b1bceecdf3789af4e4f68d21a493 *inst/doc/kf.pdf
+0105af15c2bc69b9c301c9b0e73ab50b *inst/doc/kf.pdf
 67f50f9790051fcb5fe0e14482a68394 *man/V22174.Rd
 1c237f49a734797b5e82379e976ae7f0 *man/asth.Rd
 9df89e13bfa7b30b7e1cd2bf0b877b0f *man/car.Rd

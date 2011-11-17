@@ -3,7 +3,7 @@
 
 car_control <- function(fty=1, n.ahead=10, trace=FALSE, ari=TRUE, vri=FALSE, vr=0, pfi="MAPS",ccv="CTES", lpv=TRUE, scc=TRUE,  nit=40, opm=1, rgm=1, req=0.5, con=1.0e-5, rpe=1.0, ivl=1.0e-2, fac=1.0e1, stl=1.0e-5, sml=1.0e2, gtl=1.0e5, kst=TRUE, fct=TRUE){
 tmp <- .Machine
-tmp1 <- c(tmp$double.neg.eps, tmp$double.base, tmp$double.digits, tmp$double.min.exp, tmp$double.xmin)
+tmp1 <- c(tmp$double.neg.eps, tmp$double.base, tmp$double.digits, tmp$double.min.exp, tmp$double.xmin, NA)
 names(tmp1) <- NULL
 write.table(file="machine.txt", tmp1, row.names=FALSE, col.names=FALSE)
   RET <- list(fty=fty, n.ahead=n.ahead, trace=trace, ari=ari, vri=vri, vr=vr, pfi=pfi,ccv=ccv, lpv=lpv, scc=scc, nit=nit, opm=opm, rgm=rgm, req=req, con=con, rpe=rpe, ivl=ivl, fac=fac, stl=stl, sml=sml, gtl=gtl, kst=kst, fct=fct)

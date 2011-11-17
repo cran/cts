@@ -5,3 +5,7 @@
   o  add Fortran source file machine.f to read the machine dependent information written by R function car_control
   0  replace sgefa.f with dgetrf.f, and sgesl.f with dgetrs.f in lycsr.f and mepad.f (sgefa.f and sgesl.f are indeed dgefa.f and dgesl.f, respectively, in Netlib). 
   o  remove unused Fortran source file sgesa.f, sgesl.f, dpodi.f, envron.f, store.f, getmin.f
+                
+                CHANGES in `cts' VERSION 1.0-7 (2011-11-16)
+
+  o  modify car.R to generate machine.txt with an extra end line as a workaround for Fortran machine.f failure on Mac machines
