@@ -1,8 +1,8 @@
-3f2499321eb27f3c5459066bb40e0735 *DESCRIPTION
+de9851ae13655eebfe3a46ddce6d5dd2 *DESCRIPTION
 86878085e8dab3f5328ca02f52755143 *NAMESPACE
-c25ea257645f445f48c0ec2897f74c4b *NEWS
+8662d91ea96f2672f47d55f1d803c7fb *NEWS
 e6b6e9965c244fdd52933ef75143cd0e *R/aic.R
-7fac95f28413981cb79565dc4216e785 *R/car.R
+e5e807b52c0e03697de2996c840118d5 *R/car.R
 4bd3f9ddf357743b21c8d5634051d8c0 *R/factab.R
 c5fce53248709f675fd64551cfd942d7 *R/kalsmo.car.R
 2918de4e25af9be300f8434efe68acbd *R/kalsmo.comp.R
@@ -21,7 +21,7 @@ c853ef3e156e4c75c248fd88ebd0f82f *data/V22174.rda
 b9564ddd59a06782310989e8f33db55e *inst/doc/jsslogo.jpg
 f69c46d87af294b003466e0e21a78b5e *inst/doc/kf.Rnw
 199d46b3d596f1e8fe7239782946d40c *inst/doc/kf.bib
-0105af15c2bc69b9c301c9b0e73ab50b *inst/doc/kf.pdf
+54941fc2a93dcc4ea16babf83b7a65a3 *inst/doc/kf.pdf
 67f50f9790051fcb5fe0e14482a68394 *man/V22174.Rd
 1c237f49a734797b5e82379e976ae7f0 *man/asth.Rd
 9df89e13bfa7b30b7e1cd2bf0b877b0f *man/car.Rd
@@ -59,13 +59,14 @@ bf6e246f3e70a6a5a723134598daab2e *src/dgetrs.f
 8ba3fd937d2f4582e3dd5b980e2cb52d *src/dpca.f
 b25f83fd16a69e206955d05b85b162b0 *src/drpoly.f
 9cc00672f5f736a8ca36cdde9fe63885 *src/e9rint.f
-d9f0daeccc0501a3cb0bf87a73ca3df0 *src/envirn.f
+49625a5211cb6bfe146733bc2aed9b04 *src/envirn.f
 d67750c349f1fc47b10258ce2b8e40d2 *src/eprint.f
 7568019b7e9a8984c52aa0bc44cbfbe3 *src/fdump.f
 f4ef4dc429c8eafad2c5828f3b64a6f8 *src/forecast.f
 5933e1cf85fb7eaee89c2ee12a932472 *src/frmatd.f
 1048e52b510f8201b1663599b3c1fa38 *src/frmati.f
 52437021021cba938051f905a4904860 *src/frmatr.f
+bc5b0ac5fc784c9b17cec219249ae051 *src/getmin.f
 dc6d6de2c3e0806ff74b1e582000337b *src/hqrort.f
 a3ba4881b43a59c84c4fc0a5847ba314 *src/i0tk00.f
 e4f18ecc5033712f14016527da199a6e *src/i10wid.f
@@ -82,7 +83,6 @@ f90a42b5f3aabde530f938ad7413b8c7 *src/istkqu.f
 7b9c117fe087c19c5064b714be3ef7d8 *src/loop.f
 937326818004c4de2d1f233f713a8d44 *src/lybsc.f
 5d4b5dc819e57d84036348453e39481c *src/lycsr.f
-4ea0febe5cb1cde7ecdc88be9f5b87d3 *src/machine.f
 eb7c1db994493f7a887d55ff15f6eb11 *src/mepad.f
 31993b7585038c6d6dc05d5dcc3f5c60 *src/mutil.f
 df5a0da18c80e2d8916a115afe7c11ff *src/newline.f
@@ -113,5 +113,6 @@ e65cf9929535eefd3be3c181e6eb097c *src/setup1.f
 98535a35c1c3894f3783de1d5b048391 *src/simi.f
 49c0f3d824d2908538e451d8d2048402 *src/sscal.f
 220a84eb857850ea45ed70201c383769 *src/stkdmp.f
+5ec23ec12d47bd0a24c01f45282a3979 *src/store.f
 6147a51c6db6e4fba60f202d8f8b3fc0 *src/u9dmp.f
 3767b38e3d74fa94a9670999cfe244a0 *src/update.f
