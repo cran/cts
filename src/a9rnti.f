@@ -153,12 +153,15 @@ C
             IF (.NOT. DUP .AND. COUNT .EQ. 1) GO TO 50
               IF (.NOT. DUP) GO TO 40
                 COUNT = COUNT+1
-                IF (COUNT .EQ. 3) WRITE(IOUT, IFMT1C) BLANK,
-     1                                 STAR, STAR, STAR, STAR
+                IF (COUNT .EQ. 3) call intpr('', -1, 1, 0)
+C                IF (COUNT .EQ. 3) WRITE(IOUT, IFMT1C) BLANK,
+C     1                                 STAR, STAR, STAR, STAR
                 IF (I .EQ. NITEMS)  GO TO 50
                   GO TO 70
-   40         WRITE(IOUT, IFMT2C) BLANK, ILAST, (LAST(K), K=1,NCOL)
-   50     WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
+   40         call intpr('LAST', -1, LAST, NCOL)
+   50         call intpr('LINE', -1, LINE, J)
+C   40         WRITE(IOUT, IFMT2C) BLANK, ILAST, (LAST(K), K=1,NCOL)
+C   50     WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
           COUNT = 1
           DO 60 K=1,NCOL
    60       LAST(K) = LINE(K)

@@ -110,7 +110,7 @@ function (x, y=NULL, spans = NULL, kernel = NULL, taper = 0.1, pad = 0,
         taper = taper, pad = pad, detrend = detrend, demean = demean)
     class(spg.out) <- "spec"
     if (plot.it) {
-        plot(spg.out, ...)
+        plotSpecLs(spg.out, ...)
         return(invisible(spg.out))
     }
     else return(spg.out)

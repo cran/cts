@@ -1,12 +1,12 @@
-\name{plot.spec.car}
-\alias{plot.spec.car}
+\name{plotSpecCar}
+\alias{plotSpecCar}
 
 \title{Plotting Spectral Densities }
 \description{
  Internal function used in spectrum.car only. Not called by user.
  Plotting method for objects of class \code{"spectrum.car"}.}
 \usage{
-plot.spec.car(x, add = FALSE, ci = 0.95, log = "dB", xlab = "frequency",
+plotSpecCar(x, add = FALSE, ci = 0.95, log = "dB", xlab = "frequency",
 ylab = NULL, type = "l", main = NULL, sub = NULL,...)
 }
 

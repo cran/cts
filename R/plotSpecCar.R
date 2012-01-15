@@ -1,4 +1,4 @@
-"plot.spec.car" <-
+"plotSpecCar" <-
 function (x, add = FALSE, ci = 0.95, log = "dB", xlab = "frequency", 
     ylab = NULL, type = "l", main = NULL, sub = NULL,...) 
 {

@@ -27,7 +27,7 @@ function (object, n.freq, plot.it = TRUE, na.action = na.fail, ...)
   spg.out <- list(freq = Z$freq, spec = Z$spec, method = paste("CAR (",order, ") spectrum ", sep = ""))
   class(spg.out) <- "spec.car"
   if (plot.it) {
-    plot(spg.out, ci = 0, ...)
+    plotSpecCar(spg.out, ci = 0, ...)
     return(invisible(spg.out))
   }
   else return(spg.out)

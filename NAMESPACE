@@ -1,5 +1,5 @@
 useDynLib(cts)
-export(car, tsdiag, factab, kalsmo, kalsmoComp, spectrum, plot.spec.car, plot.spec.ls, spec.ls, car_control, spec.ci)
+export(car, tsdiag, factab, kalsmo, kalsmoComp, spectrum, plotSpecCar, plotSpecLs, spec.ls, car_control, spec.ci)
 exportClasses("car")
 exportMethods("show")
 

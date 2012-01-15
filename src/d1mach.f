@@ -164,26 +164,34 @@ C     ON FIRST CALL, IF NO DATA UNCOMMENTED, TEST MACHINE TYPES.
                   CALL I1MCRY(LOG10(1), J, 16383, 10100890, 8715215)
                   CALL I1MCRY(LOG10(2), J, 0, 16226447, 9001388)
                ELSE
-                  WRITE(*,9000)
-                  STOP 779
+                  call rexit('Adjust D1MACH by uncommenting data 
+     * statement appropriate for your machine.')
+c                  WRITE(*,9000)
+c                  STOP 779
                   END IF
             ELSE
-               WRITE(*,9000)
-               STOP 779
+                  call rexit('Adjust D1MACH by uncommenting data 
+     * statement appropriate for your machine.')
+C               WRITE(*,9000)
+C               STOP 779
                END IF
             END IF
          SC = 987
          END IF
 *    SANITY CHECK
-      IF (DMACH(4) .GE. 1.0D0) STOP 778
+C      IF (DMACH(4) .GE. 1.0D0) STOP 778
+      IF (DMACH(4) .GE. 1.0D0) call rexit('778')
       IF (I .LT. 1 .OR. I .GT. 5) THEN
-         WRITE(*,*) 'D1MACH(I): I =',I,' is out of bounds.'
-         STOP
+C         WRITE(*,*) 'D1MACH(I): I =',I,' is out of bounds.'
+C      STOP
+      call intpr('D1MACH(I): I =', -1, I, 1)
+      call rwarn('D1MACH(I): I is out of bounds.')
+      call rexit('STOP')
          END IF
       D1MACH = DMACH(I)
       RETURN
- 9000 FORMAT(/' Adjust D1MACH by uncommenting data statements'/
-     *' appropriate for your machine.')
+C 9000 FORMAT(/' Adjust D1MACH by uncommenting data statements'/
+C     *' appropriate for your machine.')
 * /* Standard C source for D1MACH -- remove the * in column 1 */
 *#include <stdio.h>
 *#include <float.h>

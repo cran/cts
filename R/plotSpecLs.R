@@ -14,24 +14,12 @@
         1/(qchisq(c(upper.quantile, lower.quantile), df)/df)
     }
 
-"plot.spec.ls" <-
+"plotSpecLs" <-
 function (x, add = FALSE, ci = 0.95, log = c("yes", "dB", "no"), 
     xlab = "frequency", ylab = NULL, type = "l",
     main = NULL, sub = NULL, ...) 
 {
-    plot.type <- match.arg(plot.type)
     log <- match.arg(log)
-    m <- match.call()
-    if (plot.type == "coherency") {
-        m[[1]] <- as.name("plot.spec.coherency")
-        m$plot.type <- m$log <- m$add <- NULL
-        return(eval(m, parent.frame()))
-    }
-    if (plot.type == "phase") {
-        m[[1]] <- as.name("plot.spec.phase")
-        m$plot.type <- m$log <- m$add <- NULL
-        return(eval(m, parent.frame()))
-    }
     if (is.null(ylab)) 
         ylab <- if (log == "dB") 
             "spectrum (dB)"

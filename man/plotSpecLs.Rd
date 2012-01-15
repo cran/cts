@@ -1,11 +1,11 @@
-\name{plot.spec.ls}
-\alias{plot.spec.ls}
+\name{plotSpecLs}
+\alias{plotSpecLs}
 \title{Plotting Lomb-Scargle Periodogram}
 \description{
   Plotting method for objects of class \code{"spec.ls"}.
 }
 \usage{
-plot.spec.ls(x, add = FALSE, ci = 0.95, log = c("yes", "dB", "no"), xlab
+plotSpecLs(x, add = FALSE, ci = 0.95, log = c("yes", "dB", "no"), xlab
 = "frequency", ylab = NULL, type = "l", main = NULL, sub = NULL, ...)
 }
 \arguments{

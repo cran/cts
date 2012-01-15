@@ -147,7 +147,13 @@ C**
 C Comment out this IF block if Emin is ok
           IF (IWARN) THEN
               FIRST = .TRUE.
-              WRITE (NOUT,FMT=99999) LEMIN
+              call rwarn('The value Emin may be incorrect.
+     +       If after inspection the value Emin looks acceptable,
+     +       please comment out the IF block as marked within 
+     +       the code of routine envirn,
+     +       otherwise contact NAG Central Office.')
+              call intpr('LEMIN=', -1, LEMIN, 1)
+C              WRITE (NOUT,FMT=99999) LEMIN
           END IF
 C**
 C

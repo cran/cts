@@ -38,7 +38,7 @@ na.action = na.fail, ...)
     the series. This will also remove the mean.}
   \item{plot.it}{plot the periodogram?}
   \item{na.action}{\code{NA} action function.}
-  \item{\dots}{graphical arguments passed to \code{plot.spec.ls}.}
+  \item{\dots}{graphical arguments passed to \code{plotSpecLs}.}
 }
 
 \details{
@@ -96,7 +96,7 @@ Scargle, J.D. (1982) Studies in astronomical time series analysis II. Statistica
   et al, 1992) }
 
 \seealso{ \code{\link{spec.taper}},
-  \code{\link{plot.spec.ls}}, \code{\link{fft}}}
+  \code{\link{plotSpecLs}}, \code{\link{fft}}}
 
 \examples{
 data(V22174)

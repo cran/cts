@@ -134,8 +134,11 @@ C
                IMACH(15) = -64
                IMACH(16) = 63
             ELSE
-               WRITE(*,9010)
-               STOP 777
+            call rexit(' Adjust autodoubled I1MACH by uncommenting data
+     * statements appropriate for your machine and setting,
+     * IMACH(I) = IMACH(I+3) for I = 11, 12, and 13.')
+c               WRITE(*,9010)
+c               STOP 777
                END IF
             IMACH(11) = IMACH(14)
             IMACH(12) = IMACH(15)
@@ -207,9 +210,12 @@ C
                IMACH(16) = 1024
                GO TO 35
  20            CALL I1MCR1(J, K, 16405, 9876536, 0)
-               IF (SMALL(1) .NE. J) THEN
-                  WRITE(*,9020)
-                  STOP 777
+               IF (SMALL(1) .NE. J) THEN      
+                   call rexit(' Adjust I1MACH by uncommenting 
+     *  data statements
+     *  appropriate for your machine.')
+c                  WRITE(*,9020)
+c                  STOP 777
                   END IF
 *              *** CRAY 1, XMP, 2, AND 3 ***
                IMACH(1) = 5
@@ -250,8 +256,10 @@ C
       IF (I .LT. 1  .OR.  I .GT. 16) GO TO 40
       I1MACH = IMACH(I)
       RETURN
- 40   WRITE(*,*) 'I1MACH(I): I =',I,' is out of bounds.'
-      STOP
+c 40   WRITE(*,*) 'I1MACH(I): I =',I,' is out of bounds.'
+c      STOP
+ 40   call intpr('I1MACH(I): I =',-1, I, 1)
+      call rexit('is out of bounds.')
 * /* C source for I1MACH -- remove the * in column 1 */
 * /* Note that some values may need changing. */
 *#include <stdio.h>
