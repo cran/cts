@@ -2,10 +2,11 @@
 %\documentclass[article]{jss}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage[english]{babel}
 %\usepackage{/usr/lib/R/share/texmf/Sweave}
 %%\VignetteIndexEntry{cts Illustrations}
 
-\SweaveOpts{engine=R,eps=false,strip.white=true, width=6, height=6}
+%\SweaveOpts{engine=R,eps=false,strip.white=true, width=6, height=6}
 %\SweaveOpts{engine=R,eps=false,prefix.string=fig/plot,strip.white=true,width=6,height=6}
 \author{Zhu Wang\\Connecticut Children's Medical Center\\University of Connecticut School of Medicine}
 \title{\pkg{cts}: An \proglang{R} Package for Continuous Time Autoregressive Models via Kalman Filter}

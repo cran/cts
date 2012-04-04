@@ -240,7 +240,8 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
 
     .Fortran("update",package="cts")
     phi <- .Fortran("setupdate",
-                    phi1=double(order),
+                    phi1=double(20),
+    ###             phi1=double(order), ### changed to avoid array overrun, 4/4/2012
                     package="cts")$phi 
     ### I am not sure this phi is updated
     if (n.ahead > 0)
