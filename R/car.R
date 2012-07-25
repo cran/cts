@@ -24,7 +24,7 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
     }
     if (length(tim)!=length(ser)) stop("Number of time and observations are not equal")
     len <- length(tim)
-    if (len > 500) stop("Number of time beyond 500 is not implemented")
+    if (len > 5000) stop("Number of time beyond 5000 is not implemented")
     ### corresponding to setup.f
     csz <- 0
     if (pfi=="QLFA") pfi <- 1
@@ -45,8 +45,8 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
     if (ari < 0) stop("Invalid ARI option:", ari)
     if (ari==0) phi <- rep(0,order)
 
-    if (vri==FALSE) vri <- 0
     if (vri==TRUE) vri <- 1
+    if (vri==FALSE) vri <- 0
     if (vri < 0) stop("Invalid VRI option:", vri)
     if (vri==0) vr <- csz
     if (vr < 0) stop("Invalid VR value:", vr)
@@ -72,7 +72,7 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
         if(trace)        
         cat("\nSCC=N CAUSES RESET OF LPV=Y TO LPV=N AND PRDG=1.0D4","\n")
       }
-    if (n.ahead < 0 || n.ahead > 500) stop("Invalid forecasting steps:", n.ahead)
+    if (n.ahead < 0 || n.ahead > 5000) stop("Invalid forecasting steps:", n.ahead)
     if (trace) cat("\nREADING OF MODEL PARAMETER PARAMETER SUCCESSFUL")
     
     if (nit < 0 || nit > 100) nit <- 25
@@ -111,7 +111,6 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
     z <-.Fortran("setup",
                  as.integer(pfi),
                  as.integer(order),
-                 
                  as.integer(vri),
                  as.integer(ccv),
                  as.double(scale),
@@ -266,9 +265,13 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
       }
     ntim <- length(ser); ntim1 <- length(tim)-length(pre)
     ntim2 <- length(tim)
+    aic <- ntim * log(zpar$ss[length(zpar$tnit)]) + 2*Z$np1
+    bic <- ntim * log(zpar$ss[length(zpar$tnit)]) + Z$np1*log(ntim)
     structure(list(call=call,series = series,order=Z$arp1,
                    np=Z$np1,scale=Z$scale1,
-                   x.mean=Z$b1[order+1],vr=Z$vr1,
+                   vri=Z$vri1, x.mean=ifelse(vri==1, 
+                   Z$b1[order+2], Z$b1[order+1]), 
+                   vob=ifelse(vri==1,Z$b1[order+1]^2, NA), vr=Z$vr1,
                    sigma2=Z$sigsq1,phi=Z$b1[1:order],
                    #sigma2=Z$sigsq1,phi=phi,
                    b=Z$b1,delb=Z$delb1,essp=essp,
@@ -278,16 +281,16 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
                    filser=filser,filvar=filvar,
                    sser=sser,svar=svar,
                    stdres=sres, pretime = tim[(ntim1+1):ntim2],
-                   predict=pre,predict.var=prv, fty=fty, tnit=zpar$tnit, ss=zpar$ss, bit=zpar$bit),
+                   predict=pre,predict.var=prv, fty=fty, tnit=zpar$tnit, ss=zpar$ss, bit=zpar$bit, aic=aic, bic=bic),
               class="car")
   }
 
 print.car <- function(x, digits = 3, ...)
 {
   cat("\nCall:\n", deparse(x$call), "\n\n", sep = "")
-  cat("Coefficients and mean:\n")
-  coef <- drop(round(c(x$phi, x$x.mean), digits = digits))
-  names(coef) <- c(seq(length=x$order), "Mean")
+  coef <- drop(round(x$phi, digits = digits))
+  cat("\nEstimated coefficients\n")
+  names(coef) <- paste("phi_",seq(length=x$order), sep="")
   print(coef)
   invisible(x)
 }
@@ -299,12 +302,23 @@ summary.car <- function(object, ...)
   cat("\nCall:\n", deparse(x$call), "\n", sep = "")
   cat(paste("\nOrder of model = ", x$order, ", sigma^2 = ",
       format(x$sigma2, digits = digits), sep=""),"\n")
-  cat("\nCoefficients and mean (standard errors):\n")
-  coef <- drop(round(c(x$phi, x$x.mean), digits = digits))
-  names(coef) <- c(seq(length=x$order), "Mean")
-  tmp <- rbind(coef, x$delb)
-  rownames(tmp) <- c("", "S.E.")
+  tmp <- coef <- drop(round(x$phi, digits = digits))
+#  coef <- drop(round(c(x$phi, x$x.mean), digits = digits))
+#  names(coef) <- c(seq(length=x$order), "mean")
+  if(x$vri==1){
+#  tmp <- rbind(coef, x$delb[-(x$order+1)])
+  cat("\nObservation error variance:",x$vob,"\n")
+}
+  tmp <- rbind(coef, x$delb[1:x$order])
+  cat("\nEstimated coefficients (standard errors):\n")
+  colnames(tmp) <- paste("phi_",seq(length=x$order), sep="")
+  rownames(tmp) <- c("coef", "S.E.")
   print(round(tmp, digits))
+  if(!is.na(x$x.mean)){
+  cat("\nEstimated mean (standard error):\n")
+  print(round(x$x.mean, digits=digits))
+  print(round(x$delb[x$np], digits))
+}
   corout <- FALSE
   if(corout){
   cat("\nCorrelations:\n")

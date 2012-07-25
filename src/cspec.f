@@ -1,4 +1,4 @@
-      SUBROUTINE CSPEC(B1,ARP1,SCALE1,NFREQ,F1,S1)
+      SUBROUTINE CSPEC(B1,ARP1,SCALE1,FRMULT,NFREQ,F1,S1)
       IMPLICIT NONE
       INTEGER I,J,M,NF,NF1,NFREQ,ARP1
       DOUBLE PRECISION B1(ARP1+1),F1(NFREQ),S1(NFREQ)
@@ -29,7 +29,7 @@ C*****repar3.txt
       COMMON/REPAR3/ALPHA,ROOTR,ROOTI,XVECR,XVECI
 C*****veccom.txt
       DOUBLE PRECISION B(22),NEWB(22),PERB(22),DELB(22),
-     * ERR(500),RES(500),PRES(22,500),sres(500)
+     * ERR(5000),RES(5000),PRES(22,5000),sres(5000)
       COMMON/VECCOM/B,NEWB,PERB,DELB,ERR,RES,PRES,sres
       DOUBLE PRECISION FRMULT
 
@@ -42,7 +42,7 @@ c     added by ZW
  10   CONTINUE
       SCALE=SCALE1
       S2=SCALE*SCALE
-      FRMULT=1.0
+C      FRMULT=1.0
       M=ARP-1
 c      NF=200
       NF=NFREQ-1
@@ -81,11 +81,15 @@ c  100   CONTINUE
   101   CONTINUE
         S=CSO/FAC
         IF(PFI.EQ.4.OR.PFI.EQ.6)THEN
-          FAC=SCALE*SCALE+Y*Y
+C          FAC=SCALE*SCALE+Y*Y
+C  July 20, 2012. This is not consistent with the factor in the numerator of your equation (6) taken from Belcher et al equation (13). To be consistent the statement should be
+          FAC=1+Y*Y/(SCALE*SCALE)
           S=S*(FAC**M)
         END IF
         F1(I)=F
-        S1(I)=S
+C        S1(I)=S, changed July 20, 2012, ZW. Spectrum should be
+C        multiplied by 2\pi \sigma^2
+        S1(I)=P2*SIGSQ*S
   102   CONTINUE
       END IF
       RETURN

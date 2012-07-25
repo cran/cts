@@ -36,7 +36,7 @@ c     *GMOLD,GMNEW,SIGSQ,OLDB
 
 C*****veccom.txt
       DOUBLE PRECISION B(22),NEWB(22),PERB(22),DELB(22),
-     * ERR(500),RES(500),PRES(22,500),sres(500)
+     * ERR(5000),RES(5000),PRES(22,5000),sres(5000)
       COMMON/VECCOM/B,NEWB,PERB,DELB,ERR,RES,PRES,sres
 C*****repcom.txt
       LOGICAL PRPI
@@ -71,7 +71,7 @@ C        PRINT *,'NOT YET IMPLEMENTED'
           END IF
         END IF
         IF(PFI.GE.5)THEN
-          DO 500 K=1,ARP
+          DO 5000 K=1,ARP
           U=ROOTR(K)
           Z=ROOTI(K)
           W=CSO-U
@@ -79,7 +79,7 @@ C        PRINT *,'NOT YET IMPLEMENTED'
           Y=CSO+U
           CALL DIVC(W,X,Y,Z,U,V)
           CALL MULR(U,V,-SCALE,ROOTR(K),ROOTI(K))
-  500     CONTINUE
+ 5000     CONTINUE
         END IF
         PRPI=.FALSE.
         IF (SCC.EQ.1) THEN

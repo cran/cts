@@ -4,7 +4,7 @@ spectrum <- function(object, ...)
     UseMethod("spectrum")
 
 "spectrum.car" <-
-function (object, n.freq, plot.it = TRUE, na.action = na.fail, ...) 
+function (object, frmult=1, n.freq, plot.it = TRUE, na.action = na.fail, ...) 
 {
   x <- object
   ## must be a result of an AR fit
@@ -20,6 +20,7 @@ function (object, n.freq, plot.it = TRUE, na.action = na.fail, ...)
            as.double(b),
            as.integer(order),
            as.double(scale),
+           as.double(frmult),
            as.integer(n.freq),
            freq=double(n.freq),
            spec=double(n.freq),

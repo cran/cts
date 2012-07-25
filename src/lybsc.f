@@ -250,12 +250,12 @@ C*PT*WARNING* Constant already double-precision
   440     CONTINUE
   460 CONTINUE
 C
-      DO 500 I = 1,N
+      DO 5000 I = 1,N
           DO 480 J = I,N
               X(I,J) = X(I,J) + X(J,I)
               X(J,I) = X(I,J)
   480     CONTINUE
-  500 CONTINUE
+ 5000 CONTINUE
 C
       GO TO 540
   520 IERR = 2

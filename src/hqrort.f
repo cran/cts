@@ -116,7 +116,7 @@ C     .......... FORM SHIFT ..........
       IF (L.EQ.EN) GO TO 480
       Y = H(NA,NA)
       W = H(EN,NA)*H(NA,EN)
-      IF (L.EQ.NA) GO TO 500
+      IF (L.EQ.NA) GO TO 5000
       IF (ITN.EQ.0) GO TO 620
       IF (ITS.NE.10 .AND. ITS.NE.20) GO TO 160
 C     .......... FORM EXCEPTIONAL SHIFT ..........
@@ -243,7 +243,7 @@ C     .......... ONE ROOT FOUND ..........
       EN = NA
       GO TO 60
 C     .......... TWO ROOTS FOUND ..........
-  500 P = (Y-X)/2.0D0
+ 5000 P = (Y-X)/2.0D0
       Q = P*P + W
       ZZ = SQRT(ABS(Q))
       H(EN,EN) = X + T

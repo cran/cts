@@ -272,9 +272,9 @@ C      CALL SGESL(T,LDIM,NSYS,IPVT,P,JOB)
           DO 540 I = 1,N
               DO 520 J = 1,N
                   S = 0.0D0
-                  DO 500 L = 1,N
+                  DO 5000 L = 1,N
                       S = S + E(I,L)*E(L,J)
-  500             CONTINUE
+ 5000             CONTINUE
                   WRKA1(I,J) = S
   520         CONTINUE
   540     CONTINUE

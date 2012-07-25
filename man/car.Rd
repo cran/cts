@@ -21,7 +21,7 @@ car(x, y=NULL, scale = 1.5, order = 3, ctrl=car_control())
 \method{summary}{car}(object, ...)
 \method{plot}{car}(x, type=c("spec", "pred", "diag"),...) 
 \method{predict}{car}(object, se.fit = TRUE, digits = 3, plot.it=TRUE,...)
-\method{spectrum}{car}(object, n.freq, plot.it = TRUE, na.action = na.fail, ...)
+\method{spectrum}{car}(object, frmult=1, n.freq, plot.it = TRUE, na.action = na.fail, ...)
 \method{AIC}{car}(object, ..., k=NULL)
 \method{tsdiag}{car}(object, gof.lag = 10, ...)
 \method{kalsmo}{car}(object)
@@ -43,6 +43,7 @@ car(x, y=NULL, scale = 1.5, order = 3, ctrl=car_control())
   \item{plot.it}{ Logical: plot the forecast values? }
   \item{gof.lag}{the maximum number of lags for a Portmanteau
     goodness-of-fit test}
+  \item{frmult}{ numerical value, can be used to multiply the frequency range}
   \item{n.freq}{number of frequency}
   \item{k}{penalty, not used}
   \item{na.action}{ \code{NA} action function.}
@@ -77,6 +78,7 @@ reparameterized coefficients of CAR fits.
   \item{order }{The order of the fitted model. This is chosen by the user.}
   \item{np }{The number of parameters estimated. This may include the mean and the observation noise ratio.}
   \item{scale}{The kappa value referred to in the paper of Belcher et al.}
+  \item{vri}{If vri=1, estimate the observation noise ratio.}
   \item{vr}{The estimated observation noise ratio.}
   \item{sigma2}{The estimated innovation variance.}
   \item{phi}{The estimated reparameterized autoregressive parameters.}
@@ -106,6 +108,8 @@ reparameterized coefficients of CAR fits.
   \item{tnit}{Numeric vector: iteration}
   \item{ss}{Numeric vector: sum of squares for each \code{tnit}}
   \item{bit}{Matrix with rows for \code{tnit} and columns for parameter estimates}
+  \item{aic}{AIC value for the fitted model}
+  \item{bic}{BIC value for the fitted model}
 }
 \references{
   Belcher, J. and Hampton, J. S. and Tunnicliffe Wilson,
