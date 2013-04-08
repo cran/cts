@@ -134,6 +134,8 @@ C  CALCULATE PERTURBATION VECTOR
       CALL REPAR
       IF(PRPI)THEN
          call NEWLINE
+         call intpr('REDUCE NUMBER OF ITERATION (NIT) IN CAR_CONTROL',
+     * -1, 1, 0)
          call intpr('ITERATION ',9, ITCT, 1)
          call rexit('ROOT WITH POSITIVE REAL PART')
 C        PRINT *,'ITERATION ',ITCT,': ROOT WITH POSITIVE REAL PART'
@@ -187,9 +189,11 @@ C          PRINT *,'ITERATION :',ITCT
 C          PRINT *,'   LAMBDA: ',LAM
 C          PRINT *,'   SUM OF SQUARES: ',SSOLD
 C          PRINT *,'   PARAMETER VALUES:'
-c           call dblepr('  ',  2, OLDB, NP)
+C           call dblepr('  ',  2, OLDB, NP)
 C          DO 308 I=1,NP
+C           call intpr('I,', -1, I, 1)
 C           call dblepr('  ',  2, OLDB(I), 1)
+C          PRINT *,'  ',I,'  ',OLDB(I)
 C          PRINT *,'  ',I,'  ',OLDB(I)
 C  308     CONTINUE
           END IF

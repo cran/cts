@@ -8,6 +8,7 @@
 
 %\SweaveOpts{engine=R,eps=false,strip.white=true, width=6, height=6}
 %\SweaveOpts{engine=R,eps=false,prefix.string=fig/plot,strip.white=true,width=6,height=6}
+\SweaveOpts{keep.source=FALSE}
 \author{Zhu Wang\\Connecticut Children's Medical Center\\University of Connecticut School of Medicine}
 
 \title{\pkg{cts}: An \proglang{R} Package for Continuous Time Autoregressive Models via Kalman Filter}
@@ -76,13 +77,13 @@ G_y(f)=2\pi\sigma^2\left|\frac{(1+\mbox{i}2\pi f/\kappa)^{p-1}}{\alpha(\mbox{i}2
 \end{equation}
 This may also be expressed in a form which defines the alternative set of parameters $\phi_1, . . . , \phi_p$, by using a transformation $g = \arctan(2\pi f/\kappa)/\pi$ of the frequency $f$:
 \begin{equation*}\label{E:carspe1}
-G_y(f)=\frac{\sigma^2/\kappa^{2p-2}}{\kappa^2 + (2\pi f)^2} \left| \frac{\phi(-1)}{\phi(2\pi i g)}\right|^2 2\pi,
+G_y(f)=\frac{\sigma^2/\kappa^{2p-2}}{\kappa^2 + (2\pi f)^2} \left| \frac{\phi(-1)}{\phi\{\exp(2\pi i g)\}}\right|^2 2\pi,
 \end{equation*}
 where 
 \begin{equation*}
-\phi(z) = 1-\phi_1z - ... - \phi_p z^p.
+\phi(z) = 1+\phi_1z + ... + \phi_p z^p.
 \end{equation*}
-The new parameter space is identical to that of the stationary discrete time autoregressive
+The link between the $\alpha$ and $\phi$ parameters is given in \citet{Belc:Hamp:Tunn:1994} (9) and the line which follows. The new parameter space is identical to that of the stationary discrete time autoregressive
 model. The CZAR model of Tunnicliffe Wilson and Morton is identical except that the right-hand side of (\ref{E:belc1})
 is modified to $(\kappa+D)^{p-1}\epsilon(t)$ so that $\sigma^2/\kappa^{2p-2}$ is re-scaled to $\sigma^2$.
 The system frequencies are determined by the roots of (\ref{E:carfac}). In fact, the representation of (\ref{E:carfac}) breaks a $p$th order autoregressive operator into its irreducible linear and quadratic factors that have complex zeros. A quadratic factor $(s-r_{2k-1})(s-r_{2k})$ with complex zeros is associated with a component of the data having the nature of a stochastic cycle, with approximate frequency given by $f=\frac{|\Im(r_{2k})|}{2\pi}$, where $|\Im(r_{2k})|$ is the absolute value of the imaginary part of $r_{2k}$. This will
@@ -97,7 +98,7 @@ white noise component.
 
 This section deals with the details related to applying the Kalman filter to estimate the parameters of model~(\ref{E:belc1}), following \citet{Jone:1981} and \citet{Belc:Hamp:Tunn:1994}.
 To apply the Kalman filter, it is required to rewrite model~(\ref{E:belc1}) to a state space form, which may be found in \citet{Wibe:1971}. %Let $A$ and $R$ be defined as in (\ref{E:Amat}) and (\ref{E:Rvec}), respectively, and 
-Let the unobservable state vector $\theta(t)=(z(t), z'(t), ...,z^{(p-1)}(t))^T$. The state equation is then given by
+Let the unobservable state vector $\theta(t)=(z(t), z'(t), z''(t) ...,z^{(p-1)}(t))^\top$ and $\theta'$ the first derivative of $\theta(t)$. The state equation is then given by
 \begin{equation}\label{E:carsta}
 \theta'=A\theta+R\epsilon,
 \end{equation}
@@ -113,7 +114,7 @@ A= \begin{bmatrix}
 \end{equation}
 and
 \begin{equation}\label{E:Rvec}
-R'=         \begin{bmatrix}
+R^\top=         \begin{bmatrix}
 0 & 0 & \hdots & 1\\
 \end{bmatrix}.
 \end{equation}
@@ -150,7 +151,7 @@ For a review of computations related to the exponential of a matrix, see \citet{
 
 To start the Kalman filter recursions, initial conditions are in demand. For a stationary model, the unconditional covariance matrix of state vector $\theta(t)$ is known \citep{Doob:1953} and used in \citet{Jone:1981} and \citet[\S9.1]{Harv:1990}. The initial state for both standard and diagonalized version can be set as $\theta_0=0$ and $\psi_0=0$, respectively. The stationary covariance matrix $Q$ satisfies
 \begin{equation}\label{E:Q}
-Q=\sigma^2\int_{0}^{\infty}e^{As}RR'e^{A's}ds.
+Q=\sigma^2\int_{0}^{\infty}e^{As}RR^\top e^{A^\top s}ds.
 \end{equation}
 
 When $A$ can be diagonalized, it is straightforward to show that
@@ -184,15 +185,15 @@ v_\psi(t_k)=x_\psi(t_k)-x_\psi(t_k|t_{k-1})
 \end{equation}
 and variance
 \begin{equation}
-F_\psi(t_k)=GP_\psi(t_k|t_{k-1})\bar{G}^{'}+V
+F_\psi(t_k)=GP_\psi(t_k|t_{k-1})\bar{G}^\top+V
 \end{equation}
 \item Update the estimate of the state vector:
 \begin{equation}
-\psi(t_k|t_k)=\psi(t_k|t_{k-1})+P_\psi(t_k|t_{k-1})\bar{G}'F_\psi^{-1}(t_k)v_\psi(t_k)
+\psi(t_k|t_k)=\psi(t_k|t_{k-1})+P_\psi(t_k|t_{k-1})\bar{G}^\top F_\psi^{-1}(t_k)v_\psi(t_k)
 \end{equation}
 \item Update the covariance matrix:
 \begin{equation}
-P_\psi(t_k|t_k)=P_\psi(t_k|t_{k-1})-P_\psi(t_k|t_{k-1})\bar{G}'F_\psi^{-1}(t_k)G\bar{P}'_\psi(t_k|t_{k-1})
+P_\psi(t_k|t_k)=P_\psi(t_k|t_{k-1})-P_\psi(t_k|t_{k-1})\bar{G}^\top F_\psi^{-1}(t_k)G\bar{P}^\top _\psi(t_k|t_{k-1})
 \end{equation}
 \item %As for the standard form,
 The unknown scale factor $\sigma^2$ can be concentrated out by letting $\sigma^2=1$ temporally. %Hence again from (\ref{E:loglike}), 
@@ -212,7 +213,7 @@ However the computational load is reduced dramatically with the diagonal form si
 When the nonlinear optimization is successfully completed, in addition to the maximum likelihood estimation of the parameters and error variances, the Kalman filter returns the optimal estimate of the state and the state covariance matrix at the last time point. The forecasting of the state, state covariance matrix and observation can be continued into future desired time points using equations from (\ref{E:carkal1d}) to (\ref{E:carkal4d}).
 \subsection{Model selection}\label{S:caraic}
 
-To identify a model order, \citet{Belc:Hamp:Tunn:1994} proposed a strategy corresponding to the reparameterization. Start with a large order model, and obtain the parameter vector $\phi$ and its covariance matrix $V_\phi$, we then make a Cholesky decomposition such that $V^{-1}_\phi=L_\phi L'_\phi$ where $L_\phi$ is a lower triangular matrix, and define the vector $t_\phi=L'_\phi \phi$ and construct the sequence $AIC_d=-\sum_{i=1}^{d}t^2_{\phi,i}+2d$ for $d=1,...,p$. The index of the minimum value of $AIC_d$ suggests a preferred model order. In addition, if the true model order $p$ is less than the large value used for model estimation, then for $i>p$ the $t$-statistics may be treated as normal-distributed variables, so that the deviation from their true values of 0 will be small. However, Belcher et al used a 33MHz maths co-processor,
+To identify a model order, \citet{Belc:Hamp:Tunn:1994} proposed a strategy corresponding to the reparameterization. Start with a large order model, and obtain the parameter vector $\phi$ and its covariance matrix $V_\phi$, we then make a Cholesky decomposition such that $V^{-1}_\phi=L_\phi L^\top_\phi$ where $L_\phi$ is a lower triangular matrix, and define the vector $t_\phi=L^\top_\phi \phi$ and construct the sequence $AIC_d=-\sum_{i=1}^{d}t^2_{\phi,i}+2d$ for $d=1,...,p$. The index of the minimum value of $AIC_d$ suggests a preferred model order. In addition, if the true model order $p$ is less than the large value used for model estimation, then for $i>p$ the $t$-statistics may be treated as normal-distributed variables, so that the deviation from their true values of 0 will be small. However, Belcher et al used a 33MHz maths co-processor,
 and with the speed of present day computers the best practice is to compute the classical AIC or BIC \citep{Akaike1974,bic} by fitting the models of increasing order $p$ to the series. The AIC is defined as $n \log SS(p)+2p$ and BIC is defined as $n\log SS(p) + p \log(p)$ where $SS$ is the sum of squares function given by \citet{Belc:Hamp:Tunn:1994} equation 15. The AIC and BIC can be easily modified if an additional mean value of the series is estimated. The package \pkg{cts} has implemented the relevant functions for model selection and a data example will be illustrated. 
 
 \subsection{Diagnostics}\label{S:cardiag}
@@ -226,8 +227,8 @@ white noise sequence, the sample autocorrelations are approximately independentl
 and normally distributed with zero means and variances $1/n$. Note that for a purely random series, the cumulative periodogram should follow along a line $y=2x$ where $x$ is frequency. 
 A standard portmanteau test statistic for serial correlation, such as the Ljung-Box statistic, can be used as well. The proposed calculation of the scaled innovation is frequently done in classical discrete-time models. This way a sequence of $n$ numbers is calculated, and the auto-correlation and discrete-time spectrum of these numbers are calculated,
 i.e. the time between observations does not enter these calculations.
+\newpage
 \subsection{Kalman smoothing}\label{S:carsmo}
-
 For a structural time series model, it is often of interest to estimate the unobserved components at all points in the sample. Estimation of smoothed trend and cyclical components provides an example. %As discussed in Section~\ref{S:smo}, 
 The purpose of smoothing at time $t$ is to find the expected value of the state vector, conditional on the information made available after time $t$.
 In this section, a fixed-interval smoothing algorithm \citep[\S3.6.2]{Harv:1990} is implemented with modifications for the model considered, though a more efficient approach is possible, see the discussion in \citet[\S4.3]{Durb:Koop:2001}. Estimating unobserved components relies on the diagonal form which provides the associated structure with the corresponding roots $r_1, ... r_p$. 
@@ -270,8 +271,7 @@ To reproduce the analyses, one can invoke the \proglang{R} code
 edit(vignette("kf",package = "cts"))
 @
 \section{Data examples}
-Two data examples in \citet{Belc:Hamp:Tunn:1994} are used to illustrate the capabilities of \pkg{cts}. A detailed description of the data can be found in the original paper. Since some analysis here reproduces the results in \citet{Belc:Hamp:Tunn:1994}, we also ignore a lengthy discussion for brevity. These analyses were done using \proglang{R} version 2.13.1 (2011-07-08) and the
-operating system \code{i686-pc-cygwin}. 
+Two data examples in \citet{Belc:Hamp:Tunn:1994} are used to illustrate the capabilities of \pkg{cts}. A detailed description of the data can be found in the original paper. Since some analysis here reproduces the results in \citet{Belc:Hamp:Tunn:1994}, we also ignore a lengthy discussion for brevity. These analyses were done using \proglang{R} version 3.0.0.
 
 \subsection{Geophysical application}
 
@@ -396,7 +396,7 @@ summary(asth.car4)
 
 The log-spectrum (base 10) of the fitted model is shown in Figure~\ref{fig:asth2}. The spectral peak indicates a strong diurnal cycle in the data. 
 
-It is possible to fit a model with an observation error term by setting \code{vri=TRUE} in the control statement while the default value is \code{FALSE}. The following code shows how to fit such a model. The estimated observation error variance can be found with the \code{summary} command and the corresponding spectrum in Figure~\ref{fig:asth2} is compared with the model without the observation error. 
+It is possible to fit a model with an observation error term by setting \code{vri=TRUE} in the parameter control statement. The following code shows how to fit such a model. The estimated observation error variance can be found with the \code{summary} command and the corresponding spectrum in Figure~\ref{fig:asth2} is compared with the model without an observation error. 
  
 <<echo=true>>=
 ### fit the modified form of a continuous AR(7) model with measurement error
@@ -423,10 +423,11 @@ factab(asth.car4)
 @
 We thus decomposed the original time series into three corresponding components via the Kalman smoother as shown in Figure~\ref{fig:asth3}. 
 \setkeys{Gin}{height=0.75\textheight, width=1.05\textwidth}
-\begin{figure}[h!]
+\begin{figure}[htb!]
 \centering
 <<fig=true,include=TRUE>>=
-### decompose the original time series into three corresponding components via the Kalman smoother as shown in Figure~\ref{fig:asth3}. 
+### decompose the original time series into three corresponding components 
+### via the Kalman smoother 
 asth.kalsmo <- kalsmo(asth.car4)
 par(mfrow=c(3,1))
 kalsmoComp(asth.kalsmo,comp=1, xlab="Time in hours")
@@ -439,10 +440,10 @@ kalsmoComp(asth.kalsmo,comp=4,xlab="Time in hours")
 
 Finally, we predicted the last 10 steps past the end of time series in Figure~\ref{fig:asth4}.
 \setkeys{Gin}{height=0.35\textheight, width=1\textwidth}
-\begin{figure}[h!]
+\begin{figure}[htb!]
 \centering
 <<fig=true>>=
-### predict the last 10 steps past the end of time series in Figure~\ref{fig:asth4}.
+### predict the last 10 steps past the end of time series
 predict(asth.car4, xlab="Time in hours")
 @
 \caption{Forecasts (circles) for lung function measurements.}
@@ -452,8 +453,7 @@ predict(asth.car4, xlab="Time in hours")
 \section{Conclusion}
 In this article we have outlined the methods and algorithms for fitting continuous time autoregressive models through the Kalman filter. The theoretical ingredients of Kalman filter have their counterparts in the \proglang{R} package \pkg{cts}, which can be particularly useful with unequally sampled time series data.
 %\section{Acknowledgment}
-%The author thanks Granville Tunnicliffe Wilson for invaluable assistance.
-%The author also thanks the Editors and reviewers for their constructive remarks and suggestions, which have greatly improved the article and software. 
+%The author thanks Granville Tunnicliffe Wilson for invaluable assistance. The author also thanks the Editors and reviewers for their constructive remarks and suggestions, which have greatly improved the article and software. 
 \bibliography{kf}
 
 \end{document}

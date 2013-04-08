@@ -74,7 +74,7 @@ reparameterized coefficients of CAR fits.
 }
 \value{
   A list of class \code{"car"} with the following elements:
-  \item{n.used}{The number of observations of \code{ser} used in fitting}
+  \item{n.used}{The number of observations used in fitting}
   \item{order }{The order of the fitted model. This is chosen by the user.}
   \item{np }{The number of parameters estimated. This may include the mean and the observation noise ratio.}
   \item{scale}{The kappa value referred to in the paper of Belcher et al.}
@@ -124,7 +124,7 @@ reparameterized coefficients of CAR fits.
 
   Wang, Zhu and Woodward, W. A. and Gray, H. L. (2009). The Application of the Kalman Filter to Nonstationary Time Series through Time Deformation. \emph{Journal of Time Series Analysis}, \bold{30(5)}, 559-574.
 
-  Wang, Zhu (2011). cts: An R Package for Continuous Time Autoregressive Models via Kalman Filter. Under review.
+  Wang, Zhu (2013). cts: An R Package for Continuous Time Autoregressive Models via Kalman Filter. \emph{Journal of Statistical Software}, \bold{Vol. 53(5)}, 1--19. \url{http://www.jstatsoft.org/v53/i05}
 }
 
 \author{

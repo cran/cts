@@ -1,5 +1,5 @@
-.First.lib <- function(lib, pkg)
-        library.dynam("cts", pkg, lib)
+#.First.lib <- function(lib, pkg)
+#        library.dynam("cts", pkg, lib)
 spectrum <- function(object, ...)
     UseMethod("spectrum")
 

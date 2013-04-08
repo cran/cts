@@ -1,0 +1,19 @@
+citHeader("To cite cts in publications use:")
+
+citEntry(entry = "Article",
+  title        = "{cts}: An {R} Package for Continuous Time Autoregressive Models via Kalman Filter",
+  author       = personList(as.person("Zhu Wang")),
+  journal      = "Journal of Statistical Software",
+  year         = "2013",
+  volume       = "53",
+  number       = "5",
+  pages        = "1--19",
+  url          = "http://www.jstatsoft.org/v53/i05/",
+
+  textVersion  =
+  paste("Zhu Wang (2013).",
+        "cts: An R Package for Continuous Time Autoregressive Models via Kalman Filter.",
+        "Journal of Statistical Software, 53(5), 1-19.",
+        "URL http://www.jstatsoft.org/v53/i05/.")
+)
+

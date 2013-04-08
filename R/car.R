@@ -1,4 +1,5 @@
-.First.lib <- function(lib, pkg)
+#.First.lib <- function(lib, pkg)
+.onLoad <- function(lib, pkg)
         library.dynam("cts", pkg, lib)
 
 car_control <- function(fty=1, n.ahead=10, trace=FALSE, ari=TRUE, vri=FALSE, vr=0, pfi="MAPS",ccv="CTES", lpv=TRUE, scc=TRUE,  nit=40, opm=1, rgm=1, req=0.5, con=1.0e-5, rpe=1.0, ivl=1.0e-2, fac=1.0e1, stl=1.0e-5, sml=1.0e2, gtl=1.0e5, kst=TRUE, fct=TRUE){
@@ -50,8 +51,8 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
     if (vri < 0) stop("Invalid VRI option:", vri)
     if (vri==0) vr <- csz
     if (vr < 0) stop("Invalid VR value:", vr)
-
-    if (ccv=="NULL") ccv <- 0
+    if (is.null(ccv)) ccv <- 0
+#    if (ccv=="NULL") ccv <- 0
     if (ccv=="MNCT") ccv <- 1
     if (ccv=="CTES") ccv <- 2
     if (ccv < 0) stop("Invalid CCV option:", ccv)
@@ -307,7 +308,7 @@ summary.car <- function(object, ...)
 #  names(coef) <- c(seq(length=x$order), "mean")
   if(x$vri==1){
 #  tmp <- rbind(coef, x$delb[-(x$order+1)])
-  cat("\nObservation error variance:",x$vob,"\n")
+  cat("\nObservation error variance:",format(x$vob*x$sigma2, digits=digits),"\n")
 }
   tmp <- rbind(coef, x$delb[1:x$order])
   cat("\nEstimated coefficients (standard errors):\n")
