@@ -62,3 +62,7 @@ PKG_LIBS=$(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
   o  changed the Fortran subroutine cspec to the calculation of the spectrum
   o  added a new parameter frmult in function spectrum which can be used to muliply the frequency range
   o  added AIC and BIC values in the output of function car  
+
+                CHANGES in `cts' VERSION 1.0-16 (2013-5-01)
+  o  The estimates of all the other variances (in this case the forecast value variance) must by multiplied by this residual variance.
+  o  Lazy Fortran programmers often specify Fortran dimensions as 1 rather than * or a real bound: d1rply.f, d2rply.f, d3rply.f, d4rply.f, d5rply.f, d6rply.f, d7rply.f, d8rply.f, d9rply.f 

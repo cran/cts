@@ -19,8 +19,8 @@ C*****series.txt
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
       COMMON/SERIES/TIM,SER,TDIF,NAME,LEN
 C*****kfasav.txt
-      REAL PRE(5000),PRV(5000),FSER(5000),FVAR(5000),SSER(5000)
-     1,SVAR(5000)
+      DOUBLE PRECISION PRE(5000),PRV(5000),FSER(5000),FVAR(5000)
+     1,SSER(5000),SVAR(5000)
       DOUBLE PRECISION FSES(5000,20),FSCV(5000,20,20),SSES(5000,20)
      1,SSCV(5000,20,20),PSES(5000,20),PSCV(5000,20,20),TRAN(5000,20,20)
 c      COMMON/KFASAV/PRE,PRV,FSER,FVAR,SSER,SVAR,FSES,FSCV,SSES,SSCV
@@ -54,8 +54,9 @@ c changed the next line 6/7/06
         else 
           if(fty.EQ.2)then
            DO 104 I=1,for
-c           PRE1(I)=PRE(LEN-for+I) changed 6/6/06
-c           PRV1(I)=PRV(LEN-for+I)
+C changed 6/6/06
+C           PRE1(I)=PRE(LEN-for+I) 
+C           PRV1(I)=PRV(LEN-for+I)
            PRE1(I)=PRE(LEN+I)
            PRV1(I)=PRV(LEN+I)
  104       CONTINUE

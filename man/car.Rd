@@ -31,7 +31,7 @@ car(x, y=NULL, scale = 1.5, order = 3, ctrl=car_control())
     being the sampled time and the second column being the observations at
     the first column; otherwise \code{x} is a numeric vector of sampled time. It can be a \code{car} object for S3 methods}
   \item{y}{not used if \code{x} has two columns; otherwise \code{y} is a numeric vector of observations at sampled time \code{x}.}
-  \item{scale}{ The kappa value referred to in the paper.}
+  \item{scale}{ The kappa value referred to in the paper by Belcher et a. (1994). We now recommend selection of kappa along with the model order by using AIC. Also, it is suggested to choose kappa close to 2pi times 1/mean.delta (reciprocal of the mean time between observations), though it is a good idea to explore somewhat lower and higher values to see whether the spectrum estimates were sensitive to this choice. Choosing kappa lower increases the risk of trying to estimate the spectrum beyond the effective Nyquist frequency of the data - though this does depend on the distribution of intersample times. }
   \item{order}{order of autoregression.}
   \item{ctrl}{ control parameters used in predict and numerical optimization. }
   \item{object}{ object of class \code{car} }

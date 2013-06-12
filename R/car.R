@@ -258,6 +258,12 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
         pre <- Zfor$pre1
         prv <- Zfor$prv1
         tim <- Zfor$tim1
+      cat("\n")
+      print(pre)
+      cat("\n")
+      print(prv)
+      cat("\n")
+      print(tim)
       }
     else
       {
@@ -282,7 +288,7 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
                    filser=filser,filvar=filvar,
                    sser=sser,svar=svar,
                    stdres=sres, pretime = tim[(ntim1+1):ntim2],
-                   predict=pre,predict.var=prv, fty=fty, tnit=zpar$tnit, ss=zpar$ss, bit=zpar$bit, aic=aic, bic=bic),
+                   predict=pre,predict.var=prv*Z$sigsq1, fty=fty, tnit=zpar$tnit, ss=zpar$ss, bit=zpar$bit, aic=aic, bic=bic),
               class="car")
   }
 

@@ -10,8 +10,8 @@ C
       INTEGER TYPE
 C
       DOUBLE PRECISION ETA, ARE, MRE
-      DOUBLE PRECISION P(1), QP(2), K(2),
-     1 QK(1), SR, SI, U, V, A, B, C, D,
+      DOUBLE PRECISION P(*), QP(*), K(*),
+     1 QK(*), SR, SI, U, V, A, B, C, D,
      2 A1, A2, A3, A6, A7, E, F, G, H, SZR, SZI,
      3 LZR, LZI
       DOUBLE PRECISION TEMP

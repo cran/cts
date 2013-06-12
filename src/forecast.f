@@ -25,7 +25,8 @@ C*****repcom.txt
 c      COMMON/REPCOM/PRPI,REQSW,VOB,KFSW
       COMMON/REPCOM/VOB,REQSW,KFSW,PRPI
 C*****kfasav.txt
-      REAL PRE(5000),PRV(5000),FSER(5000),FVAR(5000),SSER(5000)
+      DOUBLE PRECISION PRE(5000),PRV(5000),FSER(5000),FVAR(5000)
+     1,SSER(5000)
      1,SVAR(5000)
       DOUBLE PRECISION FSES(5000,20),FSCV(5000,20,20),SSES(5000,20)
      1,SSCV(5000,20,20),PSES(5000,20),PSCV(5000,20,20),TRAN(5000,20,20)
@@ -134,5 +135,8 @@ c 30            write(4,203) TIM(T),SER(T),PRE(T),PRV(T)
 c 203           FORMAT(4E13.5)
             endif
 c            CLOSE(UNIT=4)
+C      DO 5 I=1, 10
+C      call dblepr("in forecast subroutine, PRE(I)", -1, PRE(I), 1)
+C   5   CONTINUE
             RETURN
             END
