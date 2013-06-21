@@ -1,6 +1,6 @@
-83542a74ff8e3555dba4d65745e5c069 *DESCRIPTION
+e531b146c4b91b52c1c349441cc5b4f2 *DESCRIPTION
 cdcb4a4c0a91b8514f1b1c219d8cd245 *NAMESPACE
-f653522c8374a70a7b41a60779a750ce *NEWS
+e93ac9a4f32a5ccd9d7db9df4610b239 *NEWS
 e6b6e9965c244fdd52933ef75143cd0e *R/aic.R
 ccf44f71ad1a7273b3288e43f722f2c1 *R/car.R
 4bd3f9ddf357743b21c8d5634051d8c0 *R/factab.R
@@ -14,12 +14,12 @@ fdc1a013d5924e5c0620adb933637564 *R/spectrum.car.R
 c853ef3e156e4c75c248fd88ebd0f82f *data/V22174.rda
 1991268fdfd117a5abb089daac65d481 *data/asth.rda
 3f6c577e6c3b81bcbdb394559b8054b5 *inst/CITATION
+cb508460b78401111a4b2702dddc5a85 *inst/COPYRIGHTS
 7b1ba2fbba19fad8d672eb106d16de83 *inst/doc/cts_Fortran_source_diagram.pdf
 3fcdf538ec18b74172a89aad3dcc183b *inst/doc/cts_Fortran_source_diagram.pptx
 01e1aa892c572bad99eaa9018e40d44c *inst/doc/kf.R
 596f500fa8b0edb4e09837df9055b5f5 *inst/doc/kf.Rnw
-d15129afc0bf6f11819678840c3feaa5 *inst/doc/kf.bib
-47ff7f101aa253efd834ac45615c12c4 *inst/doc/kf.pdf
+e0f824c37b09882eed0dc33d5c4dd2d8 *inst/doc/kf.pdf
 e7a2440e35a4e24f6dc539d5c2609d60 *man/V22174.Rd
 1c237f49a734797b5e82379e976ae7f0 *man/asth.Rd
 31285caf8b37e9182c928bad7a30715a *man/car.Rd
@@ -51,8 +51,6 @@ f02692aeb5b7bc224f854d0f2a8ffd71 *src/d6rply.f
 43e8918d1e75d4d68e48481de4a47c77 *src/d7rply.f
 cdca266b91cf2e873e5d0dbb73c2220c *src/d8rply.f
 14ed1255492809df656a7894881dc341 *src/d9rply.f
-1f4f5b73d88fca6cb3c90c314c3c1f5d *src/dgetrf.f
-bf6e246f3e70a6a5a723134598daab2e *src/dgetrs.f
 4f81dd23006d682d07ea49142f030a91 *src/display.f
 58f1d5064929367179059db23a7db0b1 *src/dpca.f
 ae43596bbc8e38c1784e9dca4d2facfb *src/drpoly.f
@@ -114,3 +112,5 @@ cbfb574ead838bb12e858fb197dbbb54 *src/simi.f
 5ec23ec12d47bd0a24c01f45282a3979 *src/store.f
 45f8e708637e2684478e06086849f752 *src/u9dmp.f
 3767b38e3d74fa94a9670999cfe244a0 *src/update.f
+596f500fa8b0edb4e09837df9055b5f5 *vignettes/kf.Rnw
+d15129afc0bf6f11819678840c3feaa5 *vignettes/kf.bib

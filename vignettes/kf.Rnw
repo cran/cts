@@ -1,0 +1,459 @@
+\documentclass[nojss]{jss}
+%\documentclass[article]{jss}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[english]{babel}
+%\usepackage{/usr/lib/R/share/texmf/Sweave}
+%%\VignetteIndexEntry{cts Illustrations}
+
+%\SweaveOpts{engine=R,eps=false,strip.white=true, width=6, height=6}
+%\SweaveOpts{engine=R,eps=false,prefix.string=fig/plot,strip.white=true,width=6,height=6}
+\SweaveOpts{keep.source=FALSE}
+\author{Zhu Wang\\Connecticut Children's Medical Center\\University of Connecticut School of Medicine}
+
+\title{\pkg{cts}: An \proglang{R} Package for Continuous Time Autoregressive Models via Kalman Filter}
+
+\Plainauthor{Zhu Wang}
+\Plaintitle{cts: An R Package for Continuous Time Autoregressive Models via Kalman Filter}
+\Shorttitle{Continuous Time AR Models via Kalman Filter}
+\Abstract{
+We describe an \proglang{R} package \pkg{cts} for fitting a modified form of
+continuous time autoregressive model, which can be particularly useful with unequally sampled time series. The estimation is based on the application of the Kalman filter. The paper provides the methods and algorithms implemented in the package, including parameter estimation, spectral analysis, forecasting, model checking and Kalman smoothing. The package contains \proglang{R} functions which interface underlying \proglang{Fortran} routines. The package is applied to geophysical and medical data for illustration.
+}
+\Keywords{continuous time autoregressive model, state space model, Kalman filter, Kalman smoothing, \proglang{R}}
+\Plainkeywords{continuous time autoregressive model, state space model, Kalman filter, Kalman smoothing, R}
+\Address{
+Zhu Wang\\
+Department of Research\\
+Connecticut Children's Medical Center\\
+Department of Pediatrics\\
+University of Connecticut School of Medicine\\
+Connecticut 06106, United States of America\\
+E-mail: \email{zwang@ccmckids.org}
+}
+
+\begin{document}
+
+\maketitle
+\section{Introduction}
+The discrete time autoregressive model of order $p$, the AR$(p)$, is a widely used tool for modeling equally spaced time series data. It can be fitted in a straightforward and reliable manner and has the capacity to approximate a second order stationary process to any required degree of precision by choice of a suitably high order. Various information criteria such as the AIC \citep{Akaike1974} or the BIC \citep{bic} can, in practice be used to determine a suitable order when fitting to a finite data set. This model is clearly not appropriate for irregularly sampled data, for which various authors have advocated the use of the continuous time autoregressive model of order $p$, the CAR$(p)$. For example \citet{Jone:1981} developed an estimation method for the CAR$(p)$ fitted to discretely sampled data through the application of the Kalman filter. However, the CAR$(p)$ model does not share with its discrete counterpart the same capacity to approximate any second order stationary continuous process. \citet{Belc:Hamp:Tunn:1994} modified the parameterization and structure of the CAR$(p)$ model in such a way that this general capacity for approximation was restored, requiring only a relatively minor modification of the estimation procedure of Jones. More recently, see \citet{Tunn:2004}, this modified CAR$(p)$ model has been named the CZAR$(p)$ model and expressed in autoregressive form using the generalized continuous time shift operator with the alternative parameterization appearing in a natural manner. \citet{Wang:Wood:Gray:2008} utilized the methods in \citet{Belc:Hamp:Tunn:1994} for fitting time varying nonstationary models. %The CAR models have seen practical usages in many fields including astronomics, medicine and economics \citep{Whit:2004, Belc:Hamp:Tunn:1994, Berg:1990}. 
+Since the technical details for the Kalman filter on CAR models are scattered in the literature, we give a thorough presentation in this paper, which provides a foundation for the implementations in the \proglang{R} \citep{Rcite} package \pkg{cts} \citep{cts} for fitting CAR models with discrete data. The \pkg{cts} package contains typical time series applications including spectral estimation, forecasting, diagnostics, smoothing and signal extraction. The application is focused on unequally spaced data although the techniques can be applied to equally spaced data as well. The paper is organized as follows. Section 2 summarizes the methods from which the \pkg{cts} package was developed. Section 3 outlines the implementations in the package. Section 4 illustrates the capabilities of \pkg{cts} with two data sets. Finally, Section 5 concludes the paper.
+\section{Methods}
+
+\subsection{The CAR and CZAR model}
+Suppose we have data $x_{k}$ observed on time $t_{k}$ for $k=1,2, ...,n$. We assume noise-affected observations $x_{k}=y(t_{k})+\eta_{k}$ and $y(t_{k})$ follows a $p$-th order continuous time autoregressive process $Y(t)$ satisfying
+\begin{align}\label{E:ARp}
+Y^{(p)}(t)+\alpha_1Y^{(p-1)}(t)+\ldots+\alpha_{p-1}Y^{(1)}(t)+\alpha_pY(t)=\epsilon(t),
+\end{align}
+where $Y^{(i)}(t)$ is the $i$th derivative of $Y(t)$ and $\epsilon(t)$ is the formal derivative of a Brownian process $B(t)$ with variance parameter $\sigma^2 = \textrm{var}\{B(t +1) - B(t)\}$.
+In addition, it will be assumed that $\eta_{k}$ is a normally distributed random variable representing observational error, uncorrelated with $\epsilon(t)$, and $
+E(\eta_k) =0;
+E(\eta_j \eta_k) =0, \mbox{for } j\neq k; 
+E(\eta_k^2) =\gamma\sigma^2.$
+
+The operator notation of model (\ref{E:ARp}) is $\alpha(D)Y(t)=\epsilon(t)$ where
+\begin{equation}
+\alpha(D)=D^p+\alpha_1 D^{p-1}+...+\alpha_{p-1} D+\alpha_{p},
+\end{equation}
+where $D$ is the derivative operator. The corresponding characteristic equation is then given by
+\begin{equation}
+\alpha(s)=s^p+\alpha_1 s^{p-1}+...+\alpha_{p-1} s+\alpha_{s}=0.
+\end{equation}
+To assure the stability of the model, a parameterization 
+was constructed on the zeros $r_1,...,r_p$ of $\alpha(s)$ \citep{Jone:1981}, i.e., 
+\begin{equation}\label{E:carfac}
+\alpha(s)=\prod_{i=1}^{p}(s-r_i).
+\end{equation}
+
+The model in the \pkg{cts} package follows the modified structure \citep{Belc:Hamp:Tunn:1994}:
+\begin{equation}\label{E:belc1}
+\alpha(D)Y(t)=(1+D/\kappa)^{p-1}\epsilon(t),
+\end{equation}
+with scaling parameter $\kappa>0$. This introduces a prescribed moving average operator of order $p-1$ into the model, which makes the model selection convenient along with other theoretic benefits described in \citet{Belc:Hamp:Tunn:1994}. In practice model (\ref{E:belc1}) has been found to fit data quite well without the need for an observation error term \citep{Belc:Hamp:Tunn:1994}. Indeed, for large orders $p$, the observation error variance may become confounded with the parameters of model (\ref{E:belc1}), thus leading to some difficulty in estimation \citep{Belc:Hamp:Tunn:1994}. As argued by these authors, model \ref{E:belc1} can be sufficient unless there is a substantial variability for measurements at the same or very nearly coincident times.
+
+The power spectrum of the $p$th order continuous process (\ref{E:belc1}) is defined by
+\begin{equation}\label{E:carspe}
+G_y(f)=2\pi\sigma^2\left|\frac{(1+\mbox{i}2\pi f/\kappa)^{p-1}}{\alpha(\mbox{i}2\pi f)}\right|^2.
+\end{equation}
+This may also be expressed in a form which defines the alternative set of parameters $\phi_1, . . . , \phi_p$, by using a transformation $g = \arctan(2\pi f/\kappa)/\pi$ of the frequency $f$:
+\begin{equation*}\label{E:carspe1}
+G_y(f)=\frac{\sigma^2/\kappa^{2p-2}}{\kappa^2 + (2\pi f)^2} \left| \frac{\phi(-1)}{\phi\{\exp(2\pi i g)\}}\right|^2 2\pi,
+\end{equation*}
+where 
+\begin{equation*}
+\phi(z) = 1+\phi_1z + ... + \phi_p z^p.
+\end{equation*}
+The link between the $\alpha$ and $\phi$ parameters is given in \citet{Belc:Hamp:Tunn:1994} (9) and the line which follows. The new parameter space is identical to that of the stationary discrete time autoregressive
+model. The CZAR model of Tunnicliffe Wilson and Morton is identical except that the right-hand side of (\ref{E:belc1})
+is modified to $(\kappa+D)^{p-1}\epsilon(t)$ so that $\sigma^2/\kappa^{2p-2}$ is re-scaled to $\sigma^2$.
+The system frequencies are determined by the roots of (\ref{E:carfac}). In fact, the representation of (\ref{E:carfac}) breaks a $p$th order autoregressive operator into its irreducible linear and quadratic factors that have complex zeros. A quadratic factor $(s-r_{2k-1})(s-r_{2k})$ with complex zeros is associated with a component of the data having the nature of a stochastic cycle, with approximate frequency given by $f=\frac{|\Im(r_{2k})|}{2\pi}$, where $|\Im(r_{2k})|$ is the absolute value of the imaginary part of $r_{2k}$. This will
+be reflected as a component of the autocorrelations with the same frequency, decaying in amplitude
+with a rate equal to the absolute value of the real part of the same zero. The model can represent a
+strong cycle in the data if this decay rate is very low. A linear factor with zero at $r_k$ is associated
+with a component of the data having the nature of a first order autoregression with autocorrelation
+function exponentially decaying at the rate $r_k$. If $r_k$ is very large, this can give the appearance of a
+white noise component. 
+
+\subsection{Kalman filtering}\label{sub:modest}
+
+This section deals with the details related to applying the Kalman filter to estimate the parameters of model~(\ref{E:belc1}), following \citet{Jone:1981} and \citet{Belc:Hamp:Tunn:1994}.
+To apply the Kalman filter, it is required to rewrite model~(\ref{E:belc1}) to a state space form, which may be found in \citet{Wibe:1971}. %Let $A$ and $R$ be defined as in (\ref{E:Amat}) and (\ref{E:Rvec}), respectively, and 
+Let the unobservable state vector $\theta(t)=(z(t), z'(t), z''(t) ...,z^{(p-1)}(t))^\top$ and $\theta'$ the first derivative of $\theta(t)$. The state equation is then given by
+\begin{equation}\label{E:carsta}
+\theta'=A\theta+R\epsilon,
+\end{equation}
+where
+\begin{equation}\label{E:Amat}
+A= \begin{bmatrix}
+0 & 1 & \ldots & 0  \\
+0 & 0 & \ldots & 0  \\
+\vdots \\
+0 & 0 & \ldots & 1 \\
+-\alpha_p & -\alpha_{p-1} & \ldots & -\alpha_1\\
+\end{bmatrix}
+\end{equation}
+and
+\begin{equation}\label{E:Rvec}
+R^\top=         \begin{bmatrix}
+0 & 0 & \hdots & 1\\
+\end{bmatrix}.
+\end{equation}
+The observation equation is given by
+\begin{equation}\label{E:carobs}
+x_{k}=H\theta(t_{k})+\eta_{k},
+\end{equation}
+where the elements of the $1\times p$ vector $H$ are given by
+\begin{equation}\label{E:Hvec}
+H_i={p-1 \choose i-1} /\kappa^{i-1} \qquad i=1,...,p.
+\end{equation}
+Suppose that $A$ can be diagonalized by $A=U\bold{D}U^{-1}$, where
+\begin{equation}\label{E:Umat}
+U= \begin{bmatrix}
+1 & 1 & \ldots & 1  \\
+r_1 & r_2 & \ldots & r_p  \\
+r^2_1 & r^2_2 & \ldots & r^2_p \\
+\vdots \\
+r^{p-1}_1 & r^{p-1}_2 & \ldots & r^{p-1}_p\\
+\end{bmatrix},
+\end{equation}
+$r_1, r_2, ..., r_p$ are the roots of $\alpha(s)$, and $\bold{D}$ is a diagonal matrix with these roots as its diagonal elements. In this case, we let $\theta=U\psi$, and the state equation becomes
+\begin{equation}\label{E:stadiag}
+\psi'=\bold{D}\psi+J\epsilon,
+\end{equation}
+where $J=U^{-1}R$. Consequently, the observation equation becomes 
+\begin{equation}
+x_{k}=G\psi(t_{k})+\eta_{k}
+\end{equation}
+where $G=HU$. The necessary and sufficient condition for the diagonalization of $A$ is that $A$ has distinct eigenvalues. %While the standard form provides reliable numerical solution, 
+The diagonal form not only provides computational efficiency, but also provides an interpretation of unobserved components.
+The evaluation of $T_{\theta,k}=e^{A\delta_k}$ (standard form) is required where $\delta_k=t_k-t_{k-1}$. % as given before.
+For a review of computations related to the exponential of a matrix, see \citet{Mole:Loan:2003}. For the diagonal form, $T_{\psi,k}=e^{\bold{D}\delta_k}$ is diagonal with elements $e^{r_i\delta_k}$. When a diagonal form is not available, a numerical matrix exponential evaluation is needed.
+
+To start the Kalman filter recursions, initial conditions are in demand. For a stationary model, the unconditional covariance matrix of state vector $\theta(t)$ is known \citep{Doob:1953} and used in \citet{Jone:1981} and \citet[\S9.1]{Harv:1990}. The initial state for both standard and diagonalized version can be set as $\theta_0=0$ and $\psi_0=0$, respectively. The stationary covariance matrix $Q$ satisfies
+\begin{equation}\label{E:Q}
+Q=\sigma^2\int_{0}^{\infty}e^{As}RR^\top e^{A^\top s}ds.
+\end{equation}
+
+When $A$ can be diagonalized, it is straightforward to show that
+\begin{equation}\label{E:Qini}
+Q_{\psi_{i,j}}=-\sigma^2J_i \bar{J_j}/(r_i+\bar{r}_j),
+\end{equation}
+where $\bar{J_j}$ and $\bar{r}_j$ are complex conjugates of $J_j$ and $r_j$, respectively.
+
+The scale parameter $\kappa$ can be chosen approximately as the reciprocal of the mean time between observations. The algorithm of Kalman filter for the diagonal form is presented below. Starting with an initial stationary state vector of $\psi_0=\psi(0|0)=0$ and the initial stationary state covariance matrix $Q_{\psi}$ (\ref{E:Qini}), the recursion proceeds as follows:
+\begin{enumerate}\label{equ:diagpre}
+\item  Predict the state. Let
+\begin{equation}\label{E:carkal1d}
+T_{\psi,k}=e^{\bold{D}\delta_k}
+\end{equation}
+a diagonal matrix, then
+\begin{equation}
+\psi(t_k|t_{k-1})=T_{\psi,k}\psi(t_{k-1}|t_{k-1}).
+\end{equation}
+\item Calculate the covariance matrix of this prediction:  
+\begin{align}
+P_\psi(t_k|t_{k-1}) %&=T_{\psi,k}P_\psi(t_{k-1}|t_{k-1})\bar{T}_{\psi,k}+Q_\psi(t_k|t_{k-1}) \notag\\
+=&T_{\psi,k}(P_\psi(t_{k-1}|t_{k-1})-Q_\psi)\bar{T}_{\psi,k} +Q_\psi.
+\end{align}
+\item Predict the observation at time $t_k$:
+\begin{equation}\label{E:carkal4d}
+x_\psi(t_k|t_{k-1})=G\psi(t_k|t_{k-1})
+\end{equation}
+\item Calculate the innovation:
+\begin{equation}
+v_\psi(t_k)=x_\psi(t_k)-x_\psi(t_k|t_{k-1})
+\end{equation}
+and variance
+\begin{equation}
+F_\psi(t_k)=GP_\psi(t_k|t_{k-1})\bar{G}^\top+V
+\end{equation}
+\item Update the estimate of the state vector:
+\begin{equation}
+\psi(t_k|t_k)=\psi(t_k|t_{k-1})+P_\psi(t_k|t_{k-1})\bar{G}^\top F_\psi^{-1}(t_k)v_\psi(t_k)
+\end{equation}
+\item Update the covariance matrix:
+\begin{equation}
+P_\psi(t_k|t_k)=P_\psi(t_k|t_{k-1})-P_\psi(t_k|t_{k-1})\bar{G}^\top F_\psi^{-1}(t_k)G\bar{P}^\top _\psi(t_k|t_{k-1})
+\end{equation}
+\item %As for the standard form,
+The unknown scale factor $\sigma^2$ can be concentrated out by letting $\sigma^2=1$ temporally. %Hence again from (\ref{E:loglike}), 
+-2 log-likelihood is calculated by
+\begin{equation}\label{E:loglikecd}
+\log L_{\psi,c}=\sum_{t=1}^{n}\log F_\psi(t_k)+n\log \sum_{t=1}^{n}v_\psi^2(t_k)/F_\psi(t_k)
+\end{equation}
+The log-likelihood function (\ref{E:loglikecd}) thus can be evaluated by a recursive application of the Kalman filter, and a nonlinear numerical optimization routine is then used to determine the parameter estimation. 
+The unknown scale factor can then be estimated by
+\begin{equation}
+\hat{\sigma}^2=\frac{1}{n}\sum_{t=1}^{n}v_\psi^2(t_k)/F_\psi(t_k).
+\end{equation}
+\end{enumerate}
+When a diagonal form is not stable, a standard form Kalman filter recursion may be found in \citet{Belc:Hamp:Tunn:1994} or \citet{Wang:2004}.
+However the computational load is reduced dramatically with the diagonal form since matrix $\bold{D}$ is diagonal. 
+
+When the nonlinear optimization is successfully completed, in addition to the maximum likelihood estimation of the parameters and error variances, the Kalman filter returns the optimal estimate of the state and the state covariance matrix at the last time point. The forecasting of the state, state covariance matrix and observation can be continued into future desired time points using equations from (\ref{E:carkal1d}) to (\ref{E:carkal4d}).
+\subsection{Model selection}\label{S:caraic}
+
+To identify a model order, \citet{Belc:Hamp:Tunn:1994} proposed a strategy corresponding to the reparameterization. Start with a large order model, and obtain the parameter vector $\phi$ and its covariance matrix $V_\phi$, we then make a Cholesky decomposition such that $V^{-1}_\phi=L_\phi L^\top_\phi$ where $L_\phi$ is a lower triangular matrix, and define the vector $t_\phi=L^\top_\phi \phi$ and construct the sequence $AIC_d=-\sum_{i=1}^{d}t^2_{\phi,i}+2d$ for $d=1,...,p$. The index of the minimum value of $AIC_d$ suggests a preferred model order. In addition, if the true model order $p$ is less than the large value used for model estimation, then for $i>p$ the $t$-statistics may be treated as normal-distributed variables, so that the deviation from their true values of 0 will be small. However, Belcher et al used a 33MHz maths co-processor,
+and with the speed of present day computers the best practice is to compute the classical AIC or BIC \citep{Akaike1974,bic} by fitting the models of increasing order $p$ to the series. The AIC is defined as $n \log SS(p)+2p$ and BIC is defined as $n\log SS(p) + p \log(p)$ where $SS$ is the sum of squares function given by \citet{Belc:Hamp:Tunn:1994} equation 15. The AIC and BIC can be easily modified if an additional mean value of the series is estimated. The package \pkg{cts} has implemented the relevant functions for model selection and a data example will be illustrated. 
+
+\subsection{Diagnostics}\label{S:cardiag}
+
+The assumptions underlying the model (\ref{E:carsta}) and (\ref{E:carobs}) are that the disturbances $\epsilon(t)$ and $\eta_{k}$ are normally distributed and serially independent with constant variances. Based on these assumptions, the standardized one-step forecast errors
+\begin{equation}
+e(t_k)=v(t_k)/\sqrt{F(t_k)} \qquad k=1,...,n
+\end{equation}
+are also normally distributed and serially independent with unit variance. Hence, in addition to inspection of time plot, the QQ-normal plot can be used to visualize the ordered residuals against their theoretical quantiles. For a
+white noise sequence, the sample autocorrelations are approximately independently
+and normally distributed with zero means and variances $1/n$. Note that for a purely random series, the cumulative periodogram should follow along a line $y=2x$ where $x$ is frequency. 
+A standard portmanteau test statistic for serial correlation, such as the Ljung-Box statistic, can be used as well. The proposed calculation of the scaled innovation is frequently done in classical discrete-time models. This way a sequence of $n$ numbers is calculated, and the auto-correlation and discrete-time spectrum of these numbers are calculated,
+i.e. the time between observations does not enter these calculations.
+\newpage
+\subsection{Kalman smoothing}\label{S:carsmo}
+For a structural time series model, it is often of interest to estimate the unobserved components at all points in the sample. Estimation of smoothed trend and cyclical components provides an example. %As discussed in Section~\ref{S:smo}, 
+The purpose of smoothing at time $t$ is to find the expected value of the state vector, conditional on the information made available after time $t$.
+In this section, a fixed-interval smoothing algorithm \citep[\S3.6.2]{Harv:1990} is implemented with modifications for the model considered, though a more efficient approach is possible, see the discussion in \citet[\S4.3]{Durb:Koop:2001}. Estimating unobserved components relies on the diagonal form which provides the associated structure with the corresponding roots $r_1, ... r_p$. 
+The smoothing state and covariance matrix are given by
+\begin{align}\label{equ:smoscm} 
+\psi_s(t_k|t_n)&=\psi(t_k|t_k)+P^*(t_k)(\psi_s(t_{k+1}|t_n)%-\psi(t_{k+1}|t_k))
+-\psi(t_{k+1}|t_k))\\
+P_s(t_k|t_n)&=P(t_k|t_k)+P^*(t_k)(P_s(t_{k+1}|t_n)%-P(t_{k+1}|t_k))\bar{P}^*(t_k)\\
+-P(t_{k+1}|t_k))\bar{P}^*(t_k)\\
+\intertext{where} 
+P^*(t_k)&=P(t_k|t_k)\bar{T}_{\psi,k+1}P^{-1}(t_{k+1}|t_k)
+\end{align}
+and ${T}_{\psi,k+1}=e^{\bold{D}(t_{k+2}-t_{k+1})}$, and $\bar{T}_{\psi,k+1}$ and $\bar{P}(t_k|t_k)$ are complex conjugates. To start the recursion, the initial values are given by $\psi_s(t_n|t_n)=\psi(t_n|t_n)$ and $P_s(t_n|t_n)=P(t_n|t_n)$. The observed value $x_{k}$, in the absence of measurement error, is the sum of contributions from the diagonalized state variables $\psi$, i.e., $x_{k}=\sum_jG_j\psi_j(t_{k})$. Therefore, the original data may be partitioned, as in \citet[\S7.3.5]{Jenk:Watt:1968}. Any pair of two complex conjugate zeros of (\ref{E:carfac}) is associated with two corresponding state variables whose combined contribution to $x_{k}$ represents a source of diurnal variation. The real zeros correspond to exponential decay. If a real zero is very large, this can provide an appearance of white noise component. Hence, the contributions $G_j\psi_j$ at every time point can be estimated from all the data using the Kalman smoother as described above.
+
+\section{Implementation}
+The \code{cts} package utilizes the \proglang{Fortran} program developed by the authors of \citet{Belc:Hamp:Tunn:1994}, with substantial additional \proglang{Fortran} and \proglang{R} routines. In this process, two \proglang{Fortran} subroutines in \citet{Belc:Hamp:Tunn:1994} have to be substituted since they belong to commercial NAG Fortran Library, developed by the Numerical Algorithms Group. One subroutine was to compute the approximate solution of a set of complex linear equations with multiple right-hand sides, using an Lower-Upper \textit{LU} factorization with partial pivoting. Another subroutine was to find all roots of a real polynomial equation, using a variant of Laguerre's Method. In the \code{cts} package, these subroutines have been replaced by their public available counterparts in the LAPACK \& BLAS Fortran Library. All the \proglang{Fortran} programs were written in double precision.
+
+If a constant term is estimated by the default setting \code{ccv="CTES"} in the \code{car} function, it represents
+the mean $\mu$, and the model is formulated in terms of $(x-\mu)$. In the setting \code{(ccv="MNCT")}, the series is not actually mean corrected, but the sample mean
+is just used to estimate $\mu$ in the above model formulation.
+Several supporting \proglang{R} functions are available in the \code{cts} package that extract or calculate useful statistics based on the fitted CAR model, such as model summary, predicted values and model spectrum. In particular,
+the function \code{car} returns objects of class \code{car}, for which the following methods
+are available: \code{print, summary, plot, predict, AIC, tsdiag, spectrum, kalsmo}. A detailed description
+of these functions is available in the online help files. Here a brief introduction will be given and the usage will be illustrated in the next section. Specifying \code{trace=TRUE} in \code{car_control} could trigger annotated printout of information during the fitting process and major results for the fitted model. The model fitting results can be graphical displayed with \code{plot} function. With argument \code{type} equal to \code{"spec", "pred"} and \code{"diag"}, respectively, a figure can be plotted for spectrum, predicted values and model diagnostic checking, respectively. Three types of prediction exist: forecast past the end, forecast last L-step, forecast last L-step update. This can be achieved by invoking argument \code{fty=1, 2, 3}, respectively. For instance, \code{ctrl=car_control(fty=1, n.ahead=10)} can predict 10 steps past the end. Function \code{AIC} can generate both $t$-statistic and AIC values following section~\ref{S:caraic}. Function \code{tsdiag} follows section~\ref{S:cardiag} to provide model diagnostic checking. Indeed, this function provides the backbone for function \code{plot} with argument \code{type="diag"}. Function \code{kalsmo} implements the Kalman smoothing described in section~\ref{S:carsmo}. 
+
+The source version of the \pkg{cts} package is freely available from the Comprehensive \proglang{R} Archive Network (\url{http://CRAN.R-project.org}). The reader can install the package directly from the \proglang{R} prompt via
+<<echo=false,results=hide>>=
+options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
+@
+<<echo=true,results=hide, eval=FALSE>>=
+install.packages("cts")
+@
+All analyses presented below are contained in a package vignette. The rendered output of the analyses is available by the \proglang{R}-command
+<<echo=true,results=hide, eval=FALSE>>=
+library("cts")
+vignette("kf",package = "cts")
+@
+To reproduce the analyses, one can invoke the \proglang{R} code 
+<<echo=true,results=hide,eval=FALSE>>=
+edit(vignette("kf",package = "cts"))
+@
+\section{Data examples}
+Two data examples in \citet{Belc:Hamp:Tunn:1994} are used to illustrate the capabilities of \pkg{cts}. A detailed description of the data can be found in the original paper. Since some analysis here reproduces the results in \citet{Belc:Hamp:Tunn:1994}, we also ignore a lengthy discussion for brevity. These analyses were done using \proglang{R} version 3.0.0.
+
+\subsection{Geophysical application}
+
+\citet{Belc:Hamp:Tunn:1994} analyzed 164 measurements of relative abundance of an oxygen isotope in an ocean core. These are unequally spaced time points with an average of separation of 2000 years. Unequally spaced tick marks indicate the corresponding irregularly sampled times in Figure~\ref{fig:oxy1}.
+<<echo=true,results=hide>>=
+library("cts")
+data("V22174")
+@
+\setkeys{Gin}{height=0.35\textheight, width=1.05\textwidth}
+
+\begin{figure}[h!]
+\centering
+<<fig=TRUE, echo=TRUE, results=hide>>=
+### plot the oxygen isotope time series
+plot(V22174,type="l",xlab="Time in kiloyears", ylab="")
+rug(V22174[,1], col="red")
+@
+\caption{Oxygen isotope series.}
+\label{fig:oxy1}
+\end{figure}
+<<echo=FALSE, results=hide>>=
+time <- system.time(V22174.car14 <- car(V22174,scale=0.2,order=14))[1]
+@
+We first fit a model of order 14 to the data, following \citet{Belc:Hamp:Tunn:1994}. The scale parameter is chosen to be 0.2 as well. 
+The estimation algorithm converges rather quickly as demonstrated in the following printout, which shows the sum of squares and the value of $\phi_{14}$ at each iteration. The results are similar to Table 1 of \citet{Belc:Hamp:Tunn:1994}, which took 30 minutes on a PC386/387 machine to carry out the computing. These authors expected that simple improvements to the program's code could substantially speed up the procedure. Despite that the current \pkg{cts} package has no intent to accomplish such a task, running the above \code{car} function took only \Sexpr{formatC(round(time, 1), digits = 2)} second, on an ordinary desktop PC (Intel Core 2 CPU, 1.86 GHz). Such a dramatic efficiency improvement is unlikely driven by software change, but by hardware advancement in the last 20 years. 
+<<echo=true>>=
+### fit the modified form of a continuous AR(14) model
+V22174.car14 <- car(V22174,scale=0.2,order=14)
+tab1 <- cbind(V22174.car14$tnit, V22174.car14$ss, V22174.car14$bit[,14])
+colnames(tab1) <- c("Iteration","Sum of Squares","phi_14")
+@
+%\newpage
+<<echo=true>>=
+print(as.data.frame(round(tab1,5)),row.names=FALSE, print.gap=8)
+@
+Following section~\ref{S:caraic}, a model selection was conducted with \code{AIC} which generates exactly the same results as Table 2 of \citet{Belc:Hamp:Tunn:1994}. Accordingly,   the first-order value for the AIC shows the most rapid drop from the base-line of 0. Consequently a large $t$-value of 3.20 suggests order 7 while the minimum AIC implies order 9.
+For illustration, a model order 7 was selected as in \citet{Belc:Hamp:Tunn:1994}.
+<<echo=true>>=
+### AIC output based on Belcher et. al (1994)
+AIC(V22174.car14)
+@
+<<echo=true>>=
+### fit the modified form of a continuous AR(7) model
+V22174.car7 <- car(V22174,scale=0.2,order=7)
+summary(V22174.car7)
+@
+Alternatively, the following code illustrates how to conduct model selection via the classical AIC or BIC by fitting the
+models of increasing order $p$ to the series. Indeed, the model with order $p=7$ is the second best model selected by the AIC and the best model by the BIC.  
+<<echo=true>>=
+### classical AIC and BIC results for model selection
+norder <- 14
+V22174.aic <- V22174.bic <- rep(NA, norder)
+for (i in 1:norder){
+fit <- car(V22174,scale=0.2,order=i)
+V22174.aic[i] <- fit$aic
+V22174.bic[i] <- fit$bic
+}
+res <- data.frame(order=1:norder, AIC=V22174.aic, BIC=V22174.bic)
+print(res, row.names=FALSE, print.gap=8)
+@
+The estimated spectra for both models of order 14 and 7 are displayed on logarithmic (base 10) scale in Figure~\ref{fig:specox}. Both two models indicate three peaks, while for the model of order 14 the resolution is much improved. In spectrum calculation, the default frequency range is set as from zero to \code{scale} parameter $\kappa$ in \code{n.freq=500} intervals. It is convenient to plot the spectrum for a new range of frequencies with the argument \code{frmult} which can be used to multiply the frequency range.
+\setkeys{Gin}{height=0.60\textheight, width=0.8\textwidth}
+\begin{figure}%[b!]
+\centering
+<<fig=true>>=
+### plot the spectrum for the modified contiuous AR(14) and AR(7) models
+par(mfrow=c(2,1))
+spectrum(V22174.car14)
+spectrum(V22174.car7)
+@
+\caption{Spectra from fitted models for the oxygen isotope series.}
+\label{fig:specox}
+\end{figure}
+
+\newpage
+To check model assumptions as described in section~\ref{S:cardiag}, 
+Figure~\ref{fig:diagox} displays a plot of the standardized residuals,
+the ACF of the residuals, cumulative periodogram of the standardized residuals, and the p-values associated with the Ljung-Box statistic.
+Visual inspection of the time plot of the standardized residuals in Figure 3
+shows no obvious patterns, although one outlier extends 3 standard deviations. The ACF of
+the standardized residuals shows no apparent departure from the model
+assumptions, i.e., approximately independently
+and normally distributed with zero means and variances $1/n$ at lag > 0. The cumulative periodogram of standardized residuals follows the line $y=2x$ reasonably well. The Ljung-Box statistic is not significant at the lags shown.
+\setkeys{Gin}{height=0.6\textheight, width=1.05\textwidth}
+\begin{figure}[h!]
+\centering
+<<fig=true>>=
+### model diagnostics check
+tsdiag(V22174.car7)
+@
+\caption{Model diagnostics for the oxygen isotope series.}
+\label{fig:diagox}
+\end{figure}
+\newpage
+\subsection{Medical application}
+
+\citet{Belc:Hamp:Tunn:1994} analyzed 209 measurements of the lung function of an asthma patient. The time series is measured mostly at 2 hour time intervals but with irregular gaps, as demonstrated by the unequal space of tick marks in Figure~\ref{fig:asth1}.
+<<echo=true,results=hide>>=
+data("asth")
+@
+<<fig=true, eval=FALSE>>=
+plot(asth,type="l",xlab="Time in hours", ylab="")
+rug(asth[,1], col="red")
+@
+\setkeys{Gin}{height=0.35\textheight, width=1.05\textwidth}
+\begin{figure}[h!]
+\centering
+<<fig=true, echo=FALSE>>=
+### plot of the lung function time series
+plot(asth,type="l",xlab="Time in hours", ylab="")
+rug(asth[,1], col="red")
+@
+\caption{Measurements of the lung function.}
+\label{fig:asth1}
+\end{figure}
+To apply \pkg{cts}, a scale parameter 0.25 was chosen and a model of order 4 was fitted to the data \citep{Belc:Hamp:Tunn:1994}. 
+<<echo=true>>=
+### fit the modified form of a continuous AR(4) model
+asth.car4 <- car(asth,scale=0.25,order=4, ctrl=car_control(n.ahead=10))
+summary(asth.car4)
+@
+
+The log-spectrum (base 10) of the fitted model is shown in Figure~\ref{fig:asth2}. The spectral peak indicates a strong diurnal cycle in the data. 
+
+It is possible to fit a model with an observation error term by setting \code{vri=TRUE} in the parameter control statement. The following code shows how to fit such a model. The estimated observation error variance can be found with the \code{summary} command and the corresponding spectrum in Figure~\ref{fig:asth2} is compared with the model without an observation error. 
+ 
+<<echo=true>>=
+### fit the modified form of a continuous AR(7) model with measurement error
+asth.vri <- car(asth,scale=0.25,order=4, ctrl=car_control(vri=TRUE))
+summary(asth.vri)
+@
+\setkeys{Gin}{height=0.8\textheight, width=0.8\textwidth}
+\begin{figure}[h!]
+\centering
+<<fig=true>>=
+### plot of spectrum for the continuous AR(4) model without/with measurement error
+par(mfrow=c(2,1))
+spectrum(asth.car4)
+spectrum(asth.vri)
+@
+\caption{Spectra from fitted models without and with an observation error term (top and bottom panel, respectively), for the lung function measurements.}
+\label{fig:asth2}
+\end{figure}
+
+Nevertheless, we focus on the model fit \code{asth.car4} without the measurement error. Applying function \code{factab} to this model returns one complex zero and two real zeros. 
+<<echo=true>>=
+### determine the zeros of equation (3)
+factab(asth.car4)
+@
+We thus decomposed the original time series into three corresponding components via the Kalman smoother as shown in Figure~\ref{fig:asth3}. 
+\setkeys{Gin}{height=0.75\textheight, width=1.05\textwidth}
+\begin{figure}[htb!]
+\centering
+<<fig=true,include=TRUE>>=
+### decompose the original time series into three corresponding components 
+### via the Kalman smoother 
+asth.kalsmo <- kalsmo(asth.car4)
+par(mfrow=c(3,1))
+kalsmoComp(asth.kalsmo,comp=1, xlab="Time in hours")
+kalsmoComp(asth.kalsmo,comp=c(2,3), xlab="Time in hours")
+kalsmoComp(asth.kalsmo,comp=4,xlab="Time in hours")
+@
+\caption{Components of the lung function measurements. From top to bottom: trend component, diurnal component, and approximate white noise component.}
+\label{fig:asth3}
+\end{figure}
+
+Finally, we predicted the last 10 steps past the end of time series in Figure~\ref{fig:asth4}.
+\setkeys{Gin}{height=0.35\textheight, width=1\textwidth}
+\begin{figure}[htb!]
+\centering
+<<fig=true>>=
+### predict the last 10 steps past the end of time series
+predict(asth.car4, xlab="Time in hours")
+@
+\caption{Forecasts (circles) for lung function measurements.}
+\label{fig:asth4}
+\end{figure}
+
+\section{Conclusion}
+In this article we have outlined the methods and algorithms for fitting continuous time autoregressive models through the Kalman filter. The theoretical ingredients of Kalman filter have their counterparts in the \proglang{R} package \pkg{cts}, which can be particularly useful with unequally sampled time series data.
+%\section{Acknowledgment}
+%The author thanks Granville Tunnicliffe Wilson for invaluable assistance. The author also thanks the Editors and reviewers for their constructive remarks and suggestions, which have greatly improved the article and software. 
+\bibliography{kf}
+
+\end{document}

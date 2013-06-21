@@ -1,0 +1,28 @@
+Some files in src directory were originally taken from the Netlib archieve and now at www.netlib.org and do not clearly state their copyright status:
+
+src/{a9rntc,a9rntd,a9rnti,a9rntl,a9rntr,balanc,d1mach,d1rply,d2rply,d3rply,d4rply,d5rply,d6rply,d7rply,d8rply,d9rply,drpoly,e9rint,eprint,fdump,frmatd,frmati,frmatr,hqrort,i0tk00,i10wid,i1mach,i8save,iceil,iflr,isamax,istkgt,istkqu,istkrl,orthes,ortran,s88fmt,saxpy,sdot,sdump,seterr,sscal,stkdmp,store,u9dmp}.f
+
+{a9rntc,a9rntd,a9rnti,a9rntl,a9rntr,u9dmp}.f written by DAN WARNER, REVISED BY PHYL FOX
+
+{balanc,orthes,ortran}.f written by B. T. Smith, J. M. Boyle, J. J. Dongarra, B. S. Garbow, Y. Ikebe, V. C. Klema and C. B. Moler
+
+hqrort.f belongs to the cascade subroutine library by J. D. Birdwell
+
+d1mach written by P.A. Fox
+{d1rply,d2rply,d3rply,d4rply,d5rply,d6rply,d7rply,d8rply,d9rply,drpoly}.f unknown author, http://www.netlib.org/port/prop.upd/
+
+{e9rint,eprint,fdump,frmatd,frmati,frmatr,i0tk00,i1owid,i8save,iceil,iflr,istkgt,istkqu,istkrl,s88fmt,sdump,seterr,store}.f unknown author http://www.netlib.org/
+
+a1mach.f written by P. A. Fox, (Bell Labs) A. D. Hall, A. D., (Bell Labs) and N. L. Schryer, (Bell Labs)
+
+{isamax,saxpy,sdot,sscal}.f written by Jack Dongarra
+
+stkdmp.f written by D. D. WARNER
+
+Some files in src directory were originally taken from SLICE library (subroutine library in control engineering). It was made available as Fortran source in the public domain. NAG distributed a free version rewritten to their standards but not part of the licensed NAG library for which a fee is paid. Regarding the copyrights of these files, a response from NAG (www.nag.com): "Please simply cite NAG as a source for the material and that you are using it with permission".
+
+{balinv,lycsr,sdata}.f MARK 2.2 RELEASE. NAG COPYRIGHT 1987
+envirn.f MARK 2.2 RELEASE. NAG COPYRIGHT 1987, written by Sven Hammarling, Mick Pont and Janet Welding, Nag Central Office.
+getmin.f MARK 2.2 RELEASE. NAG COPYRIGHT 1987, written by Mick Pont, Nag Central Office.
+lybsc.f MARK 2.2 RELEASE. NAG COPYRIGHT 1987, written by R.H.Bartels & G.W.Stewart
+mepad.f MARK 2.2 RELEASE. NAG COPYRIGHT 1987, written by R.C. WARD
