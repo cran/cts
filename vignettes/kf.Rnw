@@ -29,7 +29,7 @@ Connecticut Children's Medical Center\\
 Department of Pediatrics\\
 University of Connecticut School of Medicine\\
 Connecticut 06106, United States of America\\
-E-mail: \email{zwang@ccmckids.org}
+E-mail: \email{zwang@connecticutchildrens.org}
 }
 
 \begin{document}

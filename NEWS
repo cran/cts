@@ -70,4 +70,7 @@ PKG_LIBS=$(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
                 CHANGES in `cts' VERSION 1.0-17 (2013-6-16)
   o  delete LAPACK source files dgetrs.f and dgetrf.f, instead call these subroutines in LAPACK 
   o  update author field in DESCRIPTION
+                
+                CHANGES in `cts' VERSION 1.0-18 (2013-8-22)
+  o  modified to remove calls to plot.spec for R version 3.1.0
   o  add inst/COPYRIGHTS
