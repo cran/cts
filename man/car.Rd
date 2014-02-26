@@ -104,6 +104,8 @@ reparameterized coefficients of CAR fits.
   \item{pretime}{Time of predictions.}
   \item{pred}{Predictions for the \code{pretime}.}
   \item{prv}{Prediction variance of \code{pred}}
+  \item{pre2}{Fitted values including \code{pred} for all the time series. See also \code{fty}.}
+  \item{prv2}{Variance of fitted values including \code{prv} for all the time series. See also \code{fty}.}
   \item{fty}{Forecast type}
   \item{tnit}{Numeric vector: iteration}
   \item{ss}{Numeric vector: sum of squares for each \code{tnit}}
@@ -139,6 +141,15 @@ spectrum(fit)
 tsdiag(fit)
 AIC(fit)
 factab(fit)
+###fitted values vs observed values
+ntim <- dim(V22174)[1]
+plot(V22174[,1], V22174[,2], type="l")
+points(V22174[,1], fit$pre2[1:ntim], col="red")
+### alternatively
+fit2 <- car(V22174,scale=0.2,order=7, ctrl=car_control(fty=3))
+plot(V22174[,1], V22174[,2], type="l")
+points(V22174[,1], fit2$pre2, col="red")
+
 data(asth)
 fit <- car(asth,scale=0.25,order=4, ctrl=car_control(n.ahead=10))
 kalsmo(fit)

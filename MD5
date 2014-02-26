@@ -1,8 +1,8 @@
-f2e849e46eeb054cfbda12e189521383 *DESCRIPTION
+dbc81d5664b441d557e9281a501613bb *DESCRIPTION
 cdcb4a4c0a91b8514f1b1c219d8cd245 *NAMESPACE
-504a7caf0c8f153fc77c774d639cba91 *NEWS
+850a29e7ce5fa7cea9c5ce50dd3d4aa9 *NEWS
 e6b6e9965c244fdd52933ef75143cd0e *R/aic.R
-ccf44f71ad1a7273b3288e43f722f2c1 *R/car.R
+51a907b751a871c5cff3e709ce7bb833 *R/car.R
 4bd3f9ddf357743b21c8d5634051d8c0 *R/factab.R
 c5fce53248709f675fd64551cfd942d7 *R/kalsmo.car.R
 2918de4e25af9be300f8434efe68acbd *R/kalsmo.comp.R
@@ -11,6 +11,7 @@ aac235dd33e976633ed11b0cdb2eedc7 *R/plotSpecCar.R
 51066c97c0ed1855f7606ece2f57669d *R/plotSpecLs.R
 e29838fe691eae132dda885c49b16648 *R/spec.ls.R
 fdc1a013d5924e5c0620adb933637564 *R/spectrum.car.R
+46a75a9989fd4cd56666c58b832f1461 *build/vignette.rds
 c853ef3e156e4c75c248fd88ebd0f82f *data/V22174.rda
 1991268fdfd117a5abb089daac65d481 *data/asth.rda
 3f6c577e6c3b81bcbdb394559b8054b5 *inst/CITATION
@@ -19,11 +20,11 @@ cb508460b78401111a4b2702dddc5a85 *inst/COPYRIGHTS
 3fcdf538ec18b74172a89aad3dcc183b *inst/doc/cts_Fortran_source_diagram.pptx
 01e1aa892c572bad99eaa9018e40d44c *inst/doc/kf.R
 596f500fa8b0edb4e09837df9055b5f5 *inst/doc/kf.Rnw
-b3cb7ef973cb05394e4575e46a56190e *inst/doc/kf.pdf
+923be21b8a66c725014830ceffa9f26b *inst/doc/kf.pdf
 e7a2440e35a4e24f6dc539d5c2609d60 *man/V22174.Rd
 1c237f49a734797b5e82379e976ae7f0 *man/asth.Rd
-31285caf8b37e9182c928bad7a30715a *man/car.Rd
-ab7f9f92be93b67a9e2bd550e4e81b37 *man/control.Rd
+1677d477f47467ce55535c5f63cd2ec6 *man/car.Rd
+94584e3d6213bfbc3b88e42cc210a37f *man/control.Rd
 8accff4d73a0f814d187ac2a4b8f230e *man/cts-internal.Rd
 32106bd1a5bc52559d6392f0906d3c70 *man/factab.Rd
 2c8f5c73d0eb32f3d5cd816ec0c7f4ef *man/kalsmo.comp.Rd
@@ -102,7 +103,7 @@ fcd48720702f53bd5d427260a74aff7e *src/revg1.f
 88edf4565c04f1bc77d6caf9cf3e6496 *src/search.f
 c3c32a808c13960f3047147388a99966 *src/setcom.f
 f675447cca29afac98aa375a5143b4ad *src/seterr.f
-64e3f2613df09f9dad397ab7b0f9e439 *src/setfor.f
+a91eba617e66a80c88fe54d953036119 *src/setfor.f
 d4e3f6032d88caf99f9e83a2f6caeb61 *src/setkfilsm.f
 a4f4e0d3b9ce111f05f756a731f7d85c *src/setup1.f
 8ab9e240686ec2ebed81822de13a5b81 *src/setupdate.f

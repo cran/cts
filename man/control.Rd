@@ -11,7 +11,7 @@ ivl=1.0e-2, fac=1.0e1, stl=1.0e-5, sml=1.0e2, gtl=1.0e5, kst=TRUE, fct=TRUE)
 }
 \arguments{
   \item{fty}{\code{fty=1} forecast past the end. \code{fty=2} forecast
-    last L-steps. \code{fty=3} forecast last L-steps updated (filtering)types.}
+    last L-steps. \code{fty=3} forecast last L-steps updated (filtering)types. See also \code{fct}. If \code{fct=TRUE}, all time series is used to fit the model for \code{fty=1 or 3}. If \code{fty=2}, only the first (length of time - n.ahead) is used to fit the model. Thus, only the first (length of time - n.head) prediction values are the same for \code{fty=1 or 3} vs \code{fty=2}. See also \code{pre2, prv2}.}
   \item{n.ahead}{number of steps ahead at which to predict.}
   \item{trace}{ a logical value triggering printout of information during
                 the fitting process, and major results for the fitted model.}
