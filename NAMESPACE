@@ -12,4 +12,9 @@ S3method(spectrum, car)
 S3method(AIC, car)
 S3method(kalsmo, car)
 S3method(print, factab)
-
+importFrom("graphics", "abline", "lines", "matplot", "par", "plot",
+     "points", "title")     
+importFrom("stats", "Box.test", "acf", "as.ts", "bandwidth.kernel",
+     "cpgram", "df.kernel", "frequency", "is.tskernel",
+     "kernapply", "na.fail", "na.pass", "nextn", "pchisq",
+     "qchisq", "spec.taper")
