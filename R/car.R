@@ -141,13 +141,13 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
                  as.integer(kst),
                  np1=as.integer(np1),
                  as.integer(tra),
-                 package="cts")
+                 PACKAGE="cts")
     if(trace)
-    .Fortran("display",package="cts")
+    .Fortran("display",PACKAGE="cts")
         zpar <- .Fortran("loop",
                 ss=double(nit+1),
                 bit=as.double(matrix(0, nit+1, 22)),
-                errno=integer(1),  package="cts")
+                errno=integer(1),  PACKAGE="cts")
         if(zpar$errno == 1) stop("ROOT WITH POSITIVE REAL PART, WHICH WAS CALLED IN loop.f")
         else if(zpar$errno == 2) stop("ERROR IN LAPACK SUBROUTINE zgesv, WHICH WAS CALLED IN cinvert.f")
         else if(zpar$errno == 3) stop("PROGRAM FAILS IN SLICE ROUTINE LYBSC, WHICH WAS CALLED IN resg1d.f")
@@ -166,7 +166,7 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
         zfin <- .Fortran("complete",
                 ss=double(1),
                 bit=double(22),
-                package="cts")
+                PACKAGE="cts")
         zpar$ss <- c(zpar$ss, zfin$ss)
         zpar$bit <- rbind(zpar$bit, zfin$bit[1:(order+1)])
     Z <- .Fortran("setcom",
@@ -186,7 +186,7 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
                   delb1=double(z$np1),
                   rootr1=double(order),
                   rooti1=double(order),
-                  package="cts")
+                  PACKAGE="cts")
     essp <- matrix(Z$essp1,byrow=FALSE,ncol=22)
     essp <- essp[1:Z$np1,1:Z$np1]
     ecov <- matrix(Z$ecov1,byrow=FALSE,ncol=22)
@@ -194,14 +194,14 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
     n <- length(tim)
   if (kst==1)
     {     
-    .Fortran("kfilsm",package="cts")   
+    .Fortran("kfilsm",PACKAGE="cts")   
     Zkfil <- .Fortran("setkfilsm",
                       fser1=double(n),
                       fvar1=double(n),
                       sser1=double(n),
                       svar1=double(n),
                       sres1=double(n),
-                      package="cts")
+                      PACKAGE="cts")
     filser <- Zkfil$fser1
     filvar <- Zkfil$fvar1
     sser <- Zkfil$sser1
@@ -238,15 +238,15 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
     if (vri==1) ST3 <- 'N'
     else ST3 <- 'Y'
 
-    .Fortran("update",package="cts")
+    .Fortran("update",PACKAGE="cts")
     phi <- .Fortran("setupdate",
                     phi1=double(20),
     ###             phi1=double(order), ### changed to avoid array overrun, 4/4/2012
-                    package="cts")$phi 
+                    PACKAGE="cts")$phi 
     ### I am not sure this phi is updated
     if (n.ahead > 0)
       {
-        .Fortran("forecast",package="cts")
+        .Fortran("forecast",PACKAGE="cts")
         if(fct==TRUE && fty==1)
           ntim <- len+n.ahead
         else ntim <- len
@@ -256,7 +256,7 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
                          tim1=double(ntim),
                          pre2=double(5000),
                          prv2=double(5000),
-                         package="cts")
+                         PACKAGE="cts")
         pre <- Zfor$pre1
         prv <- Zfor$prv1
         tim <- Zfor$tim1

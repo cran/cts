@@ -24,7 +24,7 @@ function (object, frmult=1, n.freq, plot.it = TRUE, na.action = na.fail, ...)
            as.integer(n.freq),
            freq=double(n.freq),
            spec=double(n.freq),
-           package="cts")
+           PACKAGE="cts")
   spg.out <- list(freq = Z$freq, spec = Z$spec, method = paste("CAR (",order, ") spectrum ", sep = ""))
   class(spg.out) <- "spec.car"
   if (plot.it) {

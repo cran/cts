@@ -1,8 +1,8 @@
-856f59186f75317046a884fd06a24c20 *DESCRIPTION
+d90d1c3c6e6ce237fff6601af6fa35a5 *DESCRIPTION
 e7f958aaa3faa81cd8e7db331f7d9fef *NAMESPACE
-850a29e7ce5fa7cea9c5ce50dd3d4aa9 *NEWS
+d6f82b6cffef9573c22a8909fa7a5e17 *NEWS
 e6b6e9965c244fdd52933ef75143cd0e *R/aic.R
-51a907b751a871c5cff3e709ce7bb833 *R/car.R
+9c692d04691f1533ced09cb27f2164f5 *R/car.R
 4bd3f9ddf357743b21c8d5634051d8c0 *R/factab.R
 c5fce53248709f675fd64551cfd942d7 *R/kalsmo.car.R
 2918de4e25af9be300f8434efe68acbd *R/kalsmo.comp.R
@@ -10,8 +10,8 @@ c5fce53248709f675fd64551cfd942d7 *R/kalsmo.car.R
 aac235dd33e976633ed11b0cdb2eedc7 *R/plotSpecCar.R
 51066c97c0ed1855f7606ece2f57669d *R/plotSpecLs.R
 e29838fe691eae132dda885c49b16648 *R/spec.ls.R
-fdc1a013d5924e5c0620adb933637564 *R/spectrum.car.R
-11ff0b1a15381aa418a185594495c013 *build/vignette.rds
+712522db4736efee53ff68ea6ee7060a *R/spectrum.car.R
+92a1bcd0753b9ba22c1673d067f370cc *build/vignette.rds
 c853ef3e156e4c75c248fd88ebd0f82f *data/V22174.rda
 1991268fdfd117a5abb089daac65d481 *data/asth.rda
 3f6c577e6c3b81bcbdb394559b8054b5 *inst/CITATION
@@ -19,8 +19,8 @@ cb508460b78401111a4b2702dddc5a85 *inst/COPYRIGHTS
 7b1ba2fbba19fad8d672eb106d16de83 *inst/doc/cts_Fortran_source_diagram.pdf
 3fcdf538ec18b74172a89aad3dcc183b *inst/doc/cts_Fortran_source_diagram.pptx
 01e1aa892c572bad99eaa9018e40d44c *inst/doc/kf.R
-596f500fa8b0edb4e09837df9055b5f5 *inst/doc/kf.Rnw
-6fff9c07f46adc1277f446203f09a0af *inst/doc/kf.pdf
+001bc06f3b316ee771310a7999491cf6 *inst/doc/kf.Rnw
+5db922a2043e9519372b30ec03002c08 *inst/doc/kf.pdf
 e7a2440e35a4e24f6dc539d5c2609d60 *man/V22174.Rd
 1c237f49a734797b5e82379e976ae7f0 *man/asth.Rd
 1677d477f47467ce55535c5f63cd2ec6 *man/car.Rd
@@ -42,6 +42,7 @@ e98a1d65069c2b435ee71e9cf859eeaf *src/balanc.f
 60c9aa2a8235d38ffb4af7779a81c83c *src/cinvert.f
 6386726cdfbc2c988b3fd42d47034c56 *src/complete.f
 9759dc6d17b9323e90e3cf9e8b5eb508 *src/cspec.f
+9c74bdaab3a7210a694d36533d227a4e *src/cts_init.c
 0d612f35a268e3e58bea94eb43d79bc7 *src/d1mach.f
 3cea4aa49343783169e1a4dc76578cb8 *src/d1rply.f
 dbd8a9d1ca1d50a24ba228def2eecc79 *src/d2rply.f
