@@ -9,7 +9,7 @@
 %\SweaveOpts{engine=R,eps=false,strip.white=true, width=6, height=6}
 %\SweaveOpts{engine=R,eps=false,prefix.string=fig/plot,strip.white=true,width=6,height=6}
 \SweaveOpts{keep.source=FALSE}
-\author{Zhu Wang\\Connecticut Children's Medical Center\\University of Connecticut School of Medicine}
+\author{Zhu Wang\\UT Health San Antonio}
 
 \title{\pkg{cts}: An \proglang{R} Package for Continuous Time Autoregressive Models via Kalman Filter}
 
@@ -24,12 +24,9 @@ continuous time autoregressive model, which can be particularly useful with uneq
 \Plainkeywords{continuous time autoregressive model, state space model, Kalman filter, Kalman smoothing, R}
 \Address{
 Zhu Wang\\
-Department of Research\\
-Connecticut Children's Medical Center\\
-Department of Pediatrics\\
-University of Connecticut School of Medicine\\
-Connecticut 06106, United States of America\\
-E-mail: \email{zwang@connecticutchildrens.org}
+Department of Epidemiology \& Biostatistics\\
+UT Health San Antonio\\
+E-mail: \email{wangz1@uthscsa.edu}
 }
 
 \begin{document}
