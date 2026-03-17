@@ -260,40 +260,40 @@ C
                IF (ITYPE .EQ. 4) GO TO  80
                IF (ITYPE .EQ. 5) GO TO  90
 C
-   50          call intpr('ALLOCATION', -1, LLOUT)
-               call intpr('POINTER, TYPE LOGICAL', -1, IPTR)
+   50          call intpr('ALLOCATION', -1, LLOUT, 0)
+               call intpr('POINTER, TYPE LOGICAL', -1, IPTR, 0)
 C   50          WRITE (ERROUT,  9917) LLOUT, IPTR
 c 9917            FORMAT (13H0ALLOCATION =, I7, 20H,          POINTER =,
 C     1            I7, 23H,          TYPE LOGICAL)
                CALL A9RNTL(LSTAK(IPTR), NITEMS, ERROUT, MCOL)
                GO TO  100
 C
-   60          call intpr('ALLOCATION', -1, LLOUT)
-               call intpr('POINTER, TYPE INTEGER', -1, IPTR)
+   60          call intpr('ALLOCATION', -1, LLOUT, 0)
+               call intpr('POINTER, TYPE INTEGER', -1, IPTR, 0)
 c   60          WRITE (ERROUT,  9918) LLOUT, IPTR
 c 9918            FORMAT (13H0ALLOCATION =, I7, 20H,          POINTER =,
 c     1            I7, 23H,          TYPE INTEGER)
                CALL A9RNTI(ISTAK(IPTR), NITEMS, ERROUT, MCOL, WI)
                GO TO  100
 C
-   70          call intpr('ALLOCATION', -1, LLOUT)
-               call intpr('POINTER, TYPE REAL', -1, IPTR)
+   70          call intpr('ALLOCATION', -1, LLOUT, 0)
+               call intpr('POINTER, TYPE REAL', -1, IPTR, 0)
 c   70          WRITE (ERROUT,  9919) LLOUT, IPTR
 c 9919            FORMAT (13H0ALLOCATION =, I7, 20H,          POINTER =,
 c     1            I7, 20H,          TYPE REAL)
                CALL A9RNTR(RSTAK(IPTR), NITEMS, ERROUT, MCOL, WR, DR)
                GO TO  100
 C
-   80          call intpr('ALLOCATION', -1, LLOUT)
-               call intpr('POINTER, TYPE DOUBLE PRECISION', -1, IPTR)
+   80          call intpr('ALLOCATION', -1, LLOUT, 0)
+               call intpr('POINTER, TYPE DOUBLE PRECISION', -1, IPTR, 0)
 c   80          WRITE (ERROUT,  9920) LLOUT, IPTR
 c 9920            FORMAT (13H0ALLOCATION =, I7, 20H,          POINTER =,
 c     1            I7, 32H,          TYPE DOUBLE PRECISION)
                CALL A9RNTD(DSTAK(IPTR), NITEMS, ERROUT, MCOL, WD, DD)
                GO TO  100
 C
-   90          call intpr('ALLOCATION', -1, LLOUT)
-               call intpr('POINTER, TYPE COMPLEX', -1, IPTR)
+   90          call intpr('ALLOCATION', -1, LLOUT, 0)
+               call intpr('POINTER, TYPE COMPLEX', -1, IPTR, 0)
 C   90          WRITE (ERROUT,  9921) LLOUT, IPTR
 c 9921            FORMAT (13H0ALLOCATION =, I7, 20H,          POINTER =,
 c     1            I7, 23H,          TYPE COMPLEX)

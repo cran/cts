@@ -1,7 +1,7 @@
 "plot.car" <-
 function (x, type=c("spec", "pred", "diag"), ...)  
 {
-    if(class(x) != "car")
+    if(!inherits(x, "car"))
     stop("Not a 'car' object\n")
     type <- match.arg(type)
     if(type=="spec")

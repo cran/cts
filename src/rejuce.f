@@ -20,7 +20,7 @@ C*****veccom.txt
      * ERR(5000),RES(5000),PRES(22,5000),sres(5000)
       COMMON/VECCOM/B,NEWB,PERB,DELB,ERR,RES,PRES,sres
 C*****series.txt
-      CHARACTER*40 NAME
+      CHARACTER(LEN=40) NAME
       INTEGER LEN
       DOUBLE PRECISION TIM(5000),SER(5000),TDIF(5000)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
@@ -36,13 +36,14 @@ C*****redcom.txt
   100 CONTINUE
       GRAD(I)=U
   101 CONTINUE
-      DO 104 I=1,NP
-      DO 104 J=1,NP
+      DO I=1,NP
+      DO J=1,NP
       U=CSZ
       DO 103 K=1,LEN
       U=U+PRES(I,K)*PRES(J,K)
   103 CONTINUE
       SSP(I,J)=U
-  104 CONTINUE
+      END DO
+      END DO
       RETURN
       END

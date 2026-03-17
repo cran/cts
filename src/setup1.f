@@ -4,8 +4,8 @@
      *NIT1,OPM1,RGM1,REQ1,CONCRIT1,RPERT1,IVLAM1,
      *FAC1,STLAM1,SMLAM1,GTLAM1,KST1,NP1, tra1)
       IMPLICIT NONE
-c      CHARACTER*1 ST9
-c      CHARACTER*4 ST0,ST1
+c      CHARACTER(LEN=1) ST9
+c      CHARACTER(LEN=4) ST0,ST1
       INTEGER I,J,K,L,M
       DOUBLE PRECISION S
 c      INCLUDE 'model.txt'
@@ -32,7 +32,7 @@ C*****model.txt
       integer ARI, tra
       common/model/ari,tra      
 C*****series.txt
-      CHARACTER*40 NAME
+      CHARACTER(LEN=40) NAME
       INTEGER LEN
       DOUBLE PRECISION TIM(5000),SER(5000),TDIF(5000)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
@@ -71,7 +71,7 @@ C*****repcom.txt
       INTEGER REQSW,KFSW
       DOUBLE PRECISION VOB
 c      COMMON/REPCOM/PRPI,REQSW,VOB,KFSW
-      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI	
+      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI 
 
 C*****repar3.txt
       DOUBLE PRECISION ALPHA(21),ROOTR(20),ROOTI(20),XVECR(20),
@@ -213,16 +213,17 @@ C  SET INITIAL VALUES
       DO 301 I=2,M
       BCT(I)=CSZ
   301 CONTINUE
-      DO 302 K=2,M
+      DO K=2,M
       IF(K.GT.J)THEN
         S=CSO
       ELSE
         S=-CSO
       END IF
-      DO 302 L=2,K
+      DO L=2,K
       I=K-L+2
       BCT(I)=BCT(I)+S*BCT(I-1)/SCALE
-  302 CONTINUE
+      END DO
+      END DO
       DO 303 I=1,M
       CHT(I,J)=BCT(M+1-I)
   303 CONTINUE
@@ -231,10 +232,11 @@ C  SET INITIAL VALUES
       DO 400 I=2,M
       BCT(I)=CSZ
   400 CONTINUE
-      DO 401 K=2,ARP
-      DO 401 I=2,K
+      DO K=2,ARP
+      DO I=2,K
       J=K-I+2
       BCT(J)=BCT(J)+BCT(J-1)/SCALE
-  401 CONTINUE
+      END DO
+      END DO
       RETURN
       END

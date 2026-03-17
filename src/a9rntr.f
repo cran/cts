@@ -46,9 +46,9 @@ C/6S
 C     INTEGER  IFMT1(20), IFMT1C(20), IFMT2(18), IFMT2C(18), BLANK, STAR
 C     EQUIVALENCE (IFMT1(1), IFMT1C(1)), (IFMT2(1), IFMT2C(1))
 C/7S
-      CHARACTER*1  IFMT1(20), IFMT2(18), BLANK, STAR
-      CHARACTER*20 IFMT1C
-      CHARACTER*18 IFMT2C
+      CHARACTER(LEN=1)  IFMT1(20), IFMT2(18), BLANK, STAR
+      CHARACTER(LEN=20) IFMT1C
+      CHARACTER(LEN=18) IFMT2C
       EQUIVALENCE (IFMT1(1), IFMT1C), (IFMT2(1), IFMT2C)
 C/
       INTEGER  INDW, NCOL, COUNT, I, J, K, ILINE, ILAST
@@ -164,8 +164,9 @@ C
         IF (J .LT. NCOL .AND. I .LT. NITEMS) GO TO 80
           IF (COUNT .EQ. 0) GO TO 50
             DUP = .TRUE.
-            DO 30 K=1,NCOL
-   30         IF (LAST(K) .NE. LINE(K)) DUP = .FALSE.
+            DO K=1,NCOL
+              IF (LAST(K) .NE. LINE(K)) DUP = .FALSE.
+            END DO
             IF (I .EQ. NITEMS  .AND.  J .LT. NCOL) DUP = .FALSE.
             IF (.NOT. DUP .AND. COUNT .EQ. 1) GO TO 50
               IF (.NOT. DUP) GO TO 40
@@ -180,8 +181,9 @@ C     1                                 STAR, STAR, STAR, STAR
 C   40         WRITE(IOUT, IFMT2C) BLANK, ILAST, (LAST(K), K=1,NCOL)
 C   50     WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
           COUNT = 1
-          DO 60 K=1,NCOL
-   60       LAST(K) = LINE(K)
+          DO K=1,NCOL
+            LAST(K) = LINE(K)
+          END DO
    70     ILAST = ILINE
           J = 0
    80   I = I+1

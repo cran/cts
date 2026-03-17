@@ -174,46 +174,46 @@ C
    40 CONTINUE
       IF (IERR.NE.0) GO TO 520
 C
-      DO 80 I = 1,N
-          DO 60 J = 1,N
+      DO I = 1,N
+          DO J = 1,N
               X(I,J) = C(I,J)
-   60     CONTINUE
+          END DO
           X(I,I) = X(I,I)*0.5D0
-   80 CONTINUE
+      END DO
 C
-      DO 160 I = 1,N
-          DO 120 J = 1,N
+      DO I = 1,N
+          DO J = 1,N
 C*PT*WARNING* Constant already double-precision
               DPREC = 0.0D0
-              DO 100 K = I,N
+              DO K = I,N
                   DPREC = DPREC + X(I,K)*U(K,J)
-  100         CONTINUE
+              END DO
               WRK(J) = DPREC
-  120     CONTINUE
-          DO 140 J = 1,N
+          END DO
+          DO J = 1,N
               X(I,J) = WRK(J)
-  140     CONTINUE
-  160 CONTINUE
-      DO 240 J = 1,N
-          DO 200 I = 1,N
+          END DO
+      END DO
+      DO J = 1,N
+          DO I = 1,N
 C*PT*WARNING* Constant already double-precision
               DPREC = 0.0D0
-              DO 180 K = 1,N
+              DO K = 1,N
                   DPREC = DPREC + U(K,I)*X(K,J)
-  180         CONTINUE
+              END DO
               WRK(I) = DPREC
-  200     CONTINUE
-          DO 220 I = 1,N
+          END DO
+          DO I = 1,N
               X(I,J) = WRK(I)
-  220     CONTINUE
-  240 CONTINUE
+          END DO
+      END DO
 C
-      DO 280 I = 1,N
-          DO 260 J = I,N
+      DO I = 1,N
+          DO J = I,N
               X(I,J) = X(I,J) + X(J,I)
               X(J,I) = X(I,J)
-  260     CONTINUE
-  280 CONTINUE
+          END DO
+      END DO
 C
       CALL LYCSR(N,A,NA,X,NX,IERR)
       IF (IERR.NE.0) RETURN

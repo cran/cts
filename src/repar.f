@@ -43,7 +43,7 @@ C*****repcom.txt
       INTEGER REQSW,KFSW
       DOUBLE PRECISION VOB
 c      COMMON/REPCOM/PRPI,REQSW,VOB,KFSW
-      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI	
+      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI 
 C*****repar2.txt
       DOUBLE PRECISION BCT(21),CHT(21,21)
       COMMON/REPAR2/BCT,CHT
@@ -93,18 +93,19 @@ C        PRINT *,'NOT YET IMPLEMENTED'
         IF(KFSW.EQ.0) THEN
           REV=CSO
           IF(ARP.GT.1)THEN
-            DO 400 I=2,ARP
-            K=I-1
-            S=ROOTR(I)
-            T=ROOTI(I)
-            DO 400 J=1,K
-            Y=ROOTR(J)
-            Z=ROOTI(J)
-            CALL SUBC(S,T,Y,Z,U,V)
-            CALL ADDC(S,T,Y,Z,W,X)
-            U=(U*U+V*V)/(W*W+X*X)
-            IF(REV.GT.U)REV=U
-  400       CONTINUE
+            DO I=2,ARP
+              K=I-1
+              S=ROOTR(I)
+              T=ROOTI(I)
+              DO J=1,K
+                Y=ROOTR(J)
+                Z=ROOTI(J)
+                CALL SUBC(S,T,Y,Z,U,V)
+                CALL ADDC(S,T,Y,Z,W,X)
+                U=(U*U+V*V)/(W*W+X*X)
+                IF(REV.GT.U)REV=U
+              END DO
+            END DO
           END IF
           REV=REV*1.0D2
           REV=REV/(CSO+REV)

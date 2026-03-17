@@ -70,11 +70,10 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
       {
         lyap <- 0
         prdg <- 1.0e4
-        if(trace)        
-        cat("\nSCC=N CAUSES RESET OF LPV=Y TO LPV=N AND PRDG=1.0D4","\n")
+        if (trace) message("SCC=N causes reset of LPV=Y to LPV=N and PRDG=1.0D4")
       }
     if (n.ahead < 0 || n.ahead > 5000) stop("Invalid forecasting steps:", n.ahead)
-    if (trace) cat("\nREADING OF MODEL PARAMETER PARAMETER SUCCESSFUL")
+    if (trace) message("Reading of model parameters successful")
     
     if (nit < 0 || nit > 100) nit <- 25
     if (opm < 0) stop("Invalid OPM value:", opm)
@@ -104,9 +103,9 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
 
     if(fty < 1 || fty > 3) stop("Invalid fty value:", fty)
     tra <- 0
-    if(trace){
-    tra <- 1
-    cat("\nREADING OF CONTROL PARAMETER SUCCESSFUL","\n")
+    if (trace) {
+      tra <- 1
+      message("Reading of control parameters successful")
     }
     np1 <- 0
     z <-.Fortran("setup",
@@ -142,8 +141,6 @@ function(x, y=NULL, scale=1.5, order=3, ctrl=car_control())
                  np1=as.integer(np1),
                  as.integer(tra),
                  PACKAGE="cts")
-    if(trace)
-    .Fortran("display",PACKAGE="cts")
         zpar <- .Fortran("loop",
                 ss=double(nit+1),
                 bit=as.double(matrix(0, nit+1, 22)),
@@ -355,23 +352,23 @@ predict.car <- function(object, se.fit=TRUE, digits = 3, plot.it=TRUE, ...)
       RET <- list(pretime=pretime, pred=pred)
 }
 
-plot.predict.car <- function(object,xlab = "time",
-    ylab = "", type = "l", main = NULL, sub = NULL,...)
+plot.predict.car <- function(x, xlab = "time",
+    ylab = "", type = "l", main = NULL, sub = NULL, ...)
   {
-    if(class(object) != "car")
+    if(!inherits(x, "car"))
     stop("object must be car\n")
-    if(object$fty==1){ ### forecast type is beyond of the observation
-    plot(object$tim, object$ser,
+    if(x$fty==1){ ### forecast type is beyond of the observation
+    plot(x$tim, x$ser,
          xlab=xlab, ylab=ylab, type=type, main=main,sub=sub, ...)
-    points(object$pretime, object$predict, lty=2, col="red", ...)
+    points(x$pretime, x$predict, lty=2, col="red", ...)
     }
     else{
-    npre <- length(object$pretime)
-    ntim <- length(object$tim)
-    plot(object$tim, object$ser,
+    npre <- length(x$pretime)
+    ntim <- length(x$tim)
+    plot(x$tim, x$ser,
          xlab=xlab,ylab=ylab,type=type,main=main,sub=sub, ...)
 #    plot(object$tim[1:length(object$ser)],object$ser,ylim=c(min(object$ser)-2*max(sqrt(object$predict.var)),max(object$ser)+2*max(sqrt(object$predict.var))),xlab=xlab,ylab=ylab,type=type,main=main,sub=sub, ...)
-    points(object$pretime, object$predict,
+    points(x$pretime, x$predict,
            lty=2,col="red", ...)
 }
 #    lines(object$tim[(length(object$tim) - length(object$predict) +
@@ -387,7 +384,7 @@ tsdiag.car <- function(object, gof.lag = 10, ...)
 {
     ## plot standardized residuals, acf of residuals,
   ## cumulative periodogram and Ljung-Box p-values
-    if(class(object) != "car")
+    if(!inherits(object, "car"))
     stop("object must be 'car' class\n") 
     oldpar<- par(mfrow = c(2, 2))
     on.exit(par(oldpar))
@@ -405,4 +402,3 @@ tsdiag.car <- function(object, gof.lag = 10, ...)
     abline(h = 0.05, lty = 2, col = "blue")
     invisible(object)
 }
-

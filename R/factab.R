@@ -1,7 +1,7 @@
 "factab" <- 
 function (object) 
 {
-    if(class(object) != "car")
+    if(!inherits(object, "car"))
     stop("object must be car\n")
     call <- match.call()
     par <- object$phi

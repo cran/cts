@@ -31,15 +31,16 @@ c       DOUBLE PRECISION WK(20),VT(5000),BI(2,20,20),R(20,20),RI(2,20,20)
 
 c     added ZW
       integer IPIVOT(ARP)
-      DO 100 J=1,ARP
-      DO 100 I=1,ARP
+      DO J=1,ARP
+      DO I=1,ARP
       IF(I.EQ.J)THEN
         BI(1,I,J)=CSO
       ELSE
         BI(1,I,J)=CSZ
       END IF
       BI(2,I,J)=CSZ
-  100 CONTINUE
+      END DO
+      END DO
       I=1
       J=20
 c      CALL F04ADF(R,J,BI,J,ARP,ARP,RI,J,WK,I) changed ZW
@@ -49,7 +50,6 @@ c      CALL F04ADF(R,J,BI,J,ARP,ARP,RI,J,WK,I) changed ZW
 C      IF(I.NE.0)THEN
 c        PRINT *,'PROGRAM FAILS IN F04ADF WITH ERROR: ',I
 C         PRINT *,'PROGRAM FAILS IN ZGESV WITH ERROR: ',I
-        call intpr('WITH ERROR', 10, I, 1)
         call rexit('PROGRAM FAILS IN ZGESV')
 C         STOP
       ERRNO1 = 2

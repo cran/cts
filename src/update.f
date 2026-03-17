@@ -1,7 +1,7 @@
       SUBROUTINE UPDATE
       IMPLICIT NONE
-      CHARACTER*1 ST9
-      CHARACTER*4 ST0,ST1
+      CHARACTER(LEN=1) ST9
+      CHARACTER(LEN=4) ST0,ST1
       INTEGER I,J,M,N
 c      INCLUDE 'model.txt'
 c      INCLUDE 'setcon.txt'

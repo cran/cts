@@ -8,7 +8,7 @@ C
 C/6S
 C     INTEGER IFMT(N)
 C/7S
-      CHARACTER*1 IFMT(N)
+      CHARACTER(LEN=1) IFMT(N)
 C/
 C
       INTEGER NT,WT
@@ -26,7 +26,7 @@ C     DATA DIGITS( 8) / 1H7 /
 C     DATA DIGITS( 9) / 1H8 /
 C     DATA DIGITS(10) / 1H9 /
 C/7S
-      CHARACTER*1 DIGITS(10)
+      CHARACTER(LEN=1) DIGITS(10)
       DATA DIGITS( 1) / '0' /
       DATA DIGITS( 2) / '1' /
       DATA DIGITS( 3) / '2' /

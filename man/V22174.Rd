@@ -18,7 +18,7 @@ Belcher, J. and Hampton, J. S. and Tunnicliffe Wilson,
     Statistical Society, Series B, Methodological},\bold{56},141--155
 }
 \references{
- Wang, Zhu (2013). cts: An R Package for Continuous Time Autoregressive Models via Kalman Filter. \emph{Journal of Statistical Software}, \bold{Vol. 53(5)}, 1--19. \url{http://www.jstatsoft.org/v53/i05}
+ Wang, Zhu (2013). cts: An R Package for Continuous Time Autoregressive Models via Kalman Filter. \emph{Journal of Statistical Software}, \bold{Vol. 53(5)}, 1--19. \url{https://www.jstatsoft.org/v53/i05}
 }
 
 \examples{

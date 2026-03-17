@@ -22,7 +22,7 @@ car(x, y=NULL, scale = 1.5, order = 3, ctrl=car_control())
 \method{plot}{car}(x, type=c("spec", "pred", "diag"),...) 
 \method{predict}{car}(object, se.fit = TRUE, digits = 3, plot.it=TRUE,...)
 \method{spectrum}{car}(object, frmult=1, n.freq, plot.it = TRUE, na.action = na.fail, ...)
-\method{AIC}{car}(object, ..., k=NULL)
+\method{AIC}{car}(object, ..., verbose=TRUE, k=2)
 \method{tsdiag}{car}(object, gof.lag = 10, ...)
 \method{kalsmo}{car}(object)
 }
@@ -45,7 +45,8 @@ car(x, y=NULL, scale = 1.5, order = 3, ctrl=car_control())
     goodness-of-fit test}
   \item{frmult}{ numerical value, can be used to multiply the frequency range}
   \item{n.freq}{number of frequency}
-  \item{k}{penalty, not used}
+  \item{verbose}{logical; if \code{TRUE}, prints the model selection table using \code{\link{message}}.}
+  \item{k}{numeric penalty per parameter (as in \code{\link[stats]{AIC}}); default is 2.}
   \item{na.action}{ \code{NA} action function.}
   \item{\dots}{further arguments to be passed to particular methods}
 }
@@ -126,7 +127,7 @@ reparameterized coefficients of CAR fits.
 
   Wang, Zhu and Woodward, W. A. and Gray, H. L. (2009). The Application of the Kalman Filter to Nonstationary Time Series through Time Deformation. \emph{Journal of Time Series Analysis}, \bold{30(5)}, 559-574.
 
-  Wang, Zhu (2013). cts: An R Package for Continuous Time Autoregressive Models via Kalman Filter. \emph{Journal of Statistical Software}, \bold{Vol. 53(5)}, 1--19. \url{http://www.jstatsoft.org/v53/i05}
+  Wang, Zhu (2013). cts: An R Package for Continuous Time Autoregressive Models via Kalman Filter. \emph{Journal of Statistical Software}, \bold{Vol. 53(5)}, 1--19. \url{https://www.jstatsoft.org/v53/i05}
 }
 
 \author{
@@ -134,6 +135,7 @@ reparameterized coefficients of CAR fits.
 }
 \seealso{\code{\link{car_control}} for predict and numerical optimization parameters, and \code{\link{AIC}} for model selection}
 \examples{
+\donttest{
 data(V22174)
 fit <- car(V22174,scale=0.2,order=7, ctrl=car_control(trace=TRUE))
 summary(fit)
@@ -153,5 +155,6 @@ points(V22174[,1], fit2$pre2, col="red")
 data(asth)
 fit <- car(asth,scale=0.25,order=4, ctrl=car_control(n.ahead=10))
 kalsmo(fit)
+}
 }
 \keyword{ts}

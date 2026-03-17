@@ -35,7 +35,7 @@ C*****model.txt
       common/model/ari,tra
 
 C*****series.txt
-      CHARACTER*40 NAME
+      CHARACTER(LEN=40) NAME
       INTEGER LEN
       DOUBLE PRECISION TIM(5000),SER(5000),TDIF(5000)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
@@ -57,7 +57,7 @@ C*****repcom.txt
       INTEGER REQSW,KFSW
       DOUBLE PRECISION VOB
 c      COMMON/REPCOM/PRPI,REQSW,VOB,KFSW
-      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI	
+      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI 
 C*****repar3.txt
       DOUBLE PRECISION ALPHA(21),ROOTR(20),ROOTI(20),XVECR(20),
      *XVECI(20)
@@ -86,26 +86,27 @@ c     1,PSES,PSCV,TRAN
      1,PSES,PSCV,TRAN,PRE,PRV,FSER,FVAR,SSER,SVAR
 
 
-      DO 100 J=1,ARP
-      DO 100 I=1,ARP
-      IF(I.EQ.1)THEN
-        U=CSO
-        V=CSZ
-      ELSE IF(I.EQ.2)THEN
-        U=ROOTR(J)
-        V=ROOTI(J)
-        IF(ARP.GT.2)THEN
-          W=U
-          X=V
-        END IF
-      ELSE IF(I.GT.2)THEN
-        CALL MULC(U,V,W,X,Y,Z)
-        U=Y
-        V=Z
-      END IF
-      R(1,I,J)=U
-      R(2,I,J)=V
-  100 CONTINUE
+      DO J=1,ARP
+        DO I=1,ARP
+          IF(I.EQ.1)THEN
+            U=CSO
+            V=CSZ
+          ELSE IF(I.EQ.2)THEN
+            U=ROOTR(J)
+            V=ROOTI(J)
+            IF(ARP.GT.2)THEN
+              W=U
+              X=V
+            END IF
+          ELSE IF(I.GT.2)THEN
+            CALL MULC(U,V,W,X,Y,Z)
+            U=Y
+            V=Z
+          END IF
+          R(1,I,J)=U
+          R(2,I,J)=V
+        END DO
+      END DO
       CALL CINVERT
       DO 102 I=1,ARP
       UR(I)=BI(1,I,ARP)
@@ -201,38 +202,42 @@ c      print *,'ERR=',U
       CALL MULR(NR(I),NI(I),U,W,X)
       CALL ADDC(WPR(I),WPI(I),W,X,WR(I),WI(I))
   111 CONTINUE
-      DO 112 I=1,ARP
-      DO 112 J=1,ARP
-      CALL MULC(MR(I),MI(I),NR(J),-NI(J),W,X)
+      DO I=1,ARP
+        DO J=1,ARP
+          CALL MULC(MR(I),MI(I),NR(J),-NI(J),W,X)
 c      print *,'CALL MULC(MR(I),MI(I),NR(J),-NI(J),W,X)'
 c      print *,'W=',W
 c      print *,'X=',X
-      CALL SUBC(CPR(I,J),CPI(I,J),W,X,CR(I,J),CI(I,J))
+          CALL SUBC(CPR(I,J),CPI(I,J),W,X,CR(I,J),CI(I,J))
 c      print *,'CALL SUBC(CPR(I,J),CPI(I,J),W,X,CR(I,J),CI(I,J))'
 c      print *,'CR(I,J)=',CR(I,J)
 c      print *,'CI(I,J)=',CI(I,J)
- 112  CONTINUE
+        END DO
+      END DO
 c     add the following lines to store results in order to calculate smoothic     ng states and covariance matrix, smoothing series and variances
       if (KFSW.EQ.0) then
          pre(T)=const+pred
          prv(T)=pev
          u=csz
-         do 130 I=1, ARP
+         DO I=1,ARP
             FSESR(T,I)=WR(I)
             FSESI(T,I)=WI(I)
             PSESR(T,I)=WPR(I)
             PSESI(T,I)=WPI(I)
- 130        U=U+XVECR(I)*WR(I)-XVECI(I)*WI(I)
+            U=U+XVECR(I)*WR(I)-XVECI(I)*WI(I)
+         END DO
             FSER0(T,I)=U+CONST
             U=CSZ
-            do 135 I=1, ARP
+            DO I=1,ARP
                TRANR(T,I)=DR(I)
                TRANI(T,I)=DI(I)
-               do 135 J=1, ARP
+               DO J=1,ARP
                   FSCVR(T,I,J)=CR(I,J)
                   FSCVI(T,I,J)=CI(I,J)
                   PSCVR(T,I,J)=CPR(I,J)
- 135              PSCVI(T,I,J)=CPI(I,J)
+                  PSCVI(T,I,J)=CPI(I,J)
+               END DO
+            END DO
 c 135              U=U+
                ENDIF
  150        CONTINUE

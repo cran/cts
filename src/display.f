@@ -1,6 +1,6 @@
       SUBROUTINE DISPLAY
       IMPLICIT NONE
-      CHARACTER*4 ST0
+      CHARACTER(LEN=4) ST0
       INTEGER I
 c      INCLUDE 'model.txt'
 c      INCLUDE 'series.txt'
@@ -12,7 +12,7 @@ C*****model.txt
       integer for, fty
       common/model/for, fty
 C*****series.txt
-      CHARACTER*40 NAME
+      CHARACTER(LEN=40) NAME
       INTEGER LEN
       DOUBLE PRECISION TIM(5000),SER(5000),TDIF(5000)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF

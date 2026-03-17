@@ -27,7 +27,7 @@ discrete data. \emph{Applied Time Series Analysis II}, 651--682
 
   Wang, Zhu(2004). \emph{The Application of the Kalman Filter to Nonstationary Time Series through Time Deformation}. PhD thesis, Southern Methodist University
 
- Wang, Zhu (2013). cts: An R Package for Continuous Time Autoregressive Models via Kalman Filter. \emph{Journal of Statistical Software}, \bold{Vol. 53(5)}, 1--19. \url{http://www.jstatsoft.org/v53/i05}
+ Wang, Zhu (2013). cts: An R Package for Continuous Time Autoregressive Models via Kalman Filter. \emph{Journal of Statistical Software}, \bold{Vol. 53(5)}, 1--19. \url{https://www.jstatsoft.org/v53/i05}
 }
 
 \author{
@@ -35,8 +35,10 @@ discrete data. \emph{Applied Time Series Analysis II}, 651--682
 }
 \seealso{ \code{\link{car}} and \code{\link{kalsmo}}}
 \examples{
+\donttest{
 data(asth)
 (fit <- car(asth,scale=0.25,order=4))
 factab(fit)
+}
 }
 \keyword{ ts }

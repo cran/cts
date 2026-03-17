@@ -25,7 +25,7 @@ c      COMMON/SEACOM/SOLV,ESSP,ECOV
 
 
       SOLV=.TRUE.
-      DO 3 L=1,NP
+      DO L=1,NP
       K=NP+1-L
       IF(ESSP(K,K).LT.1.0D-9)THEN
         SOLV=.FALSE.
@@ -34,38 +34,38 @@ c      COMMON/SEACOM/SOLV,ESSP,ECOV
       IF(K.GT.1)THEN
         I1=K-1
         Y=ESSP(K,K)
-        DO 2 I=1,I1
+        DO I=1,I1
         Z=ESSP(I,K)
-        DO 1 J=1,I1
+        DO J=1,I1
         ESSP(I,J)=ESSP(I,J)-Z*ESSP(K,J)/Y
-    1   CONTINUE
+        END DO
         DELB(I)=DELB(I)-Z*DELB(K)/Y
-    2   CONTINUE
+        END DO
       END IF
-    3 CONTINUE
-      DO 7 K=1,NP
+      END DO
+      DO K=1,NP
       Y=ESSP(K,K)
       V=1.0D0
       IF(K.GT.1)THEN
         I1=K-1
-        DO 5 I=1,I1
+        DO I=1,I1
         Z=0.0D0
-        DO 4 J=1,I1
+        DO J=1,I1
         Z=Z-ESSP(J,I)*ESSP(K,J)
-    4   CONTINUE
+        END DO
         W=ESSP(K,I)
         Z=Z/Y
         V=V-W*Z
         ESSP(I,K)=Z
         DELB(K)=DELB(K)-W*DELB(I)
-    5   CONTINUE
+        END DO
         I1=K-1
-        DO 6 I=1,I1
+        DO I=1,I1
         ESSP(K,I)=ESSP(I,K)
-    6   CONTINUE
+        END DO
       END IF
       ESSP(K,K)=V/Y
       DELB(K)=DELB(K)/Y
-    7 CONTINUE
+      END DO
       RETURN
       END

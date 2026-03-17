@@ -1,9 +1,8 @@
 useDynLib(cts)
 export(car, tsdiag, factab, kalsmo, kalsmoComp, spectrum, plotSpecCar, plotSpecLs, spec.ls, car_control, spec.ci)
-exportClasses("car")
-exportMethods("show")
 
 S3method(plot, car)
+S3method(plot, predict.car)
 S3method(print, car)
 S3method(summary, car)
 S3method(predict, car)
@@ -14,6 +13,7 @@ S3method(kalsmo, car)
 S3method(print, factab)
 importFrom("graphics", "abline", "lines", "matplot", "par", "plot",
      "points", "title")     
+importFrom("utils", "capture.output")
 importFrom("stats", "Box.test", "acf", "as.ts", "bandwidth.kernel",
      "cpgram", "df.kernel", "frequency", "is.tskernel",
      "kernapply", "na.fail", "na.pass", "nextn", "pchisq",

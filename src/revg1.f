@@ -18,7 +18,7 @@ c     1,PSES,PSCV,TRAN
       COMMON/KFASAV/FSES,FSCV,SSES,SSCV
      1,PSES,PSCV,TRAN,PRE,PRV,FSER,FVAR,SSER,SVAR
 C*****series.txt
-      CHARACTER*40 NAME
+      CHARACTER(LEN=40) NAME
       INTEGER LEN
       DOUBLE PRECISION TIM(5000),SER(5000),TDIF(5000)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
@@ -47,14 +47,16 @@ C*****repar3.txt
 c      do 100 t=1,3
         TR=1+LEN-T
         IF (T.GT.1) THEN
-          DO 10 I=1,ARP
-          DO 10 J=1,ARP
-            V=PSCV(TR+1,I,J)
-            AQ(I,J)=V
-            AQI(I,J)=V
-            APH(I,J)=TRAN(TR+1,I,J)
-            SIG(I,J)=SSCV(TR+1,I,J)
-   10       AP(I,J)=FSCV(TR,I,J) 
+          DO I=1,ARP
+            DO J=1,ARP
+              V=PSCV(TR+1,I,J)
+              AQ(I,J)=V
+              AQI(I,J)=V
+              APH(I,J)=TRAN(TR+1,I,J)
+              SIG(I,J)=SSCV(TR+1,I,J)
+              AP(I,J)=FSCV(TR,I,J)
+            END DO
+          END DO
           IFAIL=0
 C          PRINT *,'BEFORE CALL OF F01ADF'
 C          IF (TR.EQ.101) CALL MPRINT(ARP,AQI,IA,'AQIBEFORE')
@@ -106,10 +108,11 @@ c          DO 20 J=I,ARP
 c          AQI(I,J)=AQI(J+1,I)
 c   20     AQI(J,I)=AQI(I,J)
 
-          do 20 i=1,arp-1
-             do 20 j=i,arp-1
-                aqi(j+1,i)=aqi(i,j+1)
- 20          continue
+          DO I=1,ARP-1
+            DO J=I,ARP-1
+              AQI(J+1,I)=AQI(I,J+1)
+            END DO
+          END DO
 c             print *,'AQI'
 c          do 30 i=1,arp
 c             do 30 j=1,arp
@@ -123,18 +126,20 @@ C          IF (TR.EQ.101) CALL MPRINT(ARP,AQI,IA,'AQIAFTER')
         ENDIF
         W=CSZ
         X=CSZ
-        DO 70 I=1,ARP
+        DO I=1,ARP
           U=FSES(TR,I)
-          DO 60 J=1,ARP
+          DO J=1,ARP
             V=FSCV(TR,I,J)
             IF (T.GT.1) THEN
               V=V+TWM2(I,J)
               U=U+AJ(I,J)*(SSES(TR+1,J)-PSES(TR+1,J))
             ENDIF
             X=X+XVECR(I)*XVECR(J)*V
-   60     SSCV(TR,I,J)=V
+            SSCV(TR,I,J)=V
+          END DO
           W=W+XVECR(I)*U
-   70   SSES(TR,I)=U
+          SSES(TR,I)=U
+        END DO
         SSER(TR)=W+CONST
         SVAR(TR)=X
 C      PRINT *,'END OF REVG1 LOOP WITH TR=',TR

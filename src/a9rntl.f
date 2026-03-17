@@ -41,11 +41,11 @@ C    1         STAR, TCHAR, FCHAR
 C     INTEGER  LINE(40), LAST(40)
 C     EQUIVALENCE (IFMT1(1), IFMT1C(1)), (IFMT2(1), IFMT2C(1))
 C/7S
-      CHARACTER*1  IFMT1(20), IFMT2(19), BLANK, STAR, TCHAR, FCHAR
-      CHARACTER*20 IFMT1C
-      CHARACTER*19 IFMT2C
+      CHARACTER(LEN=1)  IFMT1(20), IFMT2(19), BLANK, STAR, TCHAR, FCHAR
+      CHARACTER(LEN=20) IFMT1C
+      CHARACTER(LEN=19) IFMT2C
       EQUIVALENCE (IFMT1(1), IFMT1C), (IFMT2(1), IFMT2C)
-      CHARACTER*1  LINE(40), LAST(40)
+      CHARACTER(LEN=1)  LINE(40), LAST(40)
 C/
       INTEGER  INDW, NCOL, COUNT, I, J, K, ILINE, ILAST
       LOGICAL  DUP
@@ -143,8 +143,9 @@ C
         IF (J .LT. NCOL .AND. I .LT. NITEMS) GO TO 80
           IF (COUNT .EQ. 0) GO TO 50
             DUP = .TRUE.
-            DO 30 K=1,NCOL
-   30         IF (LAST(K) .NE. LINE(K)) DUP = .FALSE.
+            DO K=1,NCOL
+              IF (LAST(K) .NE. LINE(K)) DUP = .FALSE.
+            END DO
             IF (I .EQ. NITEMS  .AND.  J .LT. NCOL) DUP = .FALSE.
             IF (.NOT. DUP .AND. COUNT .EQ. 1) GO TO 50
               IF (.NOT. DUP) GO TO 40
@@ -159,8 +160,9 @@ C     1                                 STAR, STAR, STAR, STAR
 C   40         WRITE(IOUT, IFMT2C) BLANK, ILAST, (LAST(K), K=1,NCOL)
 C   50     WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
           COUNT = 1
-          DO 60 K=1,NCOL
-   60       LAST(K) = LINE(K)
+          DO K=1,NCOL
+            LAST(K) = LINE(K)
+          END DO
    70     ILAST = ILINE
           J = 0
    80   I = I+1

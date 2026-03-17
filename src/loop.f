@@ -23,7 +23,7 @@ C*****repcom.txt
       INTEGER REQSW,KFSW
       DOUBLE PRECISION VOB
 c      COMMON/REPCOM/PRPI,REQSW,VOB,KFSW
-      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI	
+      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI 
 C*****conpar.txt    
       INTEGER NIT,OPM,RGM,KUP,KSP,KST
       DOUBLE PRECISION REQ,CONCRIT,RPERT,IVLAM,FAC,STLAM,SMLAM,GTLAM
@@ -45,7 +45,7 @@ C*****veccom.txt
      * ERR(5000),RES(5000),PRES(22,5000),sres(5000)
       COMMON/VECCOM/B,NEWB,PERB,DELB,ERR,RES,PRES,sres
 C*****series.txt
-      CHARACTER*40 NAME
+      CHARACTER(LEN=40) NAME
       INTEGER LEN
       DOUBLE PRECISION TIM(5000),SER(5000),TDIF(5000)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
@@ -90,7 +90,7 @@ C          STOP
            call intpr('ITERATION 0:', 12, 1, 0)
            call dblepr('LAMBDA = ', 9, LAM, 1)
            call dblepr('   INITIAL SUM OF SQUARES = ', 28, SSOLD, 1)
-           call dblepr('   INITIAL PARAMETER VALUES',  27, B, ARP)
+           call dblepr('   INITIAL PARAMETER VALUES',  27, B(1), 1)
 C        PRINT *,'ITERATION 0:'
 C        PRINT *,'   LAMBDA = ',LAM
 C        PRINT *,'   INITIAL SUM OF SQUARES = ',SSOLD
@@ -133,10 +133,6 @@ C  CALCULATE PERTURBATION VECTOR
       B(PPIND)=B(PPIND)+U
       CALL REPAR
       IF(PRPI)THEN
-         call NEWLINE
-         call intpr('REDUCE NUMBER OF ITERATION (NIT) IN CAR_CONTROL',
-     * -1, 1, 0)
-         call intpr('ITERATION ',9, ITCT, 1)
          call rexit('ROOT WITH POSITIVE REAL PART')
 C        PRINT *,'ITERATION ',ITCT,': ROOT WITH POSITIVE REAL PART'
         ERRNO=1
@@ -180,11 +176,10 @@ C        STOP
           RETURN
         ELSE
           IF(tra.EQ.1)THEN
-            call NEWLINE
             call intpr('ITERATION :', 11, ITCT, 1)
             call dblepr('   LAMBDA: ',11, LAM, 1)
            call dblepr('   SUM OF SQUARES = ', 20, SSOLD, 1)
-           call dblepr('   PARAMETER VALUES',  19, OLDB, NP)
+           call dblepr('   PARAMETER VALUES',  19, OLDB(1), 1)
 C          PRINT *,'ITERATION :',ITCT
 C          PRINT *,'   LAMBDA: ',LAM
 C          PRINT *,'   SUM OF SQUARES: ',SSOLD

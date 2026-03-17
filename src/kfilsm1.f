@@ -23,7 +23,7 @@ C*****repcom.txt
       INTEGER REQSW,KFSW
       DOUBLE PRECISION VOB
 c      COMMON/REPCOM/PRPI,REQSW,VOB,KFSW
-      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI	
+      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI 
 C*****kfasav.txt
       DOUBLE PRECISION PRE(5000),PRV(5000),FSER(5000),FVAR(5000)
      1,SSER(5000)
@@ -47,7 +47,7 @@ C*****veccom.txt
      * ERR(5000),RES(5000),PRES(22,5000),sres(5000)
       COMMON/VECCOM/B,NEWB,PERB,DELB,ERR,RES,PRES,sres
 C*****series.txt
-      CHARACTER*40 NAME
+      CHARACTER(LEN=40) NAME
       INTEGER LEN
       DOUBLE PRECISION TIM(5000),SER(5000),TDIF(5000)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
@@ -64,8 +64,9 @@ c      KFSW=1
       kfsw=0
 c     change kfsw=1 to kfsw=0, where kfsw=1 is standard version
 c     and kfsw=0 is the diagonal form, see Wilson's paper (94)
-      DO 10 I=1,NP
-  10  B(I)=OLDB(I)
+      DO I=1,NP
+        B(I)=OLDB(I)
+      END DO
       CALL REPAR
 c      CALL RESG1  
 c     change RESG1 to RESG0new, to use the diagonal form

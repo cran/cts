@@ -36,7 +36,7 @@ c     *GMOLD,GMNEW,SIGSQ,OLDB
       COMMON/SETCON/CSO,CSZ,LAM,SSOLD,
      *GMOLD,GMNEW,SIGSQ,OLDB,CONV,FAIL,NP,ITCT,PPIND
 C*****series.txt
-      CHARACTER*40 NAME
+      CHARACTER(LEN=40) NAME
       INTEGER LEN
       DOUBLE PRECISION TIM(5000),SER(5000),TDIF(5000)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
@@ -68,7 +68,7 @@ C*****repcom.txt
       INTEGER REQSW,KFSW
       DOUBLE PRECISION VOB
 c      COMMON/REPCOM/PRPI,REQSW,VOB,KFSW
-      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI	
+      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI 
 C*****veccom1.txt
       DOUBLE PRECISION B1(22),DELB1(22)
 C*****setcon1.txt
@@ -87,11 +87,12 @@ C*****model1.txt
       SCALE1=SCALE
       VR1=VR
       SIGSQ1=SIGSQ
-      DO 100 I=1,NP
-         DO 100 J=1,NP
+      DO I=1,NP
+         DO J=1,NP
             ESSP1(I,J)=ESSP(I,J)
             ECOV1(I,J)=ECOV(I,J)
- 100     continue
+         END DO
+      END DO
          DO 101 I=1,NP
             B1(I)=B(I)
  101     continue

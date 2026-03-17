@@ -28,13 +28,14 @@ c      COMMON/SEACOM/SOLV,ESSP,ECOV
       COMMON/SEACOM/ESSP,ECOV,SOLV
 
       V=CSO+LAM
-      DO 100 I=1,NP
+      DO I=1,NP
       DELB(I)=GRAD(I)
-      DO 100 J=1,NP
+      DO J=1,NP
       U=SSP(I,J)
       IF(I.EQ.J)U=U*V
       ESSP(I,J)=U
-  100 CONTINUE
+      END DO
+      END DO
       CALL SIMI
       IF(SOLV)THEN
         DO 101 I=1,NP

@@ -50,9 +50,9 @@ C     INTEGER  IFMT1(20), IFMT2(18), BLANK, STAR
 C     INTEGER IFMT1C(20), IFMT2C(18)
 C     EQUIVALENCE (IFMT1(1),IFMT1C(1)), (IFMT2(1),IFMT2C(1))
 C/7S
-      CHARACTER*1  IFMT1(20), IFMT2(18), BLANK, STAR
-      CHARACTER*20 IFMT1C
-      CHARACTER*18 IFMT2C
+      CHARACTER(LEN=1)  IFMT1(20), IFMT2(18), BLANK, STAR
+      CHARACTER(LEN=20) IFMT1C
+      CHARACTER(LEN=18) IFMT2C
       EQUIVALENCE (IFMT1(1),IFMT1C), (IFMT2(1),IFMT2C)
 C/
       INTEGER  INDW, NCOL, COUNT, I, J, K, ILINE, ILAST
@@ -212,13 +212,14 @@ C   50     WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
             call dblepr('imaginary part', -1, AIMAG(LINE), J)
 C/
           COUNT = 1
-          DO 60 K=1,NCOL
+        DO K=1,NCOL
 C/R
 C           LAST(1,K) = LINE(1,K)
 C  60       LAST(2,K) = LINE(2,K)
 C/C
-   60       LAST(K) = LINE(K)
+            LAST(K) = LINE(K)
 C/
+        ENDDO
    70     ILAST = ILINE
           J = 0
    80   I = I+1

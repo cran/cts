@@ -9,7 +9,7 @@ plotSpecLs(x, add = FALSE, ci = 0.95, log = c("yes", "dB", "no"), xlab
 = "frequency", ylab = NULL, type = "l", main = NULL, sub = NULL, ...)
 }
 \arguments{
-    \item{x}{an object of class \code{"spec.car"}.}
+    \item{x}{an object of class \code{"spec.ls"}.}
   \item{add}{logical.  If \code{TRUE}, add to already existing plot.}
   \item{ci}{Coverage probability for confidence interval.  Plotting of
     the confidence bar is omitted unless \code{ci} is strictly
@@ -25,6 +25,10 @@ plotSpecLs(x, add = FALSE, ci = 0.95, log = c("yes", "dB", "no"), xlab
   \item{main}{overall title for the plot.}
   \item{sub}{a sub title for the plot.}
   \item{\dots}{Further graphical parameters.}
+}
+
+\value{
+Called for its side effect of producing a plot. Invisibly returns \code{x} (an object of class \code{"spec.ls"}).
 }
 
 \seealso{ \code{\link{spec.ls} }}

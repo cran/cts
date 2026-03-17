@@ -38,15 +38,15 @@ C     .. Executable Statements ..
           B1 = STORE(A/BASE,ZERO)
           C1 = STORE(B1*BASE,ZERO)
           D1 = ZERO
-          DO 40 I = 1,BASE
+          DO I = 1,BASE
               D1 = D1 + B1
-   40     CONTINUE
+          END DO
           B2 = STORE(A*RBASE,ZERO)
           C2 = STORE(B2/RBASE,ZERO)
           D2 = ZERO
-          DO 60 I = 1,BASE
+          DO I = 1,BASE
               D2 = D2 + B2
-   60     CONTINUE
+          END DO
           GO TO 20
       END IF
       RETURN

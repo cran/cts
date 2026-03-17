@@ -93,7 +93,11 @@ C
           A(M,I) = F
    60 CONTINUE
 C
-   80 GO TO (100,180) IEXC
+   80 IF (IEXC.EQ.1) THEN
+          GO TO 100
+      ELSE
+          GO TO 180
+      END IF
 C     ********** SEARCH FOR ROWS ISOLATING AN EIGENVALUE
 C                AND PUSH THEM DOWN **********
   100 IF (L.EQ.1) GO TO 460

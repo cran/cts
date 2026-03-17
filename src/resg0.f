@@ -20,7 +20,7 @@ C*****model.txt
       common/model/ari,tra
 
 C*****series.txt
-      CHARACTER*40 NAME
+      CHARACTER(LEN=40) NAME
       INTEGER LEN
       DOUBLE PRECISION TIM(5000),SER(5000),TDIF(5000)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
@@ -42,7 +42,7 @@ C*****repcom.txt
       INTEGER REQSW,KFSW
       DOUBLE PRECISION VOB
 c      COMMON/REPCOM/PRPI,REQSW,VOB,KFSW
-      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI	
+      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI 
 C*****repar3.txt
       DOUBLE PRECISION ALPHA(21),ROOTR(20),ROOTI(20),XVECR(20),
      *XVECI(20)
@@ -61,26 +61,27 @@ c       DOUBLE PRECISION WK(20),VT(5000),BI(2,20,20),R(20,20),RI(2,20,20)
       COMMON/RESGN2/WK,VT,BI,R,RI,ERRNO1
 
 
-      DO 100 J=1,ARP
-      DO 100 I=1,ARP
-      IF(I.EQ.1)THEN
-        U=CSO
-        V=CSZ
-      ELSE IF(I.EQ.2)THEN
-        U=ROOTR(J)
-        V=ROOTI(J)
-        IF(ARP.GT.2)THEN
-          W=U
-          X=V
-        END IF
-      ELSE IF(I.GT.2)THEN
-        CALL MULC(U,V,W,X,Y,Z)
-        U=Y
-        V=Z
-      END IF
-      R(1,I,J)=U
-      R(2,I,J)=V
-  100 CONTINUE
+      DO J=1,ARP
+        DO I=1,ARP
+          IF(I.EQ.1)THEN
+            U=CSO
+            V=CSZ
+          ELSE IF(I.EQ.2)THEN
+            U=ROOTR(J)
+            V=ROOTI(J)
+            IF(ARP.GT.2)THEN
+              W=U
+              X=V
+            END IF
+          ELSE IF(I.GT.2)THEN
+            CALL MULC(U,V,W,X,Y,Z)
+            U=Y
+            V=Z
+          END IF
+          R(1,I,J)=U
+          R(2,I,J)=V
+        END DO
+      END DO
       CALL CINVERT
       DO 102 I=1,ARP
       UR(I)=BI(1,I,ARP)
@@ -151,11 +152,12 @@ c     end of change by Z.W.
       CALL MULR(NR(I),NI(I),U,W,X)
       CALL ADDC(WPR(I),WPI(I),W,X,WR(I),WI(I))
   111 CONTINUE
-      DO 112 I=1,ARP
-      DO 112 J=1,ARP
-      CALL MULC(MR(I),MI(I),NR(J),-NI(J),W,X)
-      CALL SUBC(CPR(I,J),CPI(I,J),W,X,CR(I,J),CI(I,J))
-  112 CONTINUE
+      DO I=1,ARP
+        DO J=1,ARP
+          CALL MULC(MR(I),MI(I),NR(J),-NI(J),W,X)
+          CALL SUBC(CPR(I,J),CPI(I,J),W,X,CR(I,J),CI(I,J))
+        END DO
+      END DO
   150 CONTINUE
       RETURN
       END

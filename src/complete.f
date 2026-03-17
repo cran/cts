@@ -36,7 +36,7 @@ c     *GMOLD,GMNEW,SIGSQ,OLDB
       COMMON/SETCON/CSO,CSZ,LAM,SSOLD,
      *GMOLD,GMNEW,SIGSQ,OLDB,CONV,FAIL,NP,ITCT,PPIND
 C*****series.txt
-      CHARACTER*40 NAME
+      CHARACTER(LEN=40) NAME
       INTEGER LEN
       DOUBLE PRECISION TIM(5000),SER(5000),TDIF(5000)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
@@ -86,21 +86,23 @@ C       if(tra.EQ.1)then
 C       end if
       END IF
       END IF
-      DO 100 I=1,NP
-      DELB(I)=0.0D0
-      DO 100 J=1,NP
-      ESSP(I,J)=SSP(I,J)
-  100 CONTINUE
+      DO I=1,NP
+        DELB(I)=0.0D0
+        DO J=1,NP
+          ESSP(I,J)=SSP(I,J)
+        END DO
+      END DO
       CALL SIMI
       K=LEN-ARP
       IF(VRI.EQ.1)K=K-1
       IF(CCV.EQ.2)K=K-1
       U=SSOLD/K
       SIGSQ=U/GMOLD
-      DO 101 I=1,NP
-      DO 101 J=1,NP
-      ESSP(I,J)=ESSP(I,J)*U  
-  101 CONTINUE
+      DO I=1,NP
+        DO J=1,NP
+          ESSP(I,J)=ESSP(I,J)*U  
+        END DO
+      END DO
 c added by Z.W.
 c      OPEN(UNIT=4,FILE='cov.dat',STATUS='NEW')
 c      OPEN(UNIT=4,FILE='cov.dat',STATUS='unknown')
@@ -109,19 +111,21 @@ c   95 FORMAT(5E16.8)
 c Note: NP-th parameter is the constant estimator in the last line
 c      close(unit=4)
 C     for model selection purpose, find covariance matrix ECOV
-      DO 303 I=1,ARP
-      DO 303 J=1,ARP
-      ECOV(I,J)=ESSP(I,J)
-  303 CONTINUE                                  
+      DO I=1,ARP
+        DO J=1,ARP
+          ECOV(I,J)=ESSP(I,J)
+        END DO
+      END DO                                  
 c end by Z.W.   
-      DO 102 I=1,NP
-      DELB(I)=DSQRT(ESSP(I,I))
-  102 CONTINUE
-      DO 103 I=1,NP
-      U=DELB(I)
-      DO 103 J=1,NP
-      ESSP(I,J)=ESSP(I,J)/(U*DELB(J))
-  103 CONTINUE
+      DO I=1,NP
+        DELB(I)=DSQRT(ESSP(I,I))
+      END DO
+      DO I=1,NP
+        U=DELB(I)
+        DO J=1,NP
+          ESSP(I,J)=ESSP(I,J)/(U*DELB(J))
+        END DO
+      END DO
       if(tra.EQ.1)then
       CALL NEWLINE
        call dblepr('FINAL SUM OF SQUARES: ', 22, SSOLD, 1)
@@ -130,7 +134,7 @@ c end by Z.W.
      *1) 
        call dblepr('GEOMETRIC MEAN VARIANCE MULTIPLIER:   ',38, GMOLD,
      *1) 
-       call dblepr('FINAL PARAMETER VALUES:',23,  OLDB, NP)
+       call dblepr('FINAL PARAMETER VALUES:',23, OLDB(1), 1)
       end if
       DO 104 I=1,NP
       B(I)=OLDB(I)

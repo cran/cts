@@ -49,7 +49,7 @@ C*****veccom.txt
       COMMON/VECCOM/B,NEWB,PERB,DELB,ERR,RES,PRES,sres
 
 C*****series.txt
-      CHARACTER*40 NAME
+      CHARACTER(LEN=40) NAME
       INTEGER LEN
       DOUBLE PRECISION TIM(5000),SER(5000),TDIF(5000)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
@@ -63,8 +63,9 @@ C*****repar3.txt
 C      PRINT *,'FORECASTING IN PROGRESS'
       endif
       KFSW=1
-      DO 10 I=1,NP
-  10  B(I)=OLDB(I)
+      DO I=1,NP
+        B(I)=OLDB(I)
+      END DO
 
       CALL REPAR
 c     resg1pre and resg1pre1 together are predicting

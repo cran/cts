@@ -43,9 +43,9 @@ C/6S
 C     INTEGER  IFMT1(20), IFMT1C(20), IFMT2(14), IFMT2C(14), BLANK, STAR
 C     EQUIVALENCE (IFMT1(1), IFMT1C(1)), (IFMT2(1), IFMT2C(1))
 C/7S
-      CHARACTER*1  IFMT1(20), IFMT2(14), BLANK, STAR
-      CHARACTER*20 IFMT1C
-      CHARACTER*14 IFMT2C
+      CHARACTER(LEN=1)  IFMT1(20), IFMT2(14), BLANK, STAR
+      CHARACTER(LEN=20) IFMT1C
+      CHARACTER(LEN=14) IFMT2C
       EQUIVALENCE (IFMT1(1), IFMT1C), (IFMT2(1), IFMT2C)
 C/
       INTEGER  INDW, NCOL, COUNT, I, J, K, ILINE, ILAST
@@ -140,33 +140,41 @@ C
 C  ILINE IS PRINTED AS THE INDEX OF THE FIRST ARRAY ELEMENT
 C  IN A LINE.
 C
-   20 IF (I .GT. NITEMS)  GO TO 90
+   20 IF (I .GT. NITEMS) THEN
+        GO TO 90
+      ENDIF
         J = J+1
         LINE(J) = A(I)
         IF (J .EQ. 1) ILINE = I
-        IF (J .LT. NCOL .AND. I .LT. NITEMS) GO TO 80
-          IF (COUNT .EQ. 0) GO TO 50
-            DUP = .TRUE.
-            DO 30 K=1,NCOL
-   30         IF (LAST(K) .NE. LINE(K)) DUP = .FALSE.
-            IF (I .EQ. NITEMS  .AND.  J .LT. NCOL) DUP = .FALSE.
-            IF (.NOT. DUP .AND. COUNT .EQ. 1) GO TO 50
-              IF (.NOT. DUP) GO TO 40
-                COUNT = COUNT+1
-                IF (COUNT .EQ. 3) call intpr('', -1, 1, 0)
-C                IF (COUNT .EQ. 3) WRITE(IOUT, IFMT1C) BLANK,
-C     1                                 STAR, STAR, STAR, STAR
-                IF (I .EQ. NITEMS)  GO TO 50
-                  GO TO 70
-   40         call intpr('LAST', -1, LAST, NCOL)
-   50         call intpr('LINE', -1, LINE, J)
-C   40         WRITE(IOUT, IFMT2C) BLANK, ILAST, (LAST(K), K=1,NCOL)
-C   50     WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
-          COUNT = 1
-          DO 60 K=1,NCOL
-   60       LAST(K) = LINE(K)
-   70     ILAST = ILINE
-          J = 0
+        IF (J .LT. NCOL .AND. I .LT. NITEMS) THEN
+          GO TO 80
+        ENDIF
+        IF (COUNT .NE. 0) THEN
+          DUP = .TRUE.
+          DO K=1,NCOL
+            IF (LAST(K) .NE. LINE(K)) DUP = .FALSE.
+          ENDDO
+          IF (I .EQ. NITEMS  .AND.  J .LT. NCOL) DUP = .FALSE.
+          IF (.NOT. DUP .AND. COUNT .EQ. 1) THEN
+            CONTINUE
+          ELSE IF (.NOT. DUP) THEN
+            CONTINUE
+          ELSE
+            COUNT = COUNT+1
+            IF (COUNT .EQ. 3) call intpr('', -1, 1, 0)
+            IF (I .EQ. NITEMS) THEN
+              CONTINUE
+            ELSE
+              GO TO 70
+            ENDIF
+          ENDIF
+        ENDIF
+        COUNT = 1
+        DO K=1,NCOL
+          LAST(K) = LINE(K)
+        ENDDO
+   70   ILAST = ILINE
+        J = 0
    80   I = I+1
         GO TO 20
    90 RETURN

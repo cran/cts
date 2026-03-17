@@ -1,12 +1,43 @@
 Package: cts
 Title: Continuous Time Autoregressive Models
-Version: 1.0-22
-Date: 2019-01-11
-Author: Fortran original by G. Tunnicliffe-Wilson and Zhu Wang, R port by Zhu Wang with contribution from John Nash, Netlib and NAG authors
-Description: Functions to fit continuous time autoregressive models with the Kalman filter (Wang (2013) <doi:10.18637/jss.v053.i05>).
-Maintainer: Zhu Wang <wangz1@uthscsa.edu>
+Version: 1.0-24
+Date: 2026-03-07
+Authors@R: c(
+    person("Granville", "Tunnicliffe-Wilson", role = "aut",
+           email = "g.tunnicliffe-wilson@lancaster.ac.uk",
+           comment = "Fortran code"),
+    person("Zhu", "Wang", role = c("cre", "aut"),
+           email = "zwang145@uthsc.edu",
+           comment = "Fortran code, R port, updates, and maintainer"),
+    person("Cleve", "Moler", role = c("ctb", "cph"),
+           comment = "LINPACK routines in src/d*"),
+    person("Jack", "Dongarra", role = c("ctb", "cph"),
+           comment = "LINPACK routines via Netlib"),
+    person("Jim", "Bunch", role = c("ctb", "cph"),
+           comment = "LINPACK routines"),
+    person("G. W.", "Stewart", role = c("ctb", "cph"),
+           comment = "LINPACK routines"),
+    person("John", "Nash", role = "ctb")
+    )
+Description: Provides tools for fitting continuous-time autoregressive (CAR) and
+    complex CAR (CZAR) models for irregularly sampled time series using an exact
+    Gaussian state-space formulation and Kalman filtering/smoothing. Implements
+    maximum-likelihood estimation with stable parameterizations of characteristic
+    roots, model selection via AIC, residual and spectral diagnostics, forecasting
+    and simulation, and extraction of fitted state estimates. Methods are
+    described in Wang (2013) <doi:10.18637/jss.v053.i05>.
+Suggests: R.rsp
+VignetteBuilder: R.rsp
+Maintainer: Zhu Wang <zwang145@uthsc.edu>
 License: GPL (>= 2)
-Packaged: 2019-01-14 17:40:49 UTC; zhu
 NeedsCompilation: yes
+Packaged: 2026-03-12 17:02:38 UTC; zwang145
+Author: Granville Tunnicliffe-Wilson [aut] (Fortran code),
+  Zhu Wang [cre, aut] (Fortran code, R port, updates, and maintainer),
+  Cleve Moler [ctb, cph] (LINPACK routines in src/d*),
+  Jack Dongarra [ctb, cph] (LINPACK routines via Netlib),
+  Jim Bunch [ctb, cph] (LINPACK routines),
+  G. W. Stewart [ctb, cph] (LINPACK routines),
+  John Nash [ctb]
 Repository: CRAN
-Date/Publication: 2019-01-14 20:10:03 UTC
+Date/Publication: 2026-03-17 19:00:10 UTC

@@ -24,7 +24,7 @@ C*****model.txt
       common/model/ari,tra
 
 C*****series.txt
-      CHARACTER*40 NAME
+      CHARACTER(LEN=40) NAME
       INTEGER LEN
       DOUBLE PRECISION TIM(5000),SER(5000),TDIF(5000)
 c      COMMON/SERIES/NAME,LEN,TIM,SER,TDIF
@@ -46,7 +46,7 @@ C*****repcom.txt
       INTEGER REQSW,KFSW
       DOUBLE PRECISION VOB
 c      COMMON/REPCOM/PRPI,REQSW,VOB,KFSW
-      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI	
+      COMMON/REPCOM/VOB,REQSW,KFSW,PRPI 
 C*****repar3.txt
       DOUBLE PRECISION ALPHA(21),ROOTR(20),ROOTI(20),XVECR(20),
      *XVECI(20)
@@ -142,7 +142,6 @@ C     *****             ****
       CALL MEPAD(ARP,K,DEL,BL,J,DL,J,L,M,IW1,AL,CL,W1,W2,I)
 C      IF (KFSW.EQ.1)PRINT *,'JUST AFTER MEPAD CALLED'
       IF(I.EQ.4)THEN
-        call intpr('WITH ERROR', 10, I, 1)
         call rexit('PROGRAM FAILS IN SLICE ROUTINE MEPAD')
 C        PRINT *,'PROGRAM FAILS IN SLICE ROUTINE MEPAD: ',I
 C        STOP
@@ -153,28 +152,31 @@ C        STOP
         E=I
       END IF
 C     **** BL IS RESTORED HAVING BEEN MODIFIED BY MEPAD
-      DO 114 I=1,ARP
-      DO 114 J=1,ARP
+      DO I=1,ARP
+      DO J=1,ARP
       BL(I,J)=AS(I,J)
       AW0(I,J)=CC(I,J)-CS(I,J)
       AW1(I,J)=DL(I,J)
-  114 CONTINUE
-      DO 116 I=1,ARP
-      DO 116 J=1,ARP
+      END DO
+      END DO
+      DO I=1,ARP
+      DO J=1,ARP
       U=CSZ
       DO 115 K=1,ARP
       U=U+AW0(I,K)*AW1(J,K)
   115 CONTINUE
       CC(I,J)=U
-  116 CONTINUE
-      DO 118 I=1,ARP
-      DO 118 J=1,ARP
+      END DO
+      END DO
+      DO I=1,ARP
+      DO J=1,ARP
       U=CSZ
       DO 117 K=1,ARP
       U=U+AW1(I,K)*CC(K,J)
   117 CONTINUE
       CPS(I,J)=U+CS(I,J)
-  118 CONTINUE
+      END DO
+      END DO
 C     **** AW1 IS TRANSITION MATRIX
 C          CS IS STATIONARY STATE COVARIANCE
 C          CC IS OLD STATE COVARIANCE
@@ -219,33 +221,37 @@ c     U is the innovation, Jones (42)
       WS(I)=WPS(I)+NS(I)*U
 c     WS(I) is the gain K_t, for predicting, set to 0
   124 CONTINUE
-      DO 125 I=1,ARP
+      DO I=1,ARP
       U=MS(I)
-      DO 125 J=1,ARP
+      DO J=1,ARP
       CC(I,J)=CPS(I,J)-U*NS(J)
 c     CC is Jones (41)
-  125 CONTINUE
+      END DO
+      END DO
 C     **** CC IS NOW PRESENT (UPDATED) STATE COVARIANCE 
 C     **** WS IS NOW PRESENT (UPDATED) STATE ESTIMATE
       IF (KFSW.EQ.1) THEN
         PRE(T)=CONST+PRED
         PRV(T)=PEV
         U=CSZ
-        DO 130 I=1,ARP
-        FSES(T,I)=WS(I)
+        DO I=1,ARP
+          FSES(T,I)=WS(I)
 c     FSES is the filtered state
-        PSES(T,I)=WPS(I) 
-  130   U=U+XVECR(I)*WS(I)
+          PSES(T,I)=WPS(I)
+          U=U+XVECR(I)*WS(I)
+        END DO
         FSER(T)=U+CONST
 c     FSER is the filtered series
 c        print *, 'U:',U
         U=CSZ
-        DO 135 I=1,ARP
-        DO 135 J=1,ARP
-        FSCV(T,I,J)=CC(I,J)
-        PSCV(T,I,J)=CPS(I,J)
-        TRAN(T,I,J)=AW1(I,J)
-  135   U=U+CC(I,J)*XVECR(I)*XVECR(J)
+        DO I=1,ARP
+          DO J=1,ARP
+            FSCV(T,I,J)=CC(I,J)
+            PSCV(T,I,J)=CPS(I,J)
+            TRAN(T,I,J)=AW1(I,J)
+            U=U+CC(I,J)*XVECR(I)*XVECR(J)
+          END DO
+        END DO
 c     U is Jones (43) without R
         FVAR(T)=U
       ENDIF
