@@ -78,6 +78,7 @@ C
 c          call envron(lbeta,lt,lrnd)
           lbeta = 2
           lt = 53
+          lrnd = .FALSE.
 C
 C        Start to find EPS.
 C
@@ -177,10 +178,5 @@ C
 C
 C     End of ENVIRN.
 C
-99999 FORMAT (/,/,' WARNING. The value Emin may be incorrect:-  Emin = '
-     +       ,I8,/,
-     +       ' If after inspection the value Emin looks acceptable',
-     +       ' please comment out ',/,' the IF block as marked within t'
-     +       ,'he code of routine envirn,',/,
-     +       ' otherwise contact NAG Cen','tral Office. ',/)
+
       END

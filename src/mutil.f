@@ -1,12 +1,12 @@
       SUBROUTINE MPRINT(N,A,K,TX)
       IMPLICIT NONE
-      INTEGER N,K,I,J
+      INTEGER N,K,I
       DOUBLE PRECISION A(K,*)
       CHARACTER(LEN=*) TX
-C      PRINT *,'MATRIX',TX
-C      DO 10 I=1,N
-C      DO 10 J=1,N
-C   10 PRINT *,'I=',I,'J=',J,'ELEM(I,J)=',A(I,J)
+C     WRITE(*,*) 'MATRIX ', TX
+      DO 10 I=1,N
+C        WRITE(*,*) A(I,1:N)
+   10 CONTINUE
       END
 C***********   
       SUBROUTINE MPROD(N,A,B,C,K)

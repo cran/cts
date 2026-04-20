@@ -1,1 +1,10 @@
 PKG_LIBS=$(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+
+# The legacy CSTAK allocator relies on COMMON/EQUIVALENCE aliasing that GCC LTO
+# can misdiagnose and misoptimize, so keep fixed-form Fortran out of LTO checks.
+NO_LTO_F_OBJS = i0tk00.o istkgt.o istkqu.o istkrl.o stkdmp.o u9dmp.o drpoly.o
+
+all: $(SHLIB)
+
+$(NO_LTO_F_OBJS): %.o: %.f
+	$(F77) $(FPICFLAGS) $(SHLIB_FFLAGS) $(FFLAGS) -fno-lto -c $< -o $@

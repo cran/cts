@@ -91,13 +91,11 @@ C        PRINT 1040, ABS(IFAIL)
 C        STOP 2
 
       END IF
- 1030 FORMAT (1X, 'Error factoring A, INFO = ', I5)
 c          print *,'AQI'
 c          do 30 i=1,arp
 c             do 30 j=1,arp
 c                print *,'aqi',aqi(i,j)
 c 30             continue
- 1040 FORMAT (1X, 'Error computing inverse of A, INFO = ', I5)
 c      print *,'AQI',AQI
 c     added ZW
 c          CALL F01ADF(ARP,AQI,IA,IFAIL)

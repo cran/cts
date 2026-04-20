@@ -26,6 +26,8 @@ C
       S = SSS
       IFLAG = 0
       J = 0
+      OMP = 0.D0
+      T = 0.D0
 C MAIN LOOP
    10 PV = P(1)
 C EVALUATE P AT S

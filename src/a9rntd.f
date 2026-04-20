@@ -38,7 +38,6 @@ C  SETERR, SO IT CANNOT CALL SETERR.
 C
       INTEGER  NITEMS, IOUT, MCOL, W, D
       DOUBLE PRECISION  A(NITEMS)
-C
       INTEGER  MAX0, MIN0, WW, DD, EMIN, EMAX,
      1         EXPENT, I1MACH, ICEIL, IABS, I10WID
 C/6S
@@ -169,15 +168,14 @@ C
             IF (.NOT. DUP .AND. COUNT .EQ. 1) GO TO 50
               IF (.NOT. DUP) GO TO 40
                 COUNT = COUNT+1
-                IF (COUNT .EQ. 3) call intpr('', -1, 1, 0)
-C                IF (COUNT .EQ. 3) WRITE(IOUT, IFMT1C) BLANK,
-c     1                                 STAR, STAR, STAR, STAR
+C               IF (COUNT .EQ. 3) WRITE(IOUT, IFMT1C) BLANK,
+C    1                                 STAR, STAR, STAR, STAR
                 IF (I .EQ. NITEMS)  GO TO 50
                   GO TO 70
-C   40         WRITE(IOUT, IFMT2C) BLANK, ILAST, (LAST(K), K=1,NCOL)
-c   50     WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
-   40          call dblepr('LAST', -1, LAST, NCOL)
-   50          call dblepr('LINE', -1, LINE, J)
+   40         CONTINUE
+C               WRITE(IOUT, IFMT2C) BLANK, ILAST, (LAST(K), K=1,NCOL)
+   50         CONTINUE
+C               WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
           COUNT = 1
           DO K=1,NCOL
             LAST(K) = LINE(K)

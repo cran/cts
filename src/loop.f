@@ -2,7 +2,7 @@
       IMPLICIT NONE
       LOGICAL ADV
       INTEGER I, errno
-      DOUBLE PRECISION U,PU,SSNEW
+      DOUBLE PRECISION U,PU,SSNEW,DDUM(1)
 c      INCLUDE 'model.txt'
 c      INCLUDE 'series.txt'
 c      INCLUDE 'conpar.txt'
@@ -88,8 +88,10 @@ C          STOP
         ss(1)=SSOLD
         IF(tra.EQ.1)THEN
            call intpr('ITERATION 0:', 12, 1, 0)
-           call dblepr('LAMBDA = ', 9, LAM, 1)
-           call dblepr('   INITIAL SUM OF SQUARES = ', 28, SSOLD, 1)
+           DDUM(1)=LAM
+           call dblepr('LAMBDA = ', 9, DDUM, 1)
+           DDUM(1)=SSOLD
+           call dblepr('   INITIAL SUM OF SQUARES = ', 28, DDUM, 1)
            call dblepr('   INITIAL PARAMETER VALUES',  27, B(1), 1)
 C        PRINT *,'ITERATION 0:'
 C        PRINT *,'   LAMBDA = ',LAM
@@ -114,7 +116,9 @@ C        END IF
             U=B(ARP+1)
           ENDIF
           IF(tra.EQ.1)THEN
-           call dblepr('   INITIAL VALUE OF CONSTANT TERM = ', 36, U, 1)
+           DDUM(1)=U
+           call dblepr('   INITIAL VALUE OF CONSTANT TERM = ', 36, 
+     *       DDUM, 1)
 C           PRINT *,'   INITIAL VALUE OF CONSTANT TERM = ',U
           ENDIF
         ENDIF
@@ -177,8 +181,10 @@ C        STOP
         ELSE
           IF(tra.EQ.1)THEN
             call intpr('ITERATION :', 11, ITCT, 1)
-            call dblepr('   LAMBDA: ',11, LAM, 1)
-           call dblepr('   SUM OF SQUARES = ', 20, SSOLD, 1)
+            DDUM(1)=LAM
+            call dblepr('   LAMBDA: ',11, DDUM, 1)
+           DDUM(1)=SSOLD
+           call dblepr('   SUM OF SQUARES = ', 20, DDUM, 1)
            call dblepr('   PARAMETER VALUES',  19, OLDB(1), 1)
 C          PRINT *,'ITERATION :',ITCT
 C          PRINT *,'   LAMBDA: ',LAM

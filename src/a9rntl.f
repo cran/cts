@@ -33,7 +33,6 @@ C
 C
       INTEGER  NITEMS, IOUT, MCOL
       LOGICAL  A(NITEMS)
-C
       INTEGER  MAX0, MIN0
 C/6S
 C     INTEGER  IFMT1(20), IFMT1C(20), IFMT2(19), IFMT2C(19), BLANK,
@@ -115,7 +114,7 @@ C  I COUNTS THE NUMBER OF ITEMS TO BE PRINTED,
 C  J COUNTS THE NUMBER ON A GIVEN LINE,
 C  COUNT COUNTS THE NUMBER OF DUPLICATE LINES.
 C
-  10  I = 1
+      I = 1
       J = 0
       COUNT = 0
 C
@@ -152,13 +151,14 @@ C
                 COUNT = COUNT+1
 C                IF (COUNT .EQ. 3) WRITE(IOUT, IFMT1C) BLANK,
 C     1                                 STAR, STAR, STAR, STAR
-                IF (COUNT .EQ. 3) call intpr('',-1,1,0)
+C               IF (COUNT .EQ. 3) WRITE(IOUT, IFMT1C) BLANK,
+C    1                                 STAR, STAR, STAR, STAR
                 IF (I .EQ. NITEMS)  GO TO 50
                   GO TO 70
-   40       call intpr('LAST (not shown)', -1, 1, 0)
-   50       call intpr('LINE (not shown)', -1, 1, 0)
-C   40         WRITE(IOUT, IFMT2C) BLANK, ILAST, (LAST(K), K=1,NCOL)
-C   50     WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
+   40         CONTINUE
+C               WRITE(IOUT, IFMT2C) BLANK, ILAST, (LAST(K), K=1,NCOL)
+   50         CONTINUE
+C               WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
           COUNT = 1
           DO K=1,NCOL
             LAST(K) = LINE(K)

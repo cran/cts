@@ -8,7 +8,6 @@ c     CSR and CSI corresponding to CS (resg1d.f)
 c     CR and CI corresponding to CC (resg1d.f)
 
       subroutine resg0new
-      IMPLICIT NONE 
       INTEGER I,J,T
       DOUBLE PRECISION U,V,W,X,Y,Z,PRED,PEV
       DOUBLE PRECISION FSESR(5000,20),FSCVR(5000,20,20)
@@ -16,6 +15,8 @@ c     CR and CI corresponding to CC (resg1d.f)
       DOUBLE PRECISION FSER0(5000,20),TRANR(5000,20),TRANI(5000,20)
       DOUBLE PRECISION PSESR(5000,20),PSESI(5000,20)
       DOUBLE PRECISION PSCVR(5000,20,20),PSCVI(5000,20,20)
+      SAVE FSESR,FSCVR,FSESI,FSCVI,FSER0,TRANR
+      SAVE TRANI,PSESR,PSESI,PSCVR,PSCVI
 c      INCLUDE 'model.txt'
 c      INCLUDE 'series.txt'
 c      INCLUDE 'setcon.txt'

@@ -3,6 +3,7 @@
       INTEGER I,J,M,NF,NF1,NFREQ,ARP1
       DOUBLE PRECISION B1(ARP1+1),F1(NFREQ),S1(NFREQ)
       DOUBLE PRECISION FAC,P2,S2,F,S,U,V,W,X,Y,Z,SCALE1
+      DOUBLE PRECISION M_SCALE
 c      INCLUDE 'model.txt'
 c      INCLUDE 'setcon.txt'
 c      INCLUDE 'repar3.txt'
@@ -63,7 +64,8 @@ c      ELSE IF(PFI.GE.3)THEN
           X=-Z
           Y=CSO+U
           CALL DIVC(W,X,Y,Z,U,V)
-          CALL MULR(U,V,-SCALE,ROOTR(J),ROOTI(J))
+          M_SCALE = -SCALE
+          CALL MULR(U,V,M_SCALE,ROOTR(J),ROOTI(J))
    50     CONTINUE
         END IF
 c        PRINT *,'FINAL ROOTS: '

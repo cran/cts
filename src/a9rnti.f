@@ -37,7 +37,6 @@ C
 C
       INTEGER  NITEMS, IOUT, MCOL, W
       INTEGER  A(NITEMS)
-C
       INTEGER  MAX0, MIN0, WW
 C/6S
 C     INTEGER  IFMT1(20), IFMT1C(20), IFMT2(14), IFMT2C(14), BLANK, STAR
@@ -120,7 +119,7 @@ C  I COUNTS THE NUMBER OF ITEMS TO BE PRINTED,
 C  J COUNTS THE NUMBER ON A GIVEN LINE,
 C  COUNT COUNTS THE NUMBER OF DUPLICATE LINES.
 C
-  10  I = 1
+      I = 1
       J = 0
       COUNT = 0
 C
@@ -156,18 +155,22 @@ C
           ENDDO
           IF (I .EQ. NITEMS  .AND.  J .LT. NCOL) DUP = .FALSE.
           IF (.NOT. DUP .AND. COUNT .EQ. 1) THEN
-            CONTINUE
+C           WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
           ELSE IF (.NOT. DUP) THEN
-            CONTINUE
+C           WRITE(IOUT, IFMT2C) BLANK, ILAST, (LAST(K), K=1,NCOL)
+C           WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
           ELSE
             COUNT = COUNT+1
-            IF (COUNT .EQ. 3) call intpr('', -1, 1, 0)
+C           IF (COUNT .EQ. 3) WRITE(IOUT, IFMT1C) BLANK,
+C    1         STAR, STAR, STAR, STAR
             IF (I .EQ. NITEMS) THEN
-              CONTINUE
+C             WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
             ELSE
               GO TO 70
             ENDIF
           ENDIF
+        ELSE
+C         WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
         ENDIF
         COUNT = 1
         DO K=1,NCOL

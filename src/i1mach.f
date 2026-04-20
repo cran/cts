@@ -104,6 +104,7 @@ C      DATA IMACH(14) /   60 /
 C      DATA IMACH(15) /-1024 /
 C      DATA IMACH(16) / 1023 /, SC/987/
 C
+      I1MACH = 0
       IF (SC .NE. 987) THEN
 *        *** CHECK FOR AUTODOUBLE ***
          SMALL(2) = 0
@@ -248,11 +249,6 @@ c                  STOP 777
          IMACH( 9) = 2147483647
  35      SC = 987
          END IF
- 9010 FORMAT(/' Adjust autodoubled I1MACH by uncommenting data'/
-     * ' statements appropriate for your machine and setting'/
-     * ' IMACH(I) = IMACH(I+3) for I = 11, 12, and 13.')
- 9020 FORMAT(/' Adjust I1MACH by uncommenting data statements'/
-     * ' appropriate for your machine.')
       IF (I .LT. 1  .OR.  I .GT. 16) GO TO 40
       I1MACH = IMACH(I)
       RETURN
@@ -260,6 +256,7 @@ c 40   WRITE(*,*) 'I1MACH(I): I =',I,' is out of bounds.'
 c      STOP
  40   call intpr('I1MACH(I): I =',-1, I, 1)
       call rexit('is out of bounds.')
+      RETURN
 * /* C source for I1MACH -- remove the * in column 1 */
 * /* Note that some values may need changing. */
 *#include <stdio.h>

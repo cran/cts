@@ -28,7 +28,7 @@ C     .. Executable Statements ..
           I = II
           IF (I.GE.LOW .AND. I.LE.IGH) GO TO 160
           IF (I.LT.LOW) I = LOW - II
-          K = SCALE(I)
+          K = INT(SCALE(I))
           IF (K.EQ.I) GO TO 160
           DO 120 J = 1,N
               S = A(I,J)

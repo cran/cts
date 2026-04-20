@@ -100,6 +100,7 @@ C     .......... SEARCH FOR NEXT EIGENVALUES ..........
       ITS = 0
       NA = EN - 1
       ENM2 = NA - 1
+      L = LOW
 C     .......... LOOK FOR SINGLE SMALL SUB-DIAGONAL ELEMENT
 C                FOR L=EN STEP -1 UNTIL LOW DO -- ..........
    80 DO 100 LL = LOW,EN

@@ -1,6 +1,7 @@
       SUBROUTINE COMPLETE(SS, BIT)
       IMPLICIT NONE
       INTEGER I,J,K
+      EXTERNAL DBLEPR, INTPR
       DOUBLE PRECISION U
 c      INCLUDE 'model.txt'
 c      INCLUDE 'conpar.txt'
@@ -59,11 +60,13 @@ C*****repar3.txt
      *XVECI(20)
       COMMON/REPAR3/ALPHA,ROOTR,ROOTI,XVECR,XVECI
       DOUBLE PRECISION SS, BIT(22) 
+      INTEGER IDUM(1)
+      DOUBLE PRECISION DDUM(1)
 
 C      CALL NEWLINE
       if(tra.EQ.1)then
         call NEWLINE
-        call intpr('PROCESSING COMPLETED', 20, 1, 0) 
+        call intpr('PROCESSING COMPLETED', 20, IDUM, 0) 
       end if
       IF(ITCT.GE.NIT)THEN
         I=NIT
@@ -71,18 +74,19 @@ C      CALL NEWLINE
         I=ITCT
       END IF
       if(tra.EQ.1)then
-       call intpr('ITERATIONS COMPLETED:', 21, I, 1)
+       IDUM(1) = I
+       call intpr('ITERATIONS COMPLETED:', 21, IDUM, 1)
 C      end if
       IF(CONV)THEN
-        call intpr('CONVERGENCE ACHIEVED', 20, 1, 0)
+        call intpr('CONVERGENCE ACHIEVED', 20, IDUM, 0)
       ELSE
-        call intpr('CONVERGENCE NOT ACHIEVED', 24, 1, 0)
+        call intpr('CONVERGENCE NOT ACHIEVED', 24, IDUM, 0)
       END IF
       IF(FAIL)THEN
-        call intpr('SEARCH FAILED TO PROGRESS', 25, 1, 0)
+        call intpr('SEARCH FAILED TO PROGRESS', 25, IDUM, 0)
       ELSE
 C       if(tra.EQ.1)then
-        call intpr('SEARCH PROGRESSED', 17, 1, 0) 
+        call intpr('SEARCH PROGRESSED', 17, IDUM, 0) 
 C       end if
       END IF
       END IF
@@ -128,13 +132,18 @@ c end by Z.W.
       END DO
       if(tra.EQ.1)then
       CALL NEWLINE
-       call dblepr('FINAL SUM OF SQUARES: ', 22, SSOLD, 1)
-       call dblepr('MEAN SUM OF SQUARES : ', 22, SIGSQ*GMOLD, 1)
-       call dblepr('INNOVATION PROCESS VARIANCE ESTIMATE: ',38, SIGSQ,
+       DDUM(1) = SSOLD
+       call dblepr('FINAL SUM OF SQUARES: ', 22, DDUM, 1)
+       DDUM(1) = SIGSQ*GMOLD
+       call dblepr('MEAN SUM OF SQUARES : ', 22, DDUM, 1)
+       DDUM(1) = SIGSQ
+       call dblepr('INNOVATION PROCESS VARIANCE ESTIMATE: ',38, DDUM,
      *1) 
-       call dblepr('GEOMETRIC MEAN VARIANCE MULTIPLIER:   ',38, GMOLD,
+       DDUM(1) = GMOLD
+       call dblepr('GEOMETRIC MEAN VARIANCE MULTIPLIER:   ',38, DDUM,
      *1) 
-       call dblepr('FINAL PARAMETER VALUES:',23, OLDB(1), 1)
+       DDUM(1) = OLDB(1)
+       call dblepr('FINAL PARAMETER VALUES:',23, DDUM, 1)
       end if
       DO 104 I=1,NP
       B(I)=OLDB(I)

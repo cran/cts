@@ -42,7 +42,6 @@ C     REAL A(2,NITEMS)
 C/C
       COMPLEX  A(NITEMS)
 C/
-C
       INTEGER  MAX0, MIN0, WW, DD, EMIN, EMAX,
      1         EXPENT, I1MACH, ICEIL, IABS, I10WID
 C/6S
@@ -195,7 +194,8 @@ C/
                 COUNT = COUNT+1
 C                IF (COUNT .EQ. 3) WRITE(IOUT, IFMT1C) BLANK,
 C     1                                 STAR, STAR, STAR, STAR
-                IF (COUNT .EQ. 3) call intpr(' ', -1, 1, 0)
+C               IF (COUNT .EQ. 3) WRITE(IOUT, IFMT1C) BLANK,
+C    1                                 STAR, STAR, STAR, STAR
                 IF (I .EQ. NITEMS)  GO TO 50
                   GO TO 70
 C/R
@@ -206,10 +206,10 @@ C    1              LINE(2,K), K=1,J)
 C/C
 C   40         WRITE(IOUT, IFMT2C) BLANK, ILAST, (LAST(K), K=1,NCOL)
 C   50     WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
-   40       call dblepr('real part', -1, REAL(LAST), NCOL)
-            call dblepr('imaginary part', -1, AIMAG(LAST), NCOL)
-   50       call dblepr('real part', -1, REAL(LINE), J)
-            call dblepr('imaginary part', -1, AIMAG(LINE), J)
+   40       CONTINUE
+C               WRITE(IOUT, IFMT2C) BLANK, ILAST, (LAST(K), K=1,NCOL)
+   50       CONTINUE
+C               WRITE(IOUT, IFMT2C) BLANK, ILINE, (LINE(K), K=1,J)
 C/
           COUNT = 1
         DO K=1,NCOL
