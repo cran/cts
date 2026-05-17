@@ -1,24 +1,15 @@
 Package: cts
 Title: Continuous Time Autoregressive Models
-Version: 1.0-25
-Date: 2026-04-20
+Version: 1.0-26
+Date: 2026-05-14
 Authors@R: c(
-    person("Granville", "Tunnicliffe-Wilson", role = "aut",
-           email = "g.tunnicliffe-wilson@lancaster.ac.uk",
-           comment = "Fortran code"),
-    person("Zhu", "Wang", role = c("cre", "aut"),
-           email = "zwang145@uthsc.edu",
-           comment = "Fortran code, R port, updates, and maintainer"),
-    person("Cleve", "Moler", role = c("ctb", "cph"),
-           comment = "LINPACK routines in src/d*"),
-    person("Jack", "Dongarra", role = c("ctb", "cph"),
-           comment = "LINPACK routines via Netlib"),
-    person("Jim", "Bunch", role = c("ctb", "cph"),
-           comment = "LINPACK routines"),
-    person("G. W.", "Stewart", role = c("ctb", "cph"),
-           comment = "LINPACK routines"),
-    person("John", "Nash", role = "ctb")
-    )
+    person("Granville", "Tunnicliffe-Wilson", role = "aut"),
+    person("Zhu", "Wang", email = "zwang145@uthsc.edu", role = c("aut", "cre")),
+    person("Cleve", "Moler", role = c("ctb", "cph")),
+    person("Jack", "Dongarra", role = c("ctb", "cph")),
+    person("Jim", "Bunch", role = c("ctb", "cph")),
+    person("G. W.", "Stewart", role = c("ctb", "cph")),
+    person("John", "Nash", role = "ctb"))
 Description: Provides tools for fitting continuous-time autoregressive (CAR) and
     complex CAR (CZAR) models for irregularly sampled time series using an exact
     Gaussian state-space formulation and Kalman filtering/smoothing. Implements
@@ -26,18 +17,16 @@ Description: Provides tools for fitting continuous-time autoregressive (CAR) and
     roots, model selection via AIC, residual and spectral diagnostics, forecasting
     and simulation, and extraction of fitted state estimates. Methods are
     described in Wang (2013) <doi:10.18637/jss.v053.i05>.
-Suggests: R.rsp
-VignetteBuilder: R.rsp
-Maintainer: Zhu Wang <zwang145@uthsc.edu>
 License: GPL (>= 2)
 NeedsCompilation: yes
-Packaged: 2026-04-20 15:17:44 UTC; zwang145
-Author: Granville Tunnicliffe-Wilson [aut] (Fortran code),
-  Zhu Wang [cre, aut] (Fortran code, R port, updates, and maintainer),
-  Cleve Moler [ctb, cph] (LINPACK routines in src/d*),
-  Jack Dongarra [ctb, cph] (LINPACK routines via Netlib),
-  Jim Bunch [ctb, cph] (LINPACK routines),
-  G. W. Stewart [ctb, cph] (LINPACK routines),
+Packaged: 2026-05-14 15:43:20 UTC; zwang145
+Author: Granville Tunnicliffe-Wilson [aut],
+  Zhu Wang [aut, cre],
+  Cleve Moler [ctb, cph],
+  Jack Dongarra [ctb, cph],
+  Jim Bunch [ctb, cph],
+  G. W. Stewart [ctb, cph],
   John Nash [ctb]
+Maintainer: Zhu Wang <zwang145@uthsc.edu>
 Repository: CRAN
-Date/Publication: 2026-04-20 16:00:02 UTC
+Date/Publication: 2026-05-17 18:50:02 UTC

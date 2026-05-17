@@ -3,6 +3,8 @@
       INTEGER N,K,I
       DOUBLE PRECISION A(K,*)
       CHARACTER(LEN=*) TX
+      I = LEN(TX)
+      IF (N .LT. 0 .AND. K .GT. 0) A(1,1) = A(1,1)
 C     WRITE(*,*) 'MATRIX ', TX
       DO 10 I=1,N
 C        WRITE(*,*) A(I,1:N)
